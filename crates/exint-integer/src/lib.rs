@@ -20,7 +20,7 @@ mod types;
 mod value;
 
 // TODO: Move to exint-backend
-pub mod intrinsics {
+pub(crate) mod intrinsics {
   use ::core::panic;
   use ::core::cmp::Ordering;
   use ::core::marker::Copy;
