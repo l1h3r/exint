@@ -9,23 +9,7 @@ readme = "README.md"
 workspace = true
 
 [features]
-default = [
-  "bigint_helper_methods",
-  "int_roundings",
-  "integer_sign_cast",
-  "isqrt",
-  "num_midpoint",
-  "random",
-  "step_trait",
-  "strict_overflow_ops",
-  "trusted_step",
-  "unbounded_shifts",
-  "unchecked_neg",
-  "unchecked_shifts",
-  "unsigned_is_multiple_of",
-  "unsigned_signed_diff",
-  "wrapping_next_power_of_two",
-]
+default = []
 
 # Enables support for `bigint_helper_methods` core functionality.
 #
