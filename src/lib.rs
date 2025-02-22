@@ -15,6 +15,7 @@
 #![cfg_attr(feature = "structural_match",     feature(structural_match))]
 #![cfg_attr(feature = "trusted_step",         feature(trusted_step))]
 #![cfg_attr(feature = "unsized_const_params", feature(unsized_const_params))]
+#![cfg_attr(feature = "utf16_extra",          feature(utf16_extra))]
 #![cfg_attr(feature = "core_intrinsics",      allow(internal_features))]
 #![cfg_attr(feature = "unsized_const_params", allow(incomplete_features))]
 #![cfg_attr(feature = "docs",                 doc(cfg_hide(target_pointer_width = "16")))]

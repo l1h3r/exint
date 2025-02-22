@@ -147,6 +147,11 @@ unsigned_signed_diff = []
 # Tracking Issue: https://github.com/rust-lang/rust/issues/95174
 unsized_const_params = ["nightly"]
 
+# Enable support for `utf16_extra` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/94919
+utf16_extra = ["nightly"]
+
 # Enable support for `wrapping_next_power_of_two` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/32463

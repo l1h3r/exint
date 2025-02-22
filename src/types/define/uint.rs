@@ -1110,3 +1110,13 @@ impl<const N: usize> uint<N> {
 impl<const N: usize> uint<N> {
   macros::parse_str!(uint);
 }
+
+impl uint<2> {
+  #[doc = include_doc!(uint, "is_utf16_surrogate")]
+  #[cfg(feature = "utf16_extra")]
+  #[must_use]
+  #[inline]
+  pub const fn is_utf16_surrogate(self) -> bool {
+    self.into_u16().is_utf16_surrogate()
+  }
+}
