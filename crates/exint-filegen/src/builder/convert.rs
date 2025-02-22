@@ -3,6 +3,7 @@ use crate::context::Context;
 
 static STD: &[usize] = &[1, 2, 4, 8, 16];
 
+#[rustfmt::skip]
 pub fn swap1(context: &mut Context) {
   context.build("convert_swap1", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> %TYPE");
@@ -16,6 +17,7 @@ pub fn swap1(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn swap8(context: &mut Context) {
   context.build("convert_swap8", |mut func| {
     func = func.skip_emit(Condition::Func(|kind| kind.bits() % 16 != 0));
@@ -30,6 +32,7 @@ pub fn swap8(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn rotl(context: &mut Context) {
   context.build("convert_rotl", |mut func| {
     func = func.skip_emit(Condition::Func(|kind| !STD.contains(&kind.bytes()))); // TODO: FIXME
@@ -46,6 +49,7 @@ pub fn rotl(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn rotr(context: &mut Context) {
   context.build("convert_rotr", |mut func| {
     func = func.skip_emit(Condition::Func(|kind| !STD.contains(&kind.bytes()))); // TODO: FIXME

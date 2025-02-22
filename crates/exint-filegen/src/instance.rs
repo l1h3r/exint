@@ -29,10 +29,7 @@ impl Instance {
     data.sort_by_key(|function| function.type_name.bits());
     data.sort_by_key(|function| function.type_name.uint());
 
-    Self {
-      name,
-      data,
-    }
+    Self { name, data }
   }
 }
 

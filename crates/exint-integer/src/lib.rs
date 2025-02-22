@@ -9,7 +9,6 @@
 #![no_std]
 #![no_implicit_prelude]
 #![allow(internal_features)]
-
 // Use to support `cast!` macro.
 //
 // Tracking Issue: https://github.com/rust-lang/rust/issues/85077

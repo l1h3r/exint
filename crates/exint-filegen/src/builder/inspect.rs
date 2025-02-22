@@ -1,6 +1,7 @@
 use crate::condition::Condition;
 use crate::context::Context;
 
+#[rustfmt::skip]
 pub fn ctpop(context: &mut Context) {
   context.build("inspect_ctpop", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> u32");
@@ -14,6 +15,7 @@ pub fn ctpop(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn ctlz(context: &mut Context) {
   context.build("inspect_ctlz", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> u32");
@@ -27,6 +29,7 @@ pub fn ctlz(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn cttz(context: &mut Context) {
   context.build("inspect_cttz", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> u32");
@@ -40,6 +43,7 @@ pub fn cttz(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn ctlz_nonzero(context: &mut Context) {
   context.build("inspect_ctlz_nonzero", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> u32");
@@ -54,6 +58,7 @@ pub fn ctlz_nonzero(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn cttz_nonzero(context: &mut Context) {
   context.build("inspect_cttz_nonzero", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> u32");

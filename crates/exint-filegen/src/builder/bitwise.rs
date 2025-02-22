@@ -1,6 +1,7 @@
 use crate::condition::Condition;
 use crate::context::Context;
 
+#[rustfmt::skip]
 pub fn band(context: &mut Context) {
   context.build("bitwise_band", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE, b: %TYPE) -> %TYPE");
@@ -15,6 +16,7 @@ pub fn band(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn bor(context: &mut Context) {
   context.build("bitwise_bor", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE, b: %TYPE) -> %TYPE");
@@ -29,6 +31,7 @@ pub fn bor(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn bxor(context: &mut Context) {
   context.build("bitwise_bxor", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE, b: %TYPE) -> %TYPE");
@@ -43,6 +46,7 @@ pub fn bxor(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn bnot(context: &mut Context) {
   context.build("bitwise_bnot", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> %TYPE");

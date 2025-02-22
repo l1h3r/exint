@@ -131,9 +131,7 @@ macro_rules! internals {
     #[must_use]
     #[inline]
     pub(crate) const fn const_div(self, rhs: Self) -> Self {
-      self
-        .checked_div(rhs)
-        .expect("attempt to divide by zero")
+      self.checked_div(rhs).expect("attempt to divide by zero")
     }
 
     #[must_use]

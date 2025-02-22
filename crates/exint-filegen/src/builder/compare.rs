@@ -1,6 +1,7 @@
 use crate::condition::Condition;
 use crate::context::Context;
 
+#[rustfmt::skip]
 pub fn eq(context: &mut Context) {
   context.build("compare_eq", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE, b: %TYPE) -> bool");
@@ -13,6 +14,7 @@ pub fn eq(context: &mut Context) {
   });
 }
 
+#[rustfmt::skip]
 pub fn cmp(context: &mut Context) {
   context.build("compare_cmp", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE, b: %TYPE) -> ::core::cmp::Ordering");

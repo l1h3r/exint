@@ -1,13 +1,13 @@
 use ::core::intrinsics::is_val_statically_known;
 use ::core::intrinsics::unlikely;
 use ::core::marker::Sized;
+use ::core::option::Option;
 use ::core::option::Option::None;
 use ::core::option::Option::Some;
-use ::core::option::Option;
 use ::core::panic;
+use ::core::result::Result;
 use ::core::result::Result::Err;
 use ::core::result::Result::Ok;
-use ::core::result::Result;
 
 /// The generic signed integer type.
 #[allow(non_camel_case_types)]

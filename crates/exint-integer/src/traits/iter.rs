@@ -87,6 +87,6 @@ macro_rules! trusted_step {
 }
 
 pub(crate) use product;
-pub(crate) use sum;
 pub(crate) use step;
+pub(crate) use sum;
 pub(crate) use trusted_step;

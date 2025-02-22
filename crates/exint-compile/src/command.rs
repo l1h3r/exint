@@ -53,10 +53,7 @@ impl Crate {
   }
 
   fn llvm_ir(&self) -> PathBuf {
-    self
-      .path_dst
-      .join(self.name)
-      .with_extension("ll")
+    self.path_dst.join(self.name).with_extension("ll")
   }
 }
 

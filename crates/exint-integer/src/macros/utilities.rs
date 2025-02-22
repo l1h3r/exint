@@ -68,6 +68,6 @@ macro_rules! tri {
 }
 
 pub(crate) use arithmetic_select;
-pub(crate) use maybe_convert_arg;
 pub(crate) use cast;
+pub(crate) use maybe_convert_arg;
 pub(crate) use tri;

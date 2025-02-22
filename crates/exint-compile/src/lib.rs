@@ -14,11 +14,11 @@ pub mod filecheck {
   use std::io::Error;
   use std::path::Path;
 
-  use crate::context::Context;
+  use crate::command;
+  use crate::command::BuildType;
   use crate::command::Config;
   use crate::command::Crate;
-  use crate::command::BuildType;
-  use crate::command;
+  use crate::context::Context;
 
   pub fn verify<P>(path: &P)
   where

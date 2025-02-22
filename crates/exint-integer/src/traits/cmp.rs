@@ -37,7 +37,7 @@ macro_rules! ord {
   };
 }
 
-pub(crate) use partial_eq;
 pub(crate) use eq;
-pub(crate) use partial_ord;
 pub(crate) use ord;
+pub(crate) use partial_eq;
+pub(crate) use partial_ord;

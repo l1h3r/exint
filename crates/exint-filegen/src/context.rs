@@ -5,8 +5,8 @@ use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
 
-use crate::instance::Instance;
 use crate::function::Function;
+use crate::instance::Instance;
 
 pub(crate) struct Context {
   data: Vec<Instance>,
