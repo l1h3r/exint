@@ -151,7 +151,7 @@ specialize! {
     // Comparison Operations
     // -------------------------------------------------------------------------
 
-    // LLVM generates `icmp slt $type` and `icmp ne $type` instructions
+    // LLVM generates `@llvm.scmp.i8.$type` intrinsic
     #[inline]
     fn scmp(lhs: Self, rhs: Self) -> Ordering {
       SpecSintFuncs::scmp(lhs.scast(), rhs.scast())
@@ -249,7 +249,7 @@ specialize! {
     // Comparison Operations
     // -------------------------------------------------------------------------
 
-    // LLVM generates `icmp ult $type` and `icmp ne $type` instructions
+    // LLVM generates `@llvm.ucmp.i8.$type` intrinsic
     #[inline]
     fn ucmp(lhs: Self, rhs: Self) -> Ordering {
       SpecUintFuncs::ucmp(lhs.ucast(), rhs.ucast())
