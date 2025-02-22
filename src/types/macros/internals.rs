@@ -242,14 +242,6 @@ macro_rules! internals {
       Self(self.0.const_rem(rhs.0))
     }
 
-    pub(crate) const fn const_shl(self, _rhs: u32) -> Self {
-      ::core::panic!("const_shl")
-    }
-
-    pub(crate) const fn const_shr(self, _rhs: u32) -> Self {
-      ::core::panic!("const_shr")
-    }
-
     #[allow(dead_code, reason = "TODO: Not used by uint")]
     #[inline]
     pub(crate) const fn const_neg(self) -> Self {
@@ -288,14 +280,6 @@ macro_rules! internals {
       Self(self.0.strict_rem(rhs.0))
     }
 
-    pub(crate) const fn const_shl(self, _rhs: u32) -> Self {
-      ::core::panic!("const_shl")
-    }
-
-    pub(crate) const fn const_shr(self, _rhs: u32) -> Self {
-      ::core::panic!("const_shr")
-    }
-
     #[inline]
     pub(crate) const fn const_neg(self) -> Self {
       Self(self.0.strict_neg())
@@ -331,14 +315,6 @@ macro_rules! internals {
     #[inline]
     pub(crate) const fn const_rem(self, rhs: Self) -> Self {
       Self(self.0.wrapping_rem(rhs.0))
-    }
-
-    pub(crate) const fn const_shl(self, _rhs: u32) -> Self {
-      ::core::panic!("const_shl")
-    }
-
-    pub(crate) const fn const_shr(self, _rhs: u32) -> Self {
-      ::core::panic!("const_shr")
     }
 
     #[inline]

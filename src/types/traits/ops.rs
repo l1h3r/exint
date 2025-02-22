@@ -177,10 +177,10 @@ macro_rules! implement_binary {
     implement_binary!(impl ShrAssign::shr_assign for $crate::$name<N>, i128  as Shr::shr);
     implement_binary!(impl ShrAssign::shr_assign for $crate::$name<N>, isize as Shr::shr);
 
-    // TODO: impl<const N: usize, const M: usize> Shl<$name<M>> for $name<N>;
-    // TODO: impl<const N: usize, const M: usize> Shr<$name<M>> for $name<N>;
-    // TODO: impl<const N: usize, const M: usize> ShlAssign<$name<M>> for $name<N>;
-    // TODO: impl<const N: usize, const M: usize> ShrAssign<$name<M>> for $name<N>;
+    // implement_binary!(impl Shl::shl for $crate::$name<N>, $crate::$name<M> as const_shl);
+    // implement_binary!(impl Shr::shr for $crate::$name<N>, $crate::$name<M> as const_shr);
+    // implement_binary!(impl ShlAssign::shr_assign for $crate::$name<N>, $crate::$name<M> as Shr::shr);
+    // implement_binary!(impl ShrAssign::shr_assign for $crate::$name<N>, $crate::$name<M> as Shr::shr);
   };
   // Entrypoint (2)
   ($outer:ident<$inner:ident>) => {
