@@ -89,8 +89,8 @@ macro_rules! define_traits {
 
 define_traits! {
   @docstring = "Supporting trait for specialized operations.";
-  @base_name = BaseCoreFuncs: Sized;
-  @spec_name = SpecCoreFuncs: Sized;
+  @base_name = BaseCore: Sized;
+  @spec_name = SpecCore: Sized;
   @functions = (
     // -------------------------------------------------------------------------
     // Bitwise Operations
@@ -133,8 +133,8 @@ define_traits! {
 
 define_traits! {
   @docstring = "Supporting trait for specialized operations.";
-  @base_name = BaseSintFuncs: SpecCoreFuncs;
-  @spec_name = SpecSintFuncs: SpecCoreFuncs;
+  @base_name = BaseSint: SpecCore;
+  @spec_name = SpecSint: SpecCore;
   @functions = (
     // -------------------------------------------------------------------------
     // Comparison Operations
@@ -165,8 +165,8 @@ define_traits! {
 
 define_traits! {
   @docstring = "Supporting trait for specialized operations.";
-  @base_name = BaseUintFuncs: SpecCoreFuncs;
-  @spec_name = SpecUintFuncs: SpecCoreFuncs;
+  @base_name = BaseUint: SpecCore;
+  @spec_name = SpecUint: SpecCore;
   @functions = (
     // -------------------------------------------------------------------------
     // Bitwise Operations

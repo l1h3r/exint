@@ -1,8 +1,8 @@
 use ::core::cmp::Ordering;
 
-use crate::llapi::impls::unstable::SpecCoreFuncs;
-use crate::llapi::impls::unstable::SpecSintFuncs;
-use crate::llapi::impls::unstable::SpecUintFuncs;
+use crate::llapi::impls::unstable::SpecCore;
+use crate::llapi::impls::unstable::SpecSint;
+use crate::llapi::impls::unstable::SpecUint;
 use crate::llapi::macros::maybe_intrinsic;
 use crate::llapi::macros::specialize;
 
@@ -20,7 +20,7 @@ macro_rules! three_way_compare {
 }
 
 specialize! {
-  impl const SpecCoreFuncs for Int<u8|u16|u32|u64|u128|i8|i16|i32|i64|i128> {
+  impl const SpecCore for Int<u8|u16|u32|u64|u128|i8|i16|i32|i64|i128> {
     // -------------------------------------------------------------------------
     // Bitwise Operations
     // -------------------------------------------------------------------------
@@ -181,7 +181,7 @@ specialize! {
 }
 
 specialize! {
-  impl const SpecSintFuncs for Int<i8|i16|i32|i64|i128> {
+  impl const SpecSint for Int<i8|i16|i32|i64|i128> {
     // -------------------------------------------------------------------------
     // Comparison Operations
     // -------------------------------------------------------------------------
@@ -310,7 +310,7 @@ specialize! {
 }
 
 specialize! {
-  impl const SpecUintFuncs for Int<u8|u16|u32|u64|u128> {
+  impl const SpecUint for Int<u8|u16|u32|u64|u128> {
     // -------------------------------------------------------------------------
     // Bitwise Operations
     // -------------------------------------------------------------------------
