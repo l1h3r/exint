@@ -8,6 +8,7 @@ readme = "README.md"
 [workspace]
 members = [
   "crates/exint-backend",
+  "crates/exint-filegen",
   "crates/exint-integer",
 ]
 
