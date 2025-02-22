@@ -233,7 +233,7 @@ macro_rules! checked {
     #[inline]
     pub const fn checked_signed_diff(self, rhs: Self) -> Option<$crate::int<S>> {
       let result: $crate::int<S> = self.wrapping_sub(rhs).to_int();
-      let overflow: bool = self.const_ge(&rhs) == result.const_lt(&$crate::int::ZERO);
+      let overflow: bool = self.const_ge(&rhs) == result.is_negative();
 
       if !overflow {
         Some(result)
@@ -388,8 +388,8 @@ macro_rules! checked {
 
       let mut value: Self = $crate::macros::tri!(self.checked_rem(rhs));
 
-      if (value.const_gt(&Self::ZERO) && rhs.const_lt(&Self::ZERO)) ||
-         (value.const_lt(&Self::ZERO) && rhs.const_gt(&Self::ZERO))
+      if (value.is_positive() && rhs.is_negative()) ||
+         (value.is_negative() && rhs.is_positive())
       {
         value = value.const_add(rhs);
       }
@@ -405,7 +405,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_isqrt(self) -> Option<Self> {
-      if self.const_lt(&Self::ZERO) {
+      if self.is_negative() {
         None
       } else {
         Some(self.to_uint().isqrt().to_int())

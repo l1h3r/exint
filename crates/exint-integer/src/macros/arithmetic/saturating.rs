@@ -20,7 +20,7 @@ macro_rules! saturating {
     pub const fn saturating_add_signed(self, rhs: $crate::int<S>) -> Self {
       let (result, overflow): (Self, bool) = self.overflowing_add(rhs.to_uint());
 
-      if overflow == rhs.const_lt(&$crate::int::ZERO) {
+      if overflow == rhs.is_negative() {
         result
       } else if overflow {
         Self::MAX
@@ -36,7 +36,7 @@ macro_rules! saturating {
 
       if !overflow {
         result
-      } else if rhs.const_lt(&$crate::int::ZERO) {
+      } else if rhs.is_negative() {
         Self::MAX
       } else {
         Self::ZERO
@@ -93,7 +93,7 @@ macro_rules! saturating {
     pub const fn saturating_mul(self, rhs: Self) -> Self {
       match self.checked_mul(rhs) {
         Some(result) => result,
-        None if self.const_lt(&Self::ZERO) == rhs.const_lt(&Self::ZERO) => Self::MAX,
+        None if self.is_negative() == rhs.is_negative() => Self::MAX,
         None => Self::MIN,
       }
     }
@@ -112,7 +112,7 @@ macro_rules! saturating {
     pub const fn saturating_pow(self, exp: u32) -> Self {
       match self.checked_pow(exp) {
         Some(result) => result,
-        None if self.const_lt(&Self::ZERO) && exp % 2 == 1 => Self::MIN,
+        None if self.is_negative() && exp % 2 == 1 => Self::MIN,
         None => Self::MAX,
       }
     }

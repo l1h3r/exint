@@ -105,11 +105,11 @@ macro_rules! generic {
     }
 
     pub const fn is_negative(self) -> bool {
-      panic!("is_negative")
+      self.const_lt(&Self::ZERO)
     }
 
     pub const fn is_positive(self) -> bool {
-      panic!("is_positive")
+      self.const_gt(&Self::ZERO)
     }
 
     #[cfg(feature = "int_roundings")]

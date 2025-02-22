@@ -69,7 +69,7 @@ macro_rules! overflowing {
     #[inline]
     pub const fn overflowing_add_signed(self, rhs: $crate::int<S>) -> (Self, bool) {
       let out: (Self, bool) = self.overflowing_add(rhs.to_uint());
-      let cmp: bool = out.1 ^ rhs.const_lt(&$crate::int::ZERO);
+      let cmp: bool = out.1 ^ rhs.is_negative();
 
       (out.0, cmp)
     }
@@ -78,7 +78,7 @@ macro_rules! overflowing {
     #[inline]
     pub const fn overflowing_sub_signed(self, rhs: $crate::int<S>) -> (Self, bool) {
       let out: (Self, bool) = self.overflowing_sub(rhs.to_uint());
-      let cmp: bool = out.1 ^ rhs.const_lt(&$crate::int::ZERO);
+      let cmp: bool = out.1 ^ rhs.is_negative();
 
       (out.0, cmp)
     }
@@ -124,7 +124,7 @@ macro_rules! overflowing {
     pub const fn overflowing_add_unsigned(self, rhs: $crate::uint<S>) -> (Self, bool) {
       let rhs: Self = rhs.to_int();
       let out: (Self, bool) = self.overflowing_add(rhs);
-      let cmp: bool = out.1 ^ rhs.const_lt(&Self::ZERO);
+      let cmp: bool = out.1 ^ rhs.is_negative();
 
       (out.0, cmp)
     }
@@ -134,7 +134,7 @@ macro_rules! overflowing {
     pub const fn overflowing_sub_unsigned(self, rhs: $crate::uint<S>) -> (Self, bool) {
       let rhs: Self = rhs.to_int();
       let out: (Self, bool) = self.overflowing_sub(rhs);
-      let cmp: bool = out.1 ^ rhs.const_lt(&Self::ZERO);
+      let cmp: bool = out.1 ^ rhs.is_negative();
 
       (out.0, cmp)
     }
