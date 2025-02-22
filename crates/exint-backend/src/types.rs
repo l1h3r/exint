@@ -14,6 +14,7 @@ pub(crate) struct Padding<const T: usize, const U: usize> {
 }
 
 impl<const T: usize, const U: usize> Padding<T, U> {
+  /// Create a new instance of `Padding`.
   #[inline]
   pub(crate) const fn new(integer: Integer<T>) -> Self {
     Self {
@@ -22,6 +23,7 @@ impl<const T: usize, const U: usize> Padding<T, U> {
     }
   }
 
+  /// Get the integer value stored in this `Padding`.
   #[inline]
   pub(crate) const fn get(self) -> Integer<T> {
     self.integer

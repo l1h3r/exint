@@ -88,7 +88,7 @@ pub(crate) const fn resize<const T: usize, const U: usize, const UINT: bool>(
     // In BE, we need to shift the src pointer to a higher memory address and
     // copy the less-significant bytes.
     //
-    // SAFETY: Reads are safe since `src == [u8; T]` and `(T - U) + U == T`
+    // SAFETY: Reads are safe since `src == [u8; T]` and `(T - U) + U == T`.
     if cfg!(target_endian = "big") {
       src = unsafe { src.add(T - U) };
     }

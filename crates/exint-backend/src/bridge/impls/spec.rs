@@ -182,7 +182,7 @@ specialize! {
       let lhs: <Self as Exts>::Uint = self.zext();
       let rhs: <Self as Exts>::Uint = other.zext();
 
-      // SAFETY: Addition cannot overflow the next power-of-two size
+      // SAFETY: Addition cannot overflow the next power-of-two size.
       let out: <Self as Exts>::Uint = unsafe {
         intrinsics::unchecked_add(lhs, rhs)
       };
@@ -289,7 +289,7 @@ specialize! {
       let lhs: <Self as Exts>::Uint = self.zext();
       let rhs: <Self as Exts>::Uint = other.zext();
 
-      // SAFETY: Multiplication cannot overflow the next power-of-two size
+      // SAFETY: Multiplication cannot overflow the next power-of-two size.
       let out: <Self as Exts>::Uint = unsafe {
         intrinsics::unchecked_mul(lhs, rhs)
       };
@@ -303,7 +303,7 @@ specialize! {
       let lhs: <Self as Exts>::Uint = self.zext();
       let rhs: <Self as Exts>::Uint = other.zext();
 
-      // SAFETY: Multiplication cannot overflow the next power-of-two size
+      // SAFETY: Multiplication cannot overflow the next power-of-two size.
       let out: <Self as Exts>::Uint = unsafe {
         intrinsics::unchecked_mul(lhs, rhs)
       };
