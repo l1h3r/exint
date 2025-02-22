@@ -1119,6 +1119,148 @@ impl<const N: usize> uint<N> {
   macros::parse_str!(uint);
 }
 
+// -----------------------------------------------------------------------------
+// u8 Extensions
+// -----------------------------------------------------------------------------
+
+impl uint<1> {
+  #[doc = include_doc!(uint, "is_ascii")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii(&self) -> bool {
+    self.into_u8().is_ascii()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_alphabetic")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_alphabetic(&self) -> bool {
+    self.into_u8().is_ascii_alphabetic()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_alphanumeric")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_alphanumeric(&self) -> bool {
+    self.into_u8().is_ascii_alphanumeric()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_digit")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_digit(&self) -> bool {
+    self.into_u8().is_ascii_digit()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_uppercase")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_uppercase(&self) -> bool {
+    self.into_u8().is_ascii_uppercase()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_lowercase")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_lowercase(&self) -> bool {
+    self.into_u8().is_ascii_lowercase()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_hexdigit")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_hexdigit(&self) -> bool {
+    self.into_u8().is_ascii_hexdigit()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_octdigit")]
+  #[cfg(feature = "is_ascii_octdigit")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_octdigit(&self) -> bool {
+    self.into_u8().is_ascii_octdigit()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_punctuation")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_punctuation(&self) -> bool {
+    self.into_u8().is_ascii_punctuation()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_graphic")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_graphic(&self) -> bool {
+    self.into_u8().is_ascii_graphic()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_whitespace")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_whitespace(&self) -> bool {
+    self.into_u8().is_ascii_whitespace()
+  }
+
+  #[doc = include_doc!(uint, "is_ascii_control")]
+  #[must_use]
+  #[inline]
+  pub const fn is_ascii_control(&self) -> bool {
+    self.into_u8().is_ascii_control()
+  }
+
+  #[doc = include_doc!(uint, "as_ascii")]
+  #[cfg(feature = "ascii_char")]
+  #[must_use]
+  #[inline]
+  pub const fn as_ascii(&self) -> Option<::core::ascii::Char> {
+    self.into_u8().as_ascii()
+  }
+
+  #[doc = include_doc!(uint, "to_ascii_uppercase")]
+  #[must_use = "to uppercase the value in-place, use `make_ascii_uppercase()`"]
+  #[inline]
+  pub const fn to_ascii_uppercase(&self) -> uint<1> {
+    Self::from_u8(self.into_u8().to_ascii_uppercase())
+  }
+
+  #[doc = include_doc!(uint, "to_ascii_lowercase")]
+  #[must_use = "to lowercase the value in-place, use `make_ascii_lowercase()`"]
+  #[inline]
+  pub const fn to_ascii_lowercase(&self) -> uint<1> {
+    Self::from_u8(self.into_u8().to_ascii_lowercase())
+  }
+
+  #[doc = include_doc!(uint, "make_ascii_uppercase")]
+  #[inline]
+  pub const fn make_ascii_uppercase(&mut self) {
+    *self = self.to_ascii_uppercase();
+  }
+
+  #[doc = include_doc!(uint, "make_ascii_lowercase")]
+  #[inline]
+  pub const fn make_ascii_lowercase(&mut self) {
+    *self = self.to_ascii_lowercase();
+  }
+
+  #[doc = include_doc!(uint, "eq_ignore_ascii_case")]
+  #[inline]
+  pub const fn eq_ignore_ascii_case(&self, other: &Self) -> bool {
+    self.into_u8().eq_ignore_ascii_case(&other.into_u8())
+  }
+
+  #[doc = include_doc!(uint, "escape_ascii")]
+  #[must_use = must_use_doc!()]
+  #[inline]
+  pub fn escape_ascii(self) -> ::core::ascii::EscapeDefault {
+    self.into_u8().escape_ascii()
+  }
+}
+
+// -----------------------------------------------------------------------------
+// u16 Extensions
+// -----------------------------------------------------------------------------
+
 impl uint<2> {
   #[doc = include_doc!(uint, "is_utf16_surrogate")]
   #[cfg(feature = "utf16_extra")]

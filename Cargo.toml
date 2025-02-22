@@ -82,6 +82,11 @@ integer_atomics = ["nightly"]
 # Tracking Issue: https://github.com/rust-lang/rust/issues/125882
 integer_sign_cast = []
 
+# Enable support for `is_ascii_octdigit` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/101288
+is_ascii_octdigit = ["nightly"]
+
 # Enable support for `mixed_integer_ops_unsigned_sub` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/126043

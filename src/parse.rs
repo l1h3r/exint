@@ -117,18 +117,60 @@ macro_rules! __int {
 macro_rules! implement {
   ($name:ident) => {
     impl<const N: usize> crate::$name<N> {
+      // TODO: Improve this mess and handle same syntax as builtin literals
+      // - support underscores
+      // - fully support b'<char>'
       #[doc(hidden)]
       #[must_use]
       pub const fn __parse(input: &'static str) -> Self {
-        // TODO: Allow underscores (?)
         let (bytes, radix): (&'static [u8], u32) = match input.as_bytes() {
+          [b'b', b'\'', body @ .., b'\''] => return Self::__parse_char(body),
           [b'0', b'b', tail @ ..] => (tail, 2),
           [b'0', b'o', tail @ ..] => (tail, 8),
           [b'0', b'x', tail @ ..] => (tail, 16),
           bytes => (bytes, 10),
         };
 
-        match Self::from_ascii_radix(bytes, radix) {
+        Self::__parse_text(bytes, radix)
+      }
+
+      const fn __parse_char(input: &'static [u8]) -> Self {
+        match input {
+          [b'b', b'\'', ch, b'\''] => {
+            Self::from_u8(*ch)
+          }
+          [b'b', b'\'', b'\\', b't', b'\''] => {
+            Self::from_u8(b'\t')
+          }
+          [b'b', b'\'', b'\\', b'r', b'\''] => {
+            Self::from_u8(b'\r')
+          }
+          [b'b', b'\'', b'\\', b'n', b'\''] => {
+            Self::from_u8(b'\n')
+          }
+          [b'b', b'\'', b'\\', b'\\', b'\''] => {
+            Self::from_u8(b'\\')
+          }
+          [b'b', b'\'', b'\\', b'\'', b'\''] => {
+            Self::from_u8(b'\'')
+          }
+          [b'b', b'\'', b'\\', 0x00..=0x1F | 0x7F, b'\''] => {
+            ::core::panic!("TODO - hex escape")
+          }
+          [b'b', b'\'', b'\\', _byte, b'\''] => {
+            ::core::panic!("TODO - maybe verbatim")
+          }
+          [b'b', b'\'', b'\\', b'x', body @ .., b'\''] => {
+            Self::__parse_text(body, 16)
+          }
+          _ => {
+            ::core::unreachable!()
+          }
+        }
+      }
+
+      const fn __parse_text(input: &'static [u8], radix: u32) -> Self {
+        match Self::from_ascii_radix(input, radix) {
           ::core::result::Result::Ok(value) => value,
           ::core::result::Result::Err(error) => ::core::panic!("{}", error.as_str()),
         }

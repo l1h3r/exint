@@ -59,6 +59,7 @@ impl SourceList {
       include_str!("docs/uint/byteorder.toml"),
       include_str!("docs/uint/constants.toml"),
       include_str!("docs/uint/conversion.toml"),
+      include_str!("docs/uint/extension.toml"),
       include_str!("docs/uint/parse_str.toml"),
     ],
   };
@@ -135,6 +136,7 @@ where
   writeln!(writer, "# Examples")?;
 
   if let Some(examples) = doc_str.examples() {
+    // TODO: skip header for some methods (u8 exts, u16 exts)
     static HEADER: &str = "Basic usage:";
     write_examples(&mut writer, HEADER, examples, &mut formatter)?;
   }
