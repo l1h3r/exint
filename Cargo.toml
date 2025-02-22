@@ -72,6 +72,11 @@ int_roundings = []
 # Tracking Issue: https://github.com/rust-lang/rust/issues/99069
 integer_atomics = ["nightly"]
 
+# Enable support for `mixed_integer_ops_unsigned_sub` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/126043
+mixed_integer_ops_unsigned_sub = []
+
 # Enable support for `integer_sign_cast` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/125882

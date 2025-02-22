@@ -371,6 +371,7 @@ impl<const N: usize> uint<N> {
   }
 
   #[doc = include_doc!(uint, "checked_sub_signed")]
+  #[cfg(feature = "mixed_integer_ops_unsigned_sub")]
   #[must_use = must_use_doc!()]
   #[inline]
   pub const fn checked_sub_signed(self, rhs: int<N>) -> Option<Self> {
@@ -609,6 +610,7 @@ impl<const N: usize> uint<N> {
   }
 
   #[doc = include_doc!(uint, "overflowing_sub_signed")]
+  #[cfg(feature = "mixed_integer_ops_unsigned_sub")]
   #[must_use = must_use_doc!()]
   #[inline]
   pub const fn overflowing_sub_signed(self, rhs: int<N>) -> (Self, bool) {
@@ -739,6 +741,7 @@ impl<const N: usize> uint<N> {
   }
 
   #[doc = include_doc!(uint, "saturating_sub_signed")]
+  #[cfg(feature = "mixed_integer_ops_unsigned_sub")]
   #[must_use = must_use_doc!()]
   #[inline]
   pub const fn saturating_sub_signed(self, rhs: int<N>) -> Self {
@@ -1002,6 +1005,7 @@ impl<const N: usize> uint<N> {
   }
 
   #[doc = include_doc!(uint, "wrapping_sub_signed")]
+  #[cfg(feature = "mixed_integer_ops_unsigned_sub")]
   #[must_use = must_use_doc!()]
   #[inline]
   pub const fn wrapping_sub_signed(self, rhs: int<N>) -> Self {
