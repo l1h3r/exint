@@ -15,6 +15,9 @@ default = []
 # Marker trait for features that require a nightly compiler.
 nightly = []
 
+# Marker trait for features that require libstd.
+std = []
+
 # Marker trait for specialization-based features.
 specialization = ["nightly"]
 
@@ -34,10 +37,25 @@ core_intrinsics = ["nightly"]
 # Enable optimizations requiring `min_specialization`.
 min_specialization = ["const_trait_impl", "specialization"]
 
+# Enable support for `ascii_char` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/110998
+ascii_char = ["nightly"]
+
 # Enable support for `bigint_helper_methods` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/85532
 bigint_helper_methods = []
+
+# Enable support for `f16` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/116909
+f16 = ["nightly"]
+
+# Enable support for `f128` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/116909
+f128 = ["nightly"]
 
 # Enable support for `int_from_ascii` core functionality.
 #

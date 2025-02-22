@@ -27,10 +27,10 @@ const UINT_SOURCES: &[&str] = &[
   include_str!("src/docs/uint/arithmetic/unbounded.toml"),
   include_str!("src/docs/uint/arithmetic/unchecked.toml"),
   include_str!("src/docs/uint/arithmetic/wrapping.toml"),
-  include_str!("src/docs/uint/assorted.toml"),
   include_str!("src/docs/uint/bit_tools.toml"),
   include_str!("src/docs/uint/byteorder.toml"),
   include_str!("src/docs/uint/constants.toml"),
+  include_str!("src/docs/uint/conversion.toml"),
   include_str!("src/docs/uint/parse_str.toml"),
 ];
 
@@ -44,10 +44,10 @@ const SINT_SOURCES: &[&str] = &[
   include_str!("src/docs/sint/arithmetic/unbounded.toml"),
   include_str!("src/docs/sint/arithmetic/unchecked.toml"),
   include_str!("src/docs/sint/arithmetic/wrapping.toml"),
-  include_str!("src/docs/sint/assorted.toml"),
   include_str!("src/docs/sint/bit_tools.toml"),
   include_str!("src/docs/sint/byteorder.toml"),
   include_str!("src/docs/sint/constants.toml"),
+  include_str!("src/docs/sint/conversion.toml"),
   include_str!("src/docs/sint/parse_str.toml"),
 ];
 
