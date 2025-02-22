@@ -1,10 +1,12 @@
 use serde::Deserialize;
+use std::borrow::Cow;
 
 use crate::parse::Value;
 
 #[derive(Deserialize)]
 pub struct DocStr {
-  overview: &'static str,
+  #[serde(borrow)]
+  overview: Cow<'static, str>,
   examples: Option<Value>,
   examples_overflow: Option<Value>,
   examples_div_zero: Option<Value>,
@@ -12,8 +14,8 @@ pub struct DocStr {
 }
 
 impl DocStr {
-  pub const fn overview(&self) -> &'static str {
-    self.overview
+  pub fn overview(&self) -> &str {
+    self.overview.as_ref()
   }
 
   pub const fn examples(&self) -> Option<&Value> {

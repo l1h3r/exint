@@ -157,11 +157,11 @@ where
   Ok(())
 }
 
-fn write_examples<W>(
+fn write_examples<'a, W>(
   writer: &mut W,
   header: &'static str,
-  examples: &Value,
-  formatter: &mut StringFmt<'_>,
+  examples: &'a Value,
+  formatter: &mut StringFmt<'a>,
 ) -> Result<(), Error>
 where
   W: Write,
@@ -181,11 +181,11 @@ where
   Ok(())
 }
 
-fn write_examples_panicking<W>(
+fn write_examples_panicking<'a, W>(
   writer: &mut W,
   header: &'static str,
-  examples: &Value,
-  formatter: &mut StringFmt<'_>,
+  examples: &'a Value,
+  formatter: &mut StringFmt<'a>,
 ) -> Result<(), Error>
 where
   W: Write,

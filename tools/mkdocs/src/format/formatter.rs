@@ -10,17 +10,13 @@ use crate::format::VARS;
 static AHO: LazyLock<AhoCorasick> = LazyLock::new(|| AhoCorasick::new(KEYS).unwrap());
 
 pub struct StringFmt<'a> {
-  value: &'static str,
+  value: &'a str,
   extra_keys: AhoCorasick,
   extra_vars: &'a [&'static str],
 }
 
 impl<'a> StringFmt<'a> {
-  pub fn new(
-    value: &'static str,
-    extra_keys: &[&'static str],
-    extra_vars: &'a [&'static str],
-  ) -> Self {
+  pub fn new(value: &'a str, extra_keys: &[&'static str], extra_vars: &'a [&'static str]) -> Self {
     assert!(
       extra_keys.len() == extra_vars.len(),
       "format requires a replacement for every pattern"
@@ -33,7 +29,7 @@ impl<'a> StringFmt<'a> {
     }
   }
 
-  pub fn set_value(&mut self, value: &'static str) {
+  pub fn set_value(&mut self, value: &'a str) {
     self.value = value;
   }
 
