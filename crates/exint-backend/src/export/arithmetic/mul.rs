@@ -1,5 +1,7 @@
 use ::core::marker::Sized;
 
+use crate::types::Int;
+
 // -----------------------------------------------------------------------------
 // Trait Definition
 // -----------------------------------------------------------------------------
@@ -25,6 +27,42 @@ pub(crate) trait SpecSmul: SpecUmul {
 // -----------------------------------------------------------------------------
 // Implementation - Default
 // -----------------------------------------------------------------------------
+
+impl<const S: usize> const SpecUmul for Int<S> {
+  default fn omul(self, other: Self) -> (Self, bool) {
+    ::core::panic!("SpecUmul::omul")
+  }
+
+  default fn smul(self, other: Self) -> Self {
+    ::core::panic!("SpecUmul::smul")
+  }
+
+  default fn wmul(self, other: Self) -> Self {
+    ::core::panic!("SpecUmul::wmul")
+  }
+
+  default unsafe fn umul(self, other: Self) -> Self {
+    ::core::panic!("SpecUmul::umul")
+  }
+}
+
+impl<const S: usize> const SpecSmul for Int<S> {
+  default fn omul(self, other: Self) -> (Self, bool) {
+    ::core::panic!("SpecSmul::omul")
+  }
+
+  default fn smul(self, other: Self) -> Self {
+    ::core::panic!("SpecSmul::smul")
+  }
+
+  default fn wmul(self, other: Self) -> Self {
+    ::core::panic!("SpecSmul::wmul")
+  }
+
+  default unsafe fn umul(self, other: Self) -> Self {
+    ::core::panic!("SpecSmul::umul")
+  }
+}
 
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for 'std' sizes
