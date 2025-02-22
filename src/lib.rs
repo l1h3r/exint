@@ -37,6 +37,7 @@ pub use self::error::TryFromIntError;
 pub use self::types::int;
 pub use self::types::uint;
 pub use self::types::ToAtomic;
+pub use self::types::ToNonZero;
 
 pub mod primitive {
   //! Integer type-aliases.
