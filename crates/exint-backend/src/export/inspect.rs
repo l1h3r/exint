@@ -1,5 +1,7 @@
+use crate::export::convert::SpecConvert;
 use crate::macros::specialize;
 use crate::traits::Cast;
+use crate::traits::Exts;
 use crate::types::Int;
 
 // -----------------------------------------------------------------------------
@@ -38,16 +40,19 @@ impl<const S: usize> const SpecInspect for Int<S> {
 
 specialize! {
   impl SpecInspect for Int<1|2|4|8|16> {
+    // LLVM generates `@llvm.ctpop.$type` intrinsic
     #[inline]
     fn ctpop(self) -> u32 {
       ::core::intrinsics::ctpop(self.ucast())
     }
 
+    // LLVM generates `@llvm.ctlz.$type` intrinsic
     #[inline]
     fn ctlz(self) -> u32 {
       ::core::intrinsics::ctlz(self.ucast())
     }
 
+    // LLVM generates `@llvm.cttz.$type` intrinsic
     #[inline]
     fn cttz(self) -> u32 {
       ::core::intrinsics::cttz(self.ucast())
@@ -58,3 +63,29 @@ specialize! {
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for common sizes
 // -----------------------------------------------------------------------------
+
+specialize! {
+  impl SpecInspect for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    // LLVM generates `@llvm.ctpop.$type` intrinsic
+    #[inline]
+    fn ctpop(self) -> u32 {
+      self.zext().count_ones()
+    }
+
+    // LLVM generates `@llvm.ctlz.$type` intrinsic
+    #[inline]
+    fn ctlz(self) -> u32 {
+      SpecConvert::swap1(self).cttz()
+    }
+
+    // LLVM generates `@llvm.cttz.$type` intrinsic
+    #[inline]
+    fn cttz(self) -> u32 {
+      if self.zext() == 0 {
+        return Self::BITS;
+      }
+
+      self.zext().trailing_zeros()
+    }
+  }
+}

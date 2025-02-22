@@ -1,5 +1,6 @@
 use crate::macros::specialize;
 use crate::traits::Cast;
+use crate::traits::Exts;
 use crate::types::Int;
 
 // -----------------------------------------------------------------------------
@@ -20,7 +21,10 @@ pub(crate) trait SpecCompare {
 
 impl<const S: usize> const SpecCompare for Int<S> {
   default fn eq(self, other: Self) -> bool {
-    ::core::panic!("SpecCompare::eq")
+    // SAFETY:
+    //   - integer bytes **are not** uninitialized
+    //   - integer types **do not** have padding
+    unsafe { ::core::intrinsics::raw_eq(&self, &other) }
   }
 
   default fn ucmp(self, other: Self) -> ::core::cmp::Ordering {
@@ -38,19 +42,13 @@ impl<const S: usize> const SpecCompare for Int<S> {
 
 specialize! {
   impl SpecCompare for Int<1|2|4|8|16> {
-    #[inline]
-    fn eq(self, other: Self) -> bool {
-      // SAFETY:
-      //   - integer bytes **are not** uninitialized
-      //   - integer types **do not** have padding
-      unsafe { ::core::intrinsics::raw_eq(&self, &other) }
-    }
-
+    // LLVM generates `icmp ult $type` and `icmp ne $type` instructions
     #[inline]
     fn ucmp(self, other: Self) -> ::core::cmp::Ordering {
       ::core::intrinsics::three_way_compare(self.ucast(), other.ucast())
     }
 
+    // LLVM generates `icmp slt $type` and `icmp ne $type` instructions
     #[inline]
     fn scmp(self, other: Self) -> ::core::cmp::Ordering {
       ::core::intrinsics::three_way_compare(self.scast(), other.scast())
@@ -61,3 +59,19 @@ specialize! {
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for common sizes
 // -----------------------------------------------------------------------------
+
+specialize! {
+  impl SpecCompare for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    // LLVM generates `icmp ult $type` and `icmp ne $type` instructions
+    #[inline]
+    fn ucmp(self, other: Self) -> ::core::cmp::Ordering {
+      ::core::intrinsics::three_way_compare(self.zext(), other.zext())
+    }
+
+    // LLVM generates `icmp slt $type` and `icmp ne $type` instructions
+    #[inline]
+    fn scmp(self, other: Self) -> ::core::cmp::Ordering {
+      ::core::intrinsics::three_way_compare(self.sext(), other.sext())
+    }
+  }
+}
