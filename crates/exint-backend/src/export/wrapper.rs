@@ -184,7 +184,10 @@ pub const fn cttz<T: Copy, const S: usize>(integer: T) -> u32 {
 #[track_caller]
 pub const unsafe fn ctlz_nonzero<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
-  SpecInspect::ctlz_nonzero(cast!(int(S) from integer))
+  // SAFETY: This is guaranteed to be safe by the caller.
+  unsafe {
+    SpecInspect::ctlz_nonzero(cast!(int(S) from integer))
+  }
 }
 
 #[must_use]
@@ -192,7 +195,10 @@ pub const unsafe fn ctlz_nonzero<T: Copy, const S: usize>(integer: T) -> u32 {
 #[track_caller]
 pub const unsafe fn cttz_nonzero<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
-  SpecInspect::cttz_nonzero(cast!(int(S) from integer))
+  // SAFETY: This is guaranteed to be safe by the caller.
+  unsafe {
+    SpecInspect::cttz_nonzero(cast!(int(S) from integer))
+  }
 }
 
 // -----------------------------------------------------------------------------
