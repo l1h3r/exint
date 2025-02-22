@@ -14,7 +14,7 @@ macro_rules! internals {
     #[must_use]
     #[inline]
     const fn const_eq(&self, other: &Self) -> bool {
-      panic!("const_eq")
+      $crate::intrinsics::eq::<Self, S>(*self, *other)
     }
 
     // -------------------------------------------------------------------------
@@ -24,7 +24,7 @@ macro_rules! internals {
     #[must_use]
     #[inline]
     const fn const_cmp(&self, other: &Self) -> ::core::cmp::Ordering {
-      panic!("const_cmp")
+      $crate::intrinsics::cmp::<Self, S, $uint>(*self, *other)
     }
 
     // -------------------------------------------------------------------------
@@ -34,19 +34,19 @@ macro_rules! internals {
     #[must_use]
     #[inline]
     const fn const_band(self, rhs: Self) -> Self {
-      panic!("const_band")
+      $crate::intrinsics::band::<Self, S>(self, rhs)
     }
 
     #[must_use]
     #[inline]
     const fn const_bor(self, rhs: Self) -> Self {
-      panic!("const_bor")
+      $crate::intrinsics::bor::<Self, S>(self, rhs)
     }
 
     #[must_use]
     #[inline]
     const fn const_bxor(self, rhs: Self) -> Self {
-      panic!("const_bxor")
+      $crate::intrinsics::bxor::<Self, S>(self, rhs)
     }
 
     // -------------------------------------------------------------------------
@@ -102,7 +102,7 @@ macro_rules! internals {
     #[must_use]
     #[inline]
     const fn const_not(self) -> Self {
-      panic!("const_not")
+      $crate::intrinsics::bnot::<Self, S>(self)
     }
 
     #[must_use]
