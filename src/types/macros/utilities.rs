@@ -1,6 +1,6 @@
 /// An attempt to match the default semantics of overflow behavior.
 ///
-/// Ref: https://doc.rust-lang.org/reference/expressions/operator-expr.html#overflow
+/// [Reference](https://doc.rust-lang.org/reference/expressions/operator-expr.html#overflow)
 macro_rules! arithmetic_select {
   (
     message: $message:expr_2021,

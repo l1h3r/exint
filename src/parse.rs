@@ -118,6 +118,7 @@ macro_rules! implement {
   ($name:ident) => {
     impl<const N: usize> crate::$name<N> {
       #[doc(hidden)]
+      #[must_use]
       pub const fn __parse(input: &'static str) -> Self {
         // TODO: Allow underscores (?)
         let (bytes, radix): (&'static [u8], u32) = match input.as_bytes() {

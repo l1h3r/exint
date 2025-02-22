@@ -214,6 +214,11 @@ variant_size_differences = "deny"
 # unqualified_local_imports = "deny"
 
 [lints.clippy]
+correctness = { level = "deny", priority = -1 }
+suspicious = { level = "deny", priority = -1 }
+complexity = { level = "deny", priority = -1 }
+perf = { level = "deny", priority = -1 }
+style = { level = "deny", priority = -1 }
 
 [lints.rustdoc] # https://doc.rust-lang.org/rustdoc/lints.html
 broken_intra_doc_links = "deny"

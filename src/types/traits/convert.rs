@@ -549,6 +549,10 @@ macro_rules! impl_float {
   ) => {
     $(#[$meta])?
     impl ::core::convert::From<$name<$size>> for $float {
+      // This cast is 'okay' since it eventually gets optimized to a
+      // properly-sized uitofp/sitofp instruction.
+      #[allow(clippy::cast_lossless)]
+      #[allow(clippy::cast_precision_loss)]
       #[doc = docstring!($name<$size>, $float)]
       #[inline]
       fn from(other: $name<$size>) -> Self {
@@ -779,7 +783,8 @@ impl_float!(int<14> as i128 => f128 where cfg(feature = "f128"));
 // pointer -> {un}signed
 #[cfg(target_pointer_width = "16")]
 mod platform {
-  use super::*;
+  use super::int;
+  use super::uint;
 
   impl_same!(usize => uint<2>);
   impl_from!(usize => uint<3|4|5|6|7|8|9|10|11|12|13|14|15|16|32|64>);
@@ -795,7 +800,8 @@ mod platform {
 
 #[cfg(target_pointer_width = "32")]
 mod platform {
-  use super::*;
+  use super::int;
+  use super::uint;
 
   impl_same!(usize => uint<4>);
   impl_from!(usize => uint<5|6|7|8|9|10|11|12|13|14|15|16|32|64>);
@@ -811,7 +817,8 @@ mod platform {
 
 #[cfg(target_pointer_width = "64")]
 mod platform {
-  use super::*;
+  use super::int;
+  use super::uint;
 
   impl_same!(usize => uint<8>);
   impl_from!(usize => uint<9|10|11|12|13|14|15|16|32|64>);

@@ -246,6 +246,8 @@ macro_rules! implement_exts {
             unsafe { ::core::mem::transmute::<Proxy, Self::Uint>(Proxy::new(self)) }
           }
 
+          // This cast is 'okay' - it's recognized by LLVM as `sext`.
+          #[allow(clippy::cast_possible_wrap)]
           #[inline]
           fn sext(self) -> Self::Sint {
             ((self.zext() as $sint) << Self::UDIFF) >> Self::UDIFF
@@ -261,6 +263,8 @@ macro_rules! implement_exts {
         }
 
         impl const Trunc<[u8; $size]> for $sint {
+          // This cast is 'okay' since we are just truncating bits.
+          #[allow(clippy::cast_sign_loss)]
           #[inline]
           fn trunc(self) -> [u8; $size] {
             (self as $uint).trunc()
