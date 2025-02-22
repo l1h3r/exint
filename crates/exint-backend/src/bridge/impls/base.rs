@@ -1,39 +1,39 @@
 use ::core::cmp::Ordering;
 
-use crate::bridge::traits::SpecBitwise;
-use crate::bridge::traits::SpecCompare;
-use crate::bridge::traits::SpecConvert;
-use crate::bridge::traits::SpecInspect;
-use crate::bridge::traits::SpecSadd;
-use crate::bridge::traits::SpecSdiv;
-use crate::bridge::traits::SpecShift;
-use crate::bridge::traits::SpecSmul;
-use crate::bridge::traits::SpecSsub;
-use crate::bridge::traits::SpecUadd;
-use crate::bridge::traits::SpecUdiv;
-use crate::bridge::traits::SpecUmul;
-use crate::bridge::traits::SpecUsub;
+use crate::bridge::traits::BaseBitwise;
+use crate::bridge::traits::BaseCompare;
+use crate::bridge::traits::BaseConvert;
+use crate::bridge::traits::BaseInspect;
+use crate::bridge::traits::BaseSadd;
+use crate::bridge::traits::BaseSdiv;
+use crate::bridge::traits::BaseShift;
+use crate::bridge::traits::BaseSmul;
+use crate::bridge::traits::BaseSsub;
+use crate::bridge::traits::BaseUadd;
+use crate::bridge::traits::BaseUdiv;
+use crate::bridge::traits::BaseUmul;
+use crate::bridge::traits::BaseUsub;
 use crate::types::Integer;
 
-impl<const S: usize> const SpecBitwise for Integer<S> {
+impl<const S: usize> const BaseBitwise for Integer<S> {
   default fn and(self, _other: Self) -> Self {
-    ::core::panic!("SpecBitwise::and")
+    ::core::panic!("BaseBitwise::and")
   }
 
   default fn or(self, _other: Self) -> Self {
-    ::core::panic!("SpecBitwise::or")
+    ::core::panic!("BaseBitwise::or")
   }
 
   default fn xor(self, _other: Self) -> Self {
-    ::core::panic!("SpecBitwise::xor")
+    ::core::panic!("BaseBitwise::xor")
   }
 
   default fn not(self) -> Self {
-    ::core::panic!("SpecBitwise::not")
+    ::core::panic!("BaseBitwise::not")
   }
 }
 
-impl<const S: usize> const SpecCompare for Integer<S> {
+impl<const S: usize> const BaseCompare for Integer<S> {
   #[inline]
   default fn eq(self, other: Self) -> bool {
     // SAFETY:
@@ -43,192 +43,192 @@ impl<const S: usize> const SpecCompare for Integer<S> {
   }
 
   default fn ucmp(self, _other: Self) -> Ordering {
-    ::core::panic!("SpecCompare::ucmp")
+    ::core::panic!("BaseCompare::ucmp")
   }
 
   default fn scmp(self, _other: Self) -> Ordering {
-    ::core::panic!("SpecCompare::scmp")
+    ::core::panic!("BaseCompare::scmp")
   }
 }
 
-impl<const S: usize> const SpecConvert for Integer<S> {
+impl<const S: usize> const BaseConvert for Integer<S> {
   default fn swap1(self) -> Self {
-    ::core::panic!("SpecConvert::swap1")
+    ::core::panic!("BaseConvert::swap1")
   }
 
   default fn swap8(self) -> Self {
-    ::core::panic!("SpecConvert::swap8")
+    ::core::panic!("BaseConvert::swap8")
   }
 
   default fn rotl(self, _bits: u32) -> Self {
-    ::core::panic!("SpecConvert::rotl")
+    ::core::panic!("BaseConvert::rotl")
   }
 
   default fn rotr(self, _bits: u32) -> Self {
-    ::core::panic!("SpecConvert::rotr")
+    ::core::panic!("BaseConvert::rotr")
   }
 }
 
-impl<const S: usize> const SpecInspect for Integer<S> {
+impl<const S: usize> const BaseInspect for Integer<S> {
   default fn ctpop(self) -> u32 {
-    ::core::panic!("SpecInspect::ctpop")
+    ::core::panic!("BaseInspect::ctpop")
   }
 
   default fn ctlz(self) -> u32 {
-    ::core::panic!("SpecInspect::ctlz")
+    ::core::panic!("BaseInspect::ctlz")
   }
 
   default fn cttz(self) -> u32 {
-    ::core::panic!("SpecInspect::cttz")
+    ::core::panic!("BaseInspect::cttz")
   }
 
   default unsafe fn ctlz_nonzero(self) -> u32 {
-    ::core::panic!("SpecInspect::ctlz_nonzero")
+    ::core::panic!("BaseInspect::ctlz_nonzero")
   }
 
   default unsafe fn cttz_nonzero(self) -> u32 {
-    ::core::panic!("SpecInspect::cttz_nonzero")
+    ::core::panic!("BaseInspect::cttz_nonzero")
   }
 }
 
-impl<const S: usize> const SpecShift for Integer<S> {
+impl<const S: usize> const BaseShift for Integer<S> {
   default unsafe fn shl(self, _bits: u32) -> Self {
-    ::core::panic!("SpecShift::shl")
+    ::core::panic!("BaseShift::shl")
   }
 
   default unsafe fn lshr(self, _bits: u32) -> Self {
-    ::core::panic!("SpecShift::lshr")
+    ::core::panic!("BaseShift::lshr")
   }
 
   default unsafe fn ashr(self, _bits: u32) -> Self {
-    ::core::panic!("SpecShift::ashr")
+    ::core::panic!("BaseShift::ashr")
   }
 }
 
-impl<const S: usize> const SpecUadd for Integer<S> {
+impl<const S: usize> const BaseUadd for Integer<S> {
   default fn oadd(self, _other: Self) -> (Self, bool) {
-    ::core::panic!("SpecUadd::oadd")
+    ::core::panic!("BaseUadd::oadd")
   }
 
   default fn sadd(self, _other: Self) -> Self {
-    ::core::panic!("SpecUadd::sadd")
+    ::core::panic!("BaseUadd::sadd")
   }
 
   default fn wadd(self, _other: Self) -> Self {
-    ::core::panic!("SpecUadd::wadd")
+    ::core::panic!("BaseUadd::wadd")
   }
 
   default unsafe fn uadd(self, _other: Self) -> Self {
-    ::core::panic!("SpecUadd::uadd")
+    ::core::panic!("BaseUadd::uadd")
   }
 }
 
-impl<const S: usize> const SpecSadd for Integer<S> {
+impl<const S: usize> const BaseSadd for Integer<S> {
   default fn oadd(self, _other: Self) -> (Self, bool) {
-    ::core::panic!("SpecSadd::oadd")
+    ::core::panic!("BaseSadd::oadd")
   }
 
   default fn sadd(self, _other: Self) -> Self {
-    ::core::panic!("SpecSadd::sadd")
+    ::core::panic!("BaseSadd::sadd")
   }
 
   default fn wadd(self, _other: Self) -> Self {
-    ::core::panic!("SpecSadd::wadd")
+    ::core::panic!("BaseSadd::wadd")
   }
 
   default unsafe fn uadd(self, _other: Self) -> Self {
-    ::core::panic!("SpecSadd::uadd")
+    ::core::panic!("BaseSadd::uadd")
   }
 }
 
-impl<const S: usize> const SpecUsub for Integer<S> {
+impl<const S: usize> const BaseUsub for Integer<S> {
   default fn osub(self, _other: Self) -> (Self, bool) {
-    ::core::panic!("SpecUsub::osub")
+    ::core::panic!("BaseUsub::osub")
   }
 
   default fn ssub(self, _other: Self) -> Self {
-    ::core::panic!("SpecUsub::ssub")
+    ::core::panic!("BaseUsub::ssub")
   }
 
   default fn wsub(self, _other: Self) -> Self {
-    ::core::panic!("SpecUsub::wsub")
+    ::core::panic!("BaseUsub::wsub")
   }
 
   default unsafe fn usub(self, _other: Self) -> Self {
-    ::core::panic!("SpecUsub::usub")
+    ::core::panic!("BaseUsub::usub")
   }
 }
 
-impl<const S: usize> const SpecSsub for Integer<S> {
+impl<const S: usize> const BaseSsub for Integer<S> {
   default fn osub(self, _other: Self) -> (Self, bool) {
-    ::core::panic!("SpecSsub::osub")
+    ::core::panic!("BaseSsub::osub")
   }
 
   default fn ssub(self, _other: Self) -> Self {
-    ::core::panic!("SpecSsub::ssub")
+    ::core::panic!("BaseSsub::ssub")
   }
 
   default fn wsub(self, _other: Self) -> Self {
-    ::core::panic!("SpecSsub::wsub")
+    ::core::panic!("BaseSsub::wsub")
   }
 
   default unsafe fn usub(self, _other: Self) -> Self {
-    ::core::panic!("SpecSsub::usub")
+    ::core::panic!("BaseSsub::usub")
   }
 }
 
-impl<const S: usize> const SpecUmul for Integer<S> {
+impl<const S: usize> const BaseUmul for Integer<S> {
   default fn omul(self, _other: Self) -> (Self, bool) {
-    ::core::panic!("SpecUmul::omul")
+    ::core::panic!("BaseUmul::omul")
   }
 
   default fn wmul(self, _other: Self) -> Self {
-    ::core::panic!("SpecUmul::wmul")
+    ::core::panic!("BaseUmul::wmul")
   }
 
   default unsafe fn umul(self, _other: Self) -> Self {
-    ::core::panic!("SpecUmul::umul")
+    ::core::panic!("BaseUmul::umul")
   }
 }
 
-impl<const S: usize> const SpecSmul for Integer<S> {
+impl<const S: usize> const BaseSmul for Integer<S> {
   default fn omul(self, _other: Self) -> (Self, bool) {
-    ::core::panic!("SpecSmul::omul")
+    ::core::panic!("BaseSmul::omul")
   }
 
   default fn wmul(self, _other: Self) -> Self {
-    ::core::panic!("SpecSmul::wmul")
+    ::core::panic!("BaseSmul::wmul")
   }
 
   default unsafe fn umul(self, _other: Self) -> Self {
-    ::core::panic!("SpecSmul::umul")
+    ::core::panic!("BaseSmul::umul")
   }
 }
 
-impl<const S: usize> const SpecUdiv for Integer<S> {
+impl<const S: usize> const BaseUdiv for Integer<S> {
   default unsafe fn udiv(self, _other: Self) -> Self {
-    ::core::panic!("SpecUdiv::udiv")
+    ::core::panic!("BaseUdiv::udiv")
   }
 
   default unsafe fn urem(self, _other: Self) -> Self {
-    ::core::panic!("SpecUdiv::urem")
+    ::core::panic!("BaseUdiv::urem")
   }
 
   default unsafe fn ediv(self, _other: Self) -> Self {
-    ::core::panic!("SpecUdiv::ediv")
+    ::core::panic!("BaseUdiv::ediv")
   }
 }
 
-impl<const S: usize> const SpecSdiv for Integer<S> {
+impl<const S: usize> const BaseSdiv for Integer<S> {
   default unsafe fn udiv(self, _other: Self) -> Self {
-    ::core::panic!("SpecSdiv::udiv")
+    ::core::panic!("BaseSdiv::udiv")
   }
 
   default unsafe fn urem(self, _other: Self) -> Self {
-    ::core::panic!("SpecSdiv::urem")
+    ::core::panic!("BaseSdiv::urem")
   }
 
   default unsafe fn ediv(self, _other: Self) -> Self {
-    ::core::panic!("SpecSdiv::ediv")
+    ::core::panic!("BaseSdiv::ediv")
   }
 }
