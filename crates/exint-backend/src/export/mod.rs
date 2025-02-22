@@ -1,3 +1,4 @@
+mod arithmetic;
 mod bitwise;
 mod compare;
 mod convert;
