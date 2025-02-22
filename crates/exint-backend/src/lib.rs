@@ -4,6 +4,7 @@
 #![feature(core_intrinsics)]
 #![feature(min_specialization)]
 #![feature(never_type)]
+#![feature(portable_simd)]
 #![no_std]
 #![no_implicit_prelude]
 #![allow(internal_features)]

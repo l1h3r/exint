@@ -70,6 +70,16 @@ pub(crate) trait Trunc<Output> {
   fn trunc(self) -> Output;
 }
 
+/// Supporting trait for SIMD-enhanced operations.
+#[const_trait]
+pub(crate) trait SimdExt {
+  type Simd;
+  /// Convert a generic integer type into the equivalent SIMD vector.
+  fn into_simd(self) -> Self::Simd;
+  /// Convert a SIMD vector into a generic integer type.
+  fn from_simd(simd: Self::Simd) -> Self;
+}
+
 impl<const S: usize> const Consts for Integer<S> {
   const SIZE: usize = ::core::mem::size_of::<Self>();
   const BITS: u32 = (Self::SIZE as u32) << 3;
@@ -217,16 +227,42 @@ macro_rules! implement {
       }
     }
   };
+  (@simd => from: Int<$size:literal>, repr: [$type:ty; $lanes:literal]) => {
+    const _: () = ::core::assert!($size % ::core::mem::size_of::<$type>() == 0);
+    const _: () = ::core::assert!($lanes * ::core::mem::size_of::<$type>() == $size);
+
+    impl const SimdExt for Integer<$size> {
+      type Simd = ::core::simd::Simd<$type, $lanes>;
+
+      #[inline]
+      fn into_simd(self) -> Self::Simd {
+        // SAFETY: `Self` is the same size and layout as `[$type; $lanes]`.
+        Self::Simd::from_array(unsafe {
+          ::core::intrinsics::transmute(self)
+        })
+      }
+
+      #[inline]
+      fn from_simd(simd: Self::Simd) -> Self {
+        // SAFETY: `[$type; $lanes]` is the same size and layout as `Self`.
+        unsafe {
+          ::core::intrinsics::transmute(simd.to_array())
+        }
+      }
+    }
+  };
 }
 
 implement!(@cast => from: Int<1>,  uint: u8,   sint: i8);
 implement!(@cast => from: Int<2>,  uint: u16,  sint: i16);
-implement!(@exts => from: Int<3>,  uint: u32,  sint: i32);
 implement!(@cast => from: Int<4>,  uint: u32,  sint: i32);
+implement!(@cast => from: Int<8>,  uint: u64,  sint: i64);
+implement!(@cast => from: Int<16>, uint: u128, sint: i128);
+
+implement!(@exts => from: Int<3>,  uint: u32,  sint: i32);
 implement!(@exts => from: Int<5>,  uint: u64,  sint: i64);
 implement!(@exts => from: Int<6>,  uint: u64,  sint: i64);
 implement!(@exts => from: Int<7>,  uint: u64,  sint: i64);
-implement!(@cast => from: Int<8>,  uint: u64,  sint: i64);
 implement!(@exts => from: Int<9>,  uint: u128, sint: i128);
 implement!(@exts => from: Int<10>, uint: u128, sint: i128);
 implement!(@exts => from: Int<11>, uint: u128, sint: i128);
@@ -234,4 +270,9 @@ implement!(@exts => from: Int<12>, uint: u128, sint: i128);
 implement!(@exts => from: Int<13>, uint: u128, sint: i128);
 implement!(@exts => from: Int<14>, uint: u128, sint: i128);
 implement!(@exts => from: Int<15>, uint: u128, sint: i128);
-implement!(@cast => from: Int<16>, uint: u128, sint: i128);
+
+implement!(@simd => from: Int<32>,  repr: [u64; 4]);
+implement!(@simd => from: Int<64>,  repr: [u64; 8]);
+implement!(@simd => from: Int<128>, repr: [u64; 16]);
+implement!(@simd => from: Int<256>, repr: [u64; 32]);
+implement!(@simd => from: Int<512>, repr: [u64; 64]);
