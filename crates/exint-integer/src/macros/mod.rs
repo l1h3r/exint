@@ -24,3 +24,4 @@ pub(crate) use self::parse_str::parse_str;
 pub(crate) use self::utilities::arithmetic_select;
 pub(crate) use self::utilities::maybe_convert_arg;
 pub(crate) use self::utilities::cast;
+pub(crate) use self::utilities::tri;

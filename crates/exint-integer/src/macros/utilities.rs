@@ -54,6 +54,20 @@ macro_rules! cast {
   };
 }
 
+/// A version of `Option::unwrap_or_else` that works in const functions.
+macro_rules! tri {
+  ($expr:expr) => {
+    $crate::macros::tri!($expr, return None)
+  };
+  ($expr:expr, $none:expr) => {
+    match $expr {
+      Some(value) => value,
+      None => $none,
+    }
+  };
+}
+
 pub(crate) use arithmetic_select;
 pub(crate) use maybe_convert_arg;
 pub(crate) use cast;
+pub(crate) use tri;
