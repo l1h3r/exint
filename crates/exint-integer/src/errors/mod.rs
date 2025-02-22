@@ -17,14 +17,12 @@ pub type ParseIntError = ();
 
 /// The error type returned when a checked integral type conversion fails.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct TryFromIntError {
-  unreachable: (),
-}
+pub struct TryFromIntError(());
 
 impl TryFromIntError {
   #[inline]
   pub(crate) const fn new() -> Self {
-    Self { unreachable: () }
+    Self(())
   }
 }
 
