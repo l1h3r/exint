@@ -142,7 +142,7 @@ macro_rules! overflowing {
     #[must_use]
     #[inline]
     pub const fn overflowing_div(self, rhs: Self) -> (Self, bool) {
-      if ::core::intrinsics::unlikely(self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE)) {
+      if unlikely(self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE)) {
         (self, true)
       } else {
         (self.const_div(rhs), false)
@@ -152,7 +152,7 @@ macro_rules! overflowing {
     #[must_use]
     #[inline]
     pub const fn overflowing_div_euclid(self, rhs: Self) -> (Self, bool) {
-      if ::core::intrinsics::unlikely(self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE)) {
+      if unlikely(self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE)) {
         (self, true)
       } else {
         (self.div_euclid(rhs), false)
@@ -162,7 +162,7 @@ macro_rules! overflowing {
     #[must_use]
     #[inline]
     pub const fn overflowing_rem(self, rhs: Self) -> (Self, bool) {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::NEG_ONE)) {
+      if unlikely(rhs.const_eq(&Self::NEG_ONE)) {
         (Self::ZERO, self.const_eq(&Self::MIN))
       } else {
         (self.const_rem(rhs), false)
@@ -172,7 +172,7 @@ macro_rules! overflowing {
     #[must_use]
     #[inline]
     pub const fn overflowing_rem_euclid(self, rhs: Self) -> (Self, bool) {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::NEG_ONE)) {
+      if unlikely(rhs.const_eq(&Self::NEG_ONE)) {
         (Self::ZERO, self.const_eq(&Self::MIN))
       } else {
         (self.rem_euclid(rhs), false)
@@ -182,7 +182,7 @@ macro_rules! overflowing {
     #[must_use]
     #[inline]
     pub const fn overflowing_neg(self) -> (Self, bool) {
-      if ::core::intrinsics::unlikely(self.const_eq(&Self::MIN)) {
+      if unlikely(self.const_eq(&Self::MIN)) {
         (Self::MIN, true)
       } else {
         (self.const_neg(), false)

@@ -54,7 +54,7 @@ macro_rules! wrapping {
       let mut base: Self = self;
       let mut acc: Self = Self::ONE;
 
-      if ::core::intrinsics::is_val_statically_known(exp) {
+      if is_val_statically_known(exp) {
         while exp > 1 {
           if (exp & 1) == 1 {
             acc = acc.wrapping_mul(base);

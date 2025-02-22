@@ -5,7 +5,7 @@ macro_rules! checked {
     pub const fn checked_mul(self, rhs: Self) -> Option<Self> {
       let (result, overflow): (Self, bool) = self.overflowing_mul(rhs);
 
-      if ::core::intrinsics::unlikely(overflow) {
+      if unlikely(overflow) {
         None
       } else {
         Some(result)
@@ -63,7 +63,7 @@ macro_rules! checked {
     pub const fn checked_neg(self) -> Option<Self> {
       let (result, overflow): (Self, bool) = self.overflowing_neg();
 
-      if ::core::intrinsics::unlikely(overflow) {
+      if unlikely(overflow) {
         None
       } else {
         Some(result)
@@ -78,7 +78,7 @@ macro_rules! checked {
     pub const fn checked_add(self, rhs: Self) -> Option<Self> {
       let overflow: bool = $crate::intrinsics::overflowing_add::<Self, S, true>(self, rhs).1;
 
-      if ::core::intrinsics::unlikely(overflow) {
+      if unlikely(overflow) {
         None
       } else {
         // SAFETY: We just ensured that this does not overflow.
@@ -93,7 +93,7 @@ macro_rules! checked {
     pub const fn checked_add_signed(self, rhs: $crate::int<S>) -> Option<Self> {
       let (result, overflow): (Self, bool) = self.overflowing_add_signed(rhs);
 
-      if ::core::intrinsics::unlikely(overflow) {
+      if unlikely(overflow) {
         None
       } else {
         Some(result)
@@ -128,7 +128,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_div(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.is_zero()) {
+      if unlikely(rhs.is_zero()) {
         None
       } else {
         // SAFETY: We just ensured that we are not dividing by zero.
@@ -141,7 +141,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_div_euclid(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.is_zero()) {
+      if unlikely(rhs.is_zero()) {
         None
       } else {
         Some(self.div_euclid(rhs))
@@ -151,7 +151,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_rem(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.is_zero()) {
+      if unlikely(rhs.is_zero()) {
         None
       } else {
         // SAFETY: We just ensured that we are not calculating the remainder of
@@ -165,7 +165,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_rem_euclid(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.is_zero()) {
+      if unlikely(rhs.is_zero()) {
         None
       } else {
         Some(self.rem_euclid(rhs))
@@ -250,7 +250,7 @@ macro_rules! checked {
     pub const fn checked_add(self, rhs: Self) -> Option<Self> {
       let (result, overflow): (Self, bool) = self.overflowing_add(rhs);
 
-      if ::core::intrinsics::unlikely(overflow) {
+      if unlikely(overflow) {
         None
       } else {
         Some(result)
@@ -262,7 +262,7 @@ macro_rules! checked {
     pub const fn checked_add_unsigned(self, rhs: $crate::uint<S>) -> Option<Self> {
       let (result, overflow): (Self, bool) = self.overflowing_add_unsigned(rhs);
 
-      if ::core::intrinsics::unlikely(overflow) {
+      if unlikely(overflow) {
         None
       } else {
         Some(result)
@@ -274,7 +274,7 @@ macro_rules! checked {
     pub const fn checked_sub(self, rhs: Self) -> Option<Self> {
       let (result, overflow): (Self, bool) = self.overflowing_sub(rhs);
 
-      if ::core::intrinsics::unlikely(overflow) {
+      if unlikely(overflow) {
         None
       } else {
         Some(result)
@@ -286,7 +286,7 @@ macro_rules! checked {
     pub const fn checked_sub_unsigned(self, rhs: $crate::uint<S>) -> Option<Self> {
       let (result, overflow): (Self, bool) = self.overflowing_sub_unsigned(rhs);
 
-      if ::core::intrinsics::unlikely(overflow) {
+      if unlikely(overflow) {
         None
       } else {
         Some(result)
@@ -296,7 +296,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_div(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
+      if unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
         None
       } else {
         // SAFETY: We just ensured that we are not dividing by zero or Self::MIN / -1.
@@ -309,7 +309,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_div_euclid(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE))) {
+      if unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE))) {
         None
       } else {
         Some(self.div_euclid(rhs))
@@ -319,7 +319,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_rem(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
+      if unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
         None
       } else {
         // SAFETY: We just ensured that we are not dividing by zero or Self::MIN / -1.
@@ -332,7 +332,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_rem_euclid(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE))) {
+      if unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE))) {
         None
       } else {
         Some(self.rem_euclid(rhs))
