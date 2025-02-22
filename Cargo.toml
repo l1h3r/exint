@@ -97,6 +97,11 @@ step_trait = ["nightly"]
 # Tracking Issue: https://github.com/rust-lang/rust/issues/118260
 strict_overflow_ops = []
 
+# Enable support for `structural_match` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/31434
+structural_match = ["nightly"]
+
 # Enable support for `trusted_step` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/85731
@@ -126,6 +131,11 @@ unsigned_is_multiple_of = []
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/126041
 unsigned_signed_diff = []
+
+# Enable support for `unsized_const_params` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/95174
+unsized_const_params = ["nightly"]
 
 # Enable support for `wrapping_next_power_of_two` core functionality.
 #
