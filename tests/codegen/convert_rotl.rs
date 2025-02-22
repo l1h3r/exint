@@ -1,9 +1,10 @@
 #![feature(core_intrinsics)]
+#![allow(internal_features)]
 use exint_integer::int;
 use exint_integer::uint;
 
 // CHECK-LABEL: @convert_rotl_int_1
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_int_1(a: int<1>, b: u32) -> int<1> {
 // CHECK: trunc i32 [[REGISTER:%[-a-zA-Z0-9$._]+]] to i8
 // CHECK: @llvm.fshl.i8(i8 [[REGISTER:%[-a-zA-Z0-9$._]+]], i8 [[REGISTER:%[-a-zA-Z0-9$._]+]], i8 [[REGISTER:%[-a-zA-Z0-9$._]+]])
@@ -12,7 +13,7 @@ pub fn convert_rotl_int_1(a: int<1>, b: u32) -> int<1> {
 }
 
 // CHECK-LABEL: @convert_rotl_int_2
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_int_2(a: int<2>, b: u32) -> int<2> {
 // CHECK: trunc i32 [[REGISTER:%[-a-zA-Z0-9$._]+]] to i16
 // CHECK: @llvm.fshl.i16(i16 [[REGISTER:%[-a-zA-Z0-9$._]+]], i16 [[REGISTER:%[-a-zA-Z0-9$._]+]], i16 [[REGISTER:%[-a-zA-Z0-9$._]+]])
@@ -21,7 +22,7 @@ pub fn convert_rotl_int_2(a: int<2>, b: u32) -> int<2> {
 }
 
 // CHECK-LABEL: @convert_rotl_int_4
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_int_4(a: int<4>, b: u32) -> int<4> {
 // CHECK: @llvm.fshl.i32(i32 [[REGISTER:%[-a-zA-Z0-9$._]+]], i32 [[REGISTER:%[-a-zA-Z0-9$._]+]], i32 [[REGISTER:%[-a-zA-Z0-9$._]+]])
 // CHECK: ret i32 [[REGISTER:%[-a-zA-Z0-9$._]+]]
@@ -29,7 +30,7 @@ pub fn convert_rotl_int_4(a: int<4>, b: u32) -> int<4> {
 }
 
 // CHECK-LABEL: @convert_rotl_int_8
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_int_8(a: int<8>, b: u32) -> int<8> {
 // CHECK: zext i32 [[REGISTER:%[-a-zA-Z0-9$._]+]] to i64
 // CHECK: @llvm.fshl.i64(i64 [[REGISTER:%[-a-zA-Z0-9$._]+]], i64 [[REGISTER:%[-a-zA-Z0-9$._]+]], i64 [[REGISTER:%[-a-zA-Z0-9$._]+]])
@@ -38,7 +39,7 @@ pub fn convert_rotl_int_8(a: int<8>, b: u32) -> int<8> {
 }
 
 // CHECK-LABEL: @convert_rotl_int_16
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_int_16(a: int<16>, b: u32) -> int<16> {
 // CHECK: load i128, ptr [[REGISTER:%[-a-zA-Z0-9$._]+]]
 // CHECK: zext i32 [[REGISTER:%[-a-zA-Z0-9$._]+]] to i128
@@ -49,7 +50,7 @@ pub fn convert_rotl_int_16(a: int<16>, b: u32) -> int<16> {
 }
 
 // CHECK-LABEL: @convert_rotl_uint_1
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_uint_1(a: uint<1>, b: u32) -> uint<1> {
 // CHECK: trunc i32 [[REGISTER:%[-a-zA-Z0-9$._]+]] to i8
 // CHECK: @llvm.fshl.i8(i8 [[REGISTER:%[-a-zA-Z0-9$._]+]], i8 [[REGISTER:%[-a-zA-Z0-9$._]+]], i8 [[REGISTER:%[-a-zA-Z0-9$._]+]])
@@ -58,7 +59,7 @@ pub fn convert_rotl_uint_1(a: uint<1>, b: u32) -> uint<1> {
 }
 
 // CHECK-LABEL: @convert_rotl_uint_2
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_uint_2(a: uint<2>, b: u32) -> uint<2> {
 // CHECK: trunc i32 [[REGISTER:%[-a-zA-Z0-9$._]+]] to i16
 // CHECK: @llvm.fshl.i16(i16 [[REGISTER:%[-a-zA-Z0-9$._]+]], i16 [[REGISTER:%[-a-zA-Z0-9$._]+]], i16 [[REGISTER:%[-a-zA-Z0-9$._]+]])
@@ -67,7 +68,7 @@ pub fn convert_rotl_uint_2(a: uint<2>, b: u32) -> uint<2> {
 }
 
 // CHECK-LABEL: @convert_rotl_uint_4
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_uint_4(a: uint<4>, b: u32) -> uint<4> {
 // CHECK: @llvm.fshl.i32(i32 [[REGISTER:%[-a-zA-Z0-9$._]+]], i32 [[REGISTER:%[-a-zA-Z0-9$._]+]], i32 [[REGISTER:%[-a-zA-Z0-9$._]+]])
 // CHECK: ret i32 [[REGISTER:%[-a-zA-Z0-9$._]+]]
@@ -75,7 +76,7 @@ pub fn convert_rotl_uint_4(a: uint<4>, b: u32) -> uint<4> {
 }
 
 // CHECK-LABEL: @convert_rotl_uint_8
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_uint_8(a: uint<8>, b: u32) -> uint<8> {
 // CHECK: zext i32 [[REGISTER:%[-a-zA-Z0-9$._]+]] to i64
 // CHECK: @llvm.fshl.i64(i64 [[REGISTER:%[-a-zA-Z0-9$._]+]], i64 [[REGISTER:%[-a-zA-Z0-9$._]+]], i64 [[REGISTER:%[-a-zA-Z0-9$._]+]])
@@ -84,7 +85,7 @@ pub fn convert_rotl_uint_8(a: uint<8>, b: u32) -> uint<8> {
 }
 
 // CHECK-LABEL: @convert_rotl_uint_16
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn convert_rotl_uint_16(a: uint<16>, b: u32) -> uint<16> {
 // CHECK: load i128, ptr [[REGISTER:%[-a-zA-Z0-9$._]+]]
 // CHECK: zext i32 [[REGISTER:%[-a-zA-Z0-9$._]+]] to i128

@@ -39,6 +39,7 @@ impl Instance {
 impl Display for Instance {
   fn fmt(&self, f: &mut Formatter<'_>) -> Result {
     writeln!(f, "#![feature(core_intrinsics)]")?;
+    writeln!(f, "#![allow(internal_features)]")?;
     writeln!(f, "use exint_integer::int;")?;
     writeln!(f, "use exint_integer::uint;")?;
 
@@ -67,7 +68,7 @@ impl Display for Instance {
 
       writeln!(f)?;
       writeln!(f, "// CHECK-LABEL: @{name}")?;
-      writeln!(f, "#[no_mangle]")?;
+      writeln!(f, "#[unsafe(no_mangle)]")?;
       writeln!(f, "pub {signature} {{")?;
 
       'check: for (check, condition) in function.filechecks.iter() {
