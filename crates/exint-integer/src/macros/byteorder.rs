@@ -1,43 +1,71 @@
 macro_rules! byteorder {
-  (core, $name:ident, $uint:expr) => {
+  (core, $_name:ident, $_uint:expr) => {
+    #[must_use]
+    #[inline]
     pub const fn from_be(x: Self) -> Self {
-      panic!("from_be")
+      x.to_be()
     }
 
+    #[must_use]
+    #[inline]
     pub const fn from_be_bytes(bytes: [u8; S]) -> Self {
-      panic!("from_be_bytes")
+      Self::from_be(Self::from_ne_bytes(bytes))
     }
 
+    #[must_use]
+    #[inline]
     pub const fn from_le(x: Self) -> Self {
-      panic!("from_le")
+      x.to_le()
     }
 
+    #[must_use]
+    #[inline]
     pub const fn from_le_bytes(bytes: [u8; S]) -> Self {
-      panic!("from_le_bytes")
+      Self::from_le(Self::from_ne_bytes(bytes))
     }
 
+    #[must_use]
+    #[inline]
     pub const fn from_ne_bytes(bytes: [u8; S]) -> Self {
-      panic!("from_ne_bytes")
+      Self { bytes }
     }
 
+    #[must_use]
+    #[inline]
     pub const fn to_be(self) -> Self {
-      panic!("to_be")
+      #[cfg(target_endian = "big")]
+      { self }
+
+      #[cfg(target_endian = "little")]
+      { self.swap_bytes() }
     }
 
+    #[must_use]
+    #[inline]
     pub const fn to_be_bytes(self) -> [u8; S] {
-      panic!("to_be_bytes")
+      self.to_be().to_ne_bytes()
     }
 
+    #[must_use]
+    #[inline]
     pub const fn to_le(self) -> Self {
-      panic!("to_le")
+      #[cfg(target_endian = "little")]
+      { self }
+
+      #[cfg(target_endian = "big")]
+      { self.swap_bytes() }
     }
 
+    #[must_use]
+    #[inline]
     pub const fn to_le_bytes(self) -> [u8; S] {
-      panic!("to_le_bytes")
+      self.to_le().to_ne_bytes()
     }
 
+    #[must_use]
+    #[inline]
     pub const fn to_ne_bytes(self) -> [u8; S] {
-      panic!("to_ne_bytes")
+      self.bytes
     }
   };
   (uint) => {
