@@ -12,7 +12,7 @@ macro_rules! byteorder {
       value.to_le()
     }
 
-    #[must_use = crate::utils::must_use_doc!()]
+    #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn to_be(self) -> Self {
       #[cfg(target_endian = "big")]
@@ -22,7 +22,7 @@ macro_rules! byteorder {
       { self.swap_bytes() }
     }
 
-    #[must_use = crate::utils::must_use_doc!()]
+    #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn to_le(self) -> Self {
       #[cfg(target_endian = "big")]
@@ -50,19 +50,19 @@ macro_rules! byteorder {
       Self { bytes }
     }
 
-    #[must_use = crate::utils::must_use_doc!()]
+    #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn to_be_bytes(self) -> [u8; N] {
       self.to_be().to_ne_bytes()
     }
 
-    #[must_use = crate::utils::must_use_doc!()]
+    #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn to_le_bytes(self) -> [u8; N] {
       self.to_le().to_ne_bytes()
     }
 
-    #[must_use = crate::utils::must_use_doc!()]
+    #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn to_ne_bytes(self) -> [u8; N] {
       self.bytes
