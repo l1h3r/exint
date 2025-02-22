@@ -1,3 +1,4 @@
+use crate::llapi::api;
 use crate::utils::Uint;
 
 /// Sign digit for a two's complement integer.
@@ -41,16 +42,6 @@ where
   let mut dst: *mut u8 = out.as_mut_ptr();
 
   if N < M {
-    if !T::UINT {
-      if bytes[msb_index::<N>()] & SIGN == SIGN {
-        unsafe {
-          ::core::ptr::write_bytes(dst, 0xFF, M);
-        }
-      }
-
-      // ::core::panic!("TODO: sext")
-    }
-
     // On BE machines, we need to shift the dst pointer to a higher memory
     // address leave the less-significant bytes untouched.
     if cfg!(target_endian = "big") {
@@ -65,6 +56,20 @@ where
     //         alignment. Finally, since `src` was not yet deallocated, we can
     //         be sure the values do not overlap.
     unsafe { ::core::ptr::copy_nonoverlapping(src, dst, N) }
+
+    if !T::UINT {
+      // TODO: This will fail for really large extensions
+      //
+      // NOTE: Optimizing this pattern seems heavily context-dependant and
+      //       doesn't really optimize well for conversion to signed integers
+      //       when `shift >= 72`
+      let shift: u32 = ((M - N) * 8) as u32;
+
+      // SAFETY: We know that `shift` is less than the bid width of `out` since
+      //         `N < M` and `(M - N) * 8 < M * 8`.
+      out = unsafe { api::unchecked_shl(out, shift) };
+      out = unsafe { api::unchecked_ashr(out, shift) };
+    }
   } else {
     // On BE machines, we need to shift the src pointer to a higher memory
     // address and copy the less-significant bytes.

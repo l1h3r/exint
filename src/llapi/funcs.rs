@@ -7,7 +7,7 @@ use crate::llapi::macros::maybe_intrinsic;
 use crate::llapi::utils::resize_bytes;
 use crate::utils::Uint;
 
-mod api {
+pub(crate) mod api {
   #[cfg(not(feature = "const_trait_impl"))]
   pub(crate) use crate::llapi::impls::fallback::*;
   #[cfg(feature = "const_trait_impl")]
