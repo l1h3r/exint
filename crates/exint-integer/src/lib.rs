@@ -18,6 +18,14 @@ pub mod errors {
 
 // TODO: Move to exint-backend
 pub mod intrinsics {
+  pub const fn eq<T: Copy, const S: usize>(lhs: T, rhs: T) -> bool {
+    panic!("intrinsics::eq")
+  }
+
+  pub const fn cmp<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> Ordering {
+    panic!("intrinsics::cmp")
+  }
+
   pub const fn ctpop<T: Copy, const S: usize>(integer: T) -> u32 {
     panic!("intrinsics::ctpop")
   }
@@ -44,6 +52,22 @@ pub mod intrinsics {
 
   pub const fn rotr<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
     panic!("intrinsics::rotr")
+  }
+
+  pub const fn band<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
+    panic!("intrinsics::band")
+  }
+
+  pub const fn bor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
+    panic!("intrinsics::bor")
+  }
+
+  pub const fn bxor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
+    panic!("intrinsics::bxor")
+  }
+
+  pub const fn bnot<T: Copy, const S: usize>(integer: T) -> T {
+    panic!("intrinsics::bnot")
   }
 }
 
