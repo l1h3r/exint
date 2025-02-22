@@ -1,3 +1,5 @@
+use ::core::marker::Copy;
+
 // -----------------------------------------------------------------------------
 // Trait Definition
 // -----------------------------------------------------------------------------
@@ -14,6 +16,26 @@ pub(crate) unsafe trait Cast {
 // -----------------------------------------------------------------------------
 // Implementations
 // -----------------------------------------------------------------------------
+
+// Tuple implementation to make overflowing operations easier to specialize
+unsafe impl<T, U> const Cast for (T, U)
+where
+  T: Copy + ~const Cast,
+  U: Copy,
+{
+  type Uint = (T::Uint, U);
+  type Sint = (T::Sint, U);
+
+  #[inline]
+  fn ucast(self) -> Self::Uint {
+    (self.0.ucast(), self.1)
+  }
+
+  #[inline]
+  fn scast(self) -> Self::Sint {
+    (self.0.scast(), self.1)
+  }
+}
 
 macro_rules! implement {
   (from: Int<$size:literal>, uint: $uint:ty, sint: $sint:ty) => {

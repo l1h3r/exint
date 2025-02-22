@@ -1,3 +1,5 @@
+use crate::macros::specialize;
+use crate::traits::Cast;
 use crate::types::Int;
 
 // -----------------------------------------------------------------------------
@@ -55,6 +57,68 @@ impl<const S: usize> const SpecSdiv for Int<S> {
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for 'std' sizes
 // -----------------------------------------------------------------------------
+
+specialize! {
+  impl SpecUdiv for Int<1|2|4|8|16> {
+    // LLVM generates `udiv $type` instruction
+    #[inline]
+    unsafe fn udiv(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::unchecked_div(self.ucast(), other.ucast()).ucast()
+      }
+    }
+
+    // LLVM generates `urem $type` instruction
+    #[inline]
+    unsafe fn urem(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::unchecked_rem(self.ucast(), other.ucast()).ucast()
+      }
+    }
+
+    // LLVM generates `udiv exact $type` instruction
+    #[inline]
+    unsafe fn ediv(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::exact_div(self.ucast(), other.ucast()).ucast()
+      }
+    }
+  }
+}
+
+specialize! {
+  impl SpecSdiv for Int<1|2|4|8|16> {
+    // LLVM generates `sdiv $type` instruction
+    #[inline]
+    unsafe fn udiv(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::unchecked_div(self.scast(), other.scast()).scast()
+      }
+    }
+
+    // LLVM generates `srem $type` instruction
+    #[inline]
+    unsafe fn urem(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::unchecked_rem(self.scast(), other.scast()).scast()
+      }
+    }
+
+    // LLVM generates `sdiv exact $type` instruction
+    #[inline]
+    unsafe fn ediv(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::exact_div(self.scast(), other.scast()).scast()
+      }
+    }
+  }
+}
 
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for common sizes

@@ -1,5 +1,7 @@
 use ::core::marker::Sized;
 
+use crate::macros::specialize;
+use crate::traits::Cast;
 use crate::types::Int;
 
 // -----------------------------------------------------------------------------
@@ -67,6 +69,56 @@ impl<const S: usize> const SpecSmul for Int<S> {
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for 'std' sizes
 // -----------------------------------------------------------------------------
+
+specialize! {
+  impl SpecUmul for Int<1|2|4|8|16> {
+    // LLVM generates `@llvm.umul.with.overflow.$type` intrinsic
+    #[inline]
+    fn omul(self, other: Self) -> (Self, bool) {
+      ::core::intrinsics::mul_with_overflow(self.ucast(), other.ucast()).ucast()
+    }
+
+    // LLVM generates `mul $type` instruction
+    #[inline]
+    fn wmul(self, other: Self) -> Self {
+      ::core::intrinsics::wrapping_mul(self.ucast(), other.ucast()).ucast()
+    }
+
+    // LLVM generates `mul nuw $type` instruction
+    #[inline]
+    unsafe fn umul(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::unchecked_mul(self.ucast(), other.ucast()).ucast()
+      }
+    }
+  }
+}
+
+specialize! {
+  impl SpecSmul for Int<1|2|4|8|16> {
+    // LLVM generates `@llvm.smul.with.overflow.$type` intrinsic
+    #[inline]
+    fn omul(self, other: Self) -> (Self, bool) {
+      ::core::intrinsics::mul_with_overflow(self.scast(), other.scast()).scast()
+    }
+
+    // LLVM generates `mul $type` instruction
+    #[inline]
+    fn wmul(self, other: Self) -> Self {
+      ::core::intrinsics::wrapping_mul(self.scast(), other.scast()).scast()
+    }
+
+    // LLVM generates `mul nsw $type` instruction
+    #[inline]
+    unsafe fn umul(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::unchecked_mul(self.scast(), other.scast()).scast()
+      }
+    }
+  }
+}
 
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for common sizes
