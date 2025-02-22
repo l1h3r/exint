@@ -12,7 +12,6 @@ use crate::types::Int;
 #[const_trait]
 pub(crate) trait SpecUmul: Sized {
   fn omul(self, other: Self) -> (Self, bool);
-  fn smul(self, other: Self) -> Self;
   fn wmul(self, other: Self) -> Self;
   unsafe fn umul(self, other: Self) -> Self;
 }
@@ -21,7 +20,6 @@ pub(crate) trait SpecUmul: Sized {
 #[const_trait]
 pub(crate) trait SpecSmul: SpecUmul {
   fn omul(self, other: Self) -> (Self, bool);
-  fn smul(self, other: Self) -> Self;
   fn wmul(self, other: Self) -> Self;
   unsafe fn umul(self, other: Self) -> Self;
 }
@@ -33,10 +31,6 @@ pub(crate) trait SpecSmul: SpecUmul {
 impl<const S: usize> const SpecUmul for Int<S> {
   default fn omul(self, other: Self) -> (Self, bool) {
     ::core::panic!("SpecUmul::omul")
-  }
-
-  default fn smul(self, other: Self) -> Self {
-    ::core::panic!("SpecUmul::smul")
   }
 
   default fn wmul(self, other: Self) -> Self {
@@ -51,10 +45,6 @@ impl<const S: usize> const SpecUmul for Int<S> {
 impl<const S: usize> const SpecSmul for Int<S> {
   default fn omul(self, other: Self) -> (Self, bool) {
     ::core::panic!("SpecSmul::omul")
-  }
-
-  default fn smul(self, other: Self) -> Self {
-    ::core::panic!("SpecSmul::smul")
   }
 
   default fn wmul(self, other: Self) -> Self {
