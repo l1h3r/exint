@@ -1,3 +1,5 @@
+use ::core::option::Option;
+
 pub(crate) trait Value {
   /// The number of bytes used to represent this value.
   const SIZE: usize;
@@ -7,6 +9,9 @@ pub(crate) trait Value {
 
   /// The representation of `0` for this type.
   const ZERO: Self;
+
+  /// Convert this type to an unsigned 32-bit integer.
+  fn try_u32(self) -> Option<u32>;
 }
 
 macro_rules! value {
@@ -15,6 +20,11 @@ macro_rules! value {
       const SIZE: usize = ::core::mem::size_of::<$primitive>();
       const UINT: bool = $uint;
       const ZERO: Self = 0;
+
+      #[inline]
+      fn try_u32(self) -> Option<u32> {
+        ::core::convert::TryInto::try_into(self).ok()
+      }
     }
   };
 }
@@ -37,10 +47,20 @@ impl<const S: usize> Value for crate::int<S> {
   const SIZE: usize = S;
   const UINT: bool = false;
   const ZERO: Self = Self::from_u8(0);
+
+  #[inline]
+  fn try_u32(self) -> Option<u32> {
+    Self::try_into_u32(self).ok()
+  }
 }
 
 impl<const S: usize> Value for crate::uint<S> {
   const SIZE: usize = S;
   const UINT: bool = true;
   const ZERO: Self = Self::from_u8(0);
+
+  #[inline]
+  fn try_u32(self) -> Option<u32> {
+    Self::try_into_u32(self).ok()
+  }
 }

@@ -200,6 +200,17 @@ macro_rules! internals {
     $crate::macros::internals!(conv, i64,   from_i64,   into_i64);
     $crate::macros::internals!(conv, i128,  from_i128,  into_i128);
     $crate::macros::internals!(conv, isize, from_isize, into_isize);
+
+    pub(crate) const fn try_into_u32(self) -> Result<u32, $crate::errors::TryFromIntError> {
+      let min: Self = $crate::macros::cast!(u32 as Self, u32::MIN);
+      let max: Self = $crate::macros::cast!(u32 as Self, u32::MAX);
+
+      if self.const_lt(&min) || self.const_gt(&max) {
+        Err($crate::errors::TryFromIntError::new())
+      } else {
+        Ok(self.into_u32())
+      }
+    }
   };
   (uint) => {
     $crate::macros::internals!(core, uint, true);

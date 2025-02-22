@@ -17,18 +17,12 @@ macro_rules! binops {
   };
   // Implementation - Binary Op
   (impl $trait:ident::$func:ident for $lhs:ty, $rhs:ty as $impl:ident) => {
-    macro_rules! __convert {
-      (Shl, $_type:ty, $expr:expr) => { 0u32 /* TODO: Convert $expr to u32 */ };
-      (Shr, $_type:ty, $expr:expr) => { 0u32 /* TODO: Convert $expr to u32 */ };
-      ($_trait:ident, $_type:ty, $expr:expr) => { $expr };
-    }
-
     impl<const S: usize> ::core::ops::$trait<$rhs> for $lhs {
       type Output = Self;
 
       #[inline]
       fn $func(self, rhs: $rhs) -> Self::Output {
-        Self::$impl(self, __convert!($trait, $rhs, rhs))
+        Self::$impl(self, $crate::macros::maybe_convert_arg!($trait, $rhs, rhs))
       }
     }
 
