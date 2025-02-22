@@ -27,6 +27,30 @@ macro_rules! internals {
       $crate::intrinsics::cmp::<Self, S, $uint>(*self, *other)
     }
 
+    #[must_use]
+    #[inline]
+    pub(crate) const fn const_lt(&self, other: &Self) -> bool {
+      self.const_cmp(other).is_lt()
+    }
+
+    #[must_use]
+    #[inline]
+    pub(crate) const fn const_le(&self, other: &Self) -> bool {
+      self.const_cmp(other).is_le()
+    }
+
+    #[must_use]
+    #[inline]
+    pub(crate) const fn const_gt(&self, other: &Self) -> bool {
+      self.const_cmp(other).is_gt()
+    }
+
+    #[must_use]
+    #[inline]
+    pub(crate) const fn const_ge(&self, other: &Self) -> bool {
+      self.const_cmp(other).is_ge()
+    }
+
     // -------------------------------------------------------------------------
     // Constant Bitwise Ops
     // -------------------------------------------------------------------------
