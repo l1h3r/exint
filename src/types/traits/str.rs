@@ -9,6 +9,16 @@ macro_rules! implement {
       }
     }
   };
+  ($outer:ident<T>) => {
+    impl<T: ::core::str::FromStr> ::core::str::FromStr for $crate::$outer<T> {
+      type Err = <T as ::core::str::FromStr>::Err;
+
+      #[inline]
+      fn from_str(src: &str) -> ::core::result::Result<Self, Self::Err> {
+        <T as ::core::str::FromStr>::from_str(src).map(Self)
+      }
+    }
+  };
 }
 
 implement!(int);

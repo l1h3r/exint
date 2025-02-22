@@ -1,6 +1,6 @@
 macro_rules! implement {
-  ($name:ident) => {
-    impl<const N: usize> ::core::iter::Sum for $crate::$name<N> {
+  ($type:ty) => {
+    impl<const N: usize> ::core::iter::Sum for $type {
       fn sum<I>(iter: I) -> Self
       where
         I: ::core::iter::Iterator<Item = Self>,
@@ -9,7 +9,7 @@ macro_rules! implement {
       }
     }
 
-    impl<'a, const N: usize> ::core::iter::Sum<&'a $crate::$name<N>> for $crate::$name<N> {
+    impl<'a, const N: usize> ::core::iter::Sum<&'a $type> for $type {
       fn sum<I>(iter: I) -> Self
       where
         I: ::core::iter::Iterator<Item = &'a Self>,
@@ -18,7 +18,7 @@ macro_rules! implement {
       }
     }
 
-    impl<const N: usize> ::core::iter::Product for $crate::$name<N> {
+    impl<const N: usize> ::core::iter::Product for $type {
       fn product<I>(iter: I) -> Self
       where
         I: ::core::iter::Iterator<Item = Self>,
@@ -27,7 +27,7 @@ macro_rules! implement {
       }
     }
 
-    impl<'a, const N: usize> ::core::iter::Product<&'a $crate::$name<N>> for $crate::$name<N> {
+    impl<'a, const N: usize> ::core::iter::Product<&'a $type> for $type {
       fn product<I>(iter: I) -> Self
       where
         I: ::core::iter::Iterator<Item = &'a Self>,
@@ -37,7 +37,7 @@ macro_rules! implement {
     }
 
     #[cfg(feature = "step_trait")]
-    impl<const N: usize> ::core::iter::Step for $crate::$name<N> {
+    impl<const N: usize> ::core::iter::Step for $type {
       fn forward(_start: Self, _n: usize) -> Self {
         ::core::todo!("Step::forward")
       }
@@ -68,9 +68,9 @@ macro_rules! implement {
     }
 
     #[cfg(feature = "trusted_step")]
-    unsafe impl<const N: usize> ::core::iter::TrustedStep for $crate::$name<N> {}
+    unsafe impl<const N: usize> ::core::iter::TrustedStep for $type {}
   };
 }
 
-implement!(int);
-implement!(uint);
+implement!(crate::int<N>);
+implement!(crate::uint<N>);

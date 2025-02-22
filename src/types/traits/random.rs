@@ -11,6 +11,15 @@ macro_rules! implement {
       }
     }
   };
+  ($outer:ident<T>) => {
+    #[cfg(feature = "random")]
+    impl<T: ::core::random::Random> ::core::random::Random for $crate::$outer<T> {
+      #[inline]
+      fn random(source: &mut (impl ::core::random::RandomSource + ?::core::marker::Sized)) -> Self {
+        Self(<T as ::core::random::Random>::random(source))
+      }
+    }
+  };
 }
 
 implement!(int);
