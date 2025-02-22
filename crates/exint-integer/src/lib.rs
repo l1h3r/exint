@@ -20,7 +20,7 @@ mod types;
 mod value;
 
 pub(crate) mod intrinsics {
-  pub use ::exint_backend::intrinsics::*;
+  pub use ::exint_backend::*;
 }
 
 pub use self::errors::ParseIntError;
