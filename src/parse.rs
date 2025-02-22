@@ -53,7 +53,7 @@ macro_rules! __uint {
   ($input:literal u128) => { $crate::__uint!(@parse uint<16> stringify!($input)) };
   ($input:literal u256) => { $crate::__uint!(@parse uint<32> stringify!($input)) };
   ($input:literal u512) => { $crate::__uint!(@parse uint<64> stringify!($input)) };
-  (@parse uint<$size:literal> $input:expr) => { const { $crate::uint::<$size>::__parse($input) } };
+  (@parse uint<$size:literal> $input:expr_2021) => { const { $crate::uint::<$size>::__parse($input) } };
 }
 
 /// Create a generic signed integer from a literal expression.
@@ -111,7 +111,7 @@ macro_rules! __int {
   ($input:literal i128) => { $crate::__int!(@parse int<16> stringify!($input)) };
   ($input:literal i256) => { $crate::__int!(@parse int<32> stringify!($input)) };
   ($input:literal i512) => { $crate::__int!(@parse int<64> stringify!($input)) };
-  (@parse int<$size:literal> $input:expr) => { const { $crate::int::<$size>::__parse($input) } };
+  (@parse int<$size:literal> $input:expr_2021) => { const { $crate::int::<$size>::__parse($input) } };
 }
 
 macro_rules! implement {

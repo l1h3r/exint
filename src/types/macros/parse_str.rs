@@ -40,7 +40,7 @@ macro_rules! parse_str {
         }
 
         macro_rules! tri {
-          ($expr:expr, $error:ident) => {
+          ($expr:expr_2021, $error:ident) => {
             match $expr {
               Some(value) => value,
               None => return ::core::result::Result::Err(error!($error)),

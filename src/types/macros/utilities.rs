@@ -3,9 +3,9 @@
 /// Ref: https://doc.rust-lang.org/reference/expressions/operator-expr.html#overflow
 macro_rules! arithmetic_select {
   (
-    message: $message:expr,
-    checked: $checked:expr,
-    wrapped: $wrapped:expr,
+    message: $message:expr_2021,
+    checked: $checked:expr_2021,
+    wrapped: $wrapped:expr_2021,
   ) => {
     // TODO: Try #[cfg(overflow_checks)]: https://github.com/rust-lang/rust/issues/111466
     #[cfg(debug_assertions)]
@@ -38,10 +38,10 @@ macro_rules! stability {
 
 /// Option-specific version of `core::ops::Try` that works in const functions.
 macro_rules! tri {
-  ($expr:expr) => {
+  ($expr:expr_2021) => {
     $crate::types::macros::tri!($expr, return None)
   };
-  ($expr:expr, $none:expr) => {
+  ($expr:expr_2021, $none:expr_2021) => {
     match $expr {
       Some(value) => value,
       None => $none,

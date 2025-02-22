@@ -12,7 +12,7 @@ macro_rules! implement {
     impl<const N: usize> ::core::cmp::PartialOrd for $crate::$name<N> {
       #[inline]
       fn partial_cmp(&self, other: &Self) -> ::core::option::Option<::core::cmp::Ordering> {
-        ::core::option::Option::Some(Self::const_cmp(self, other))
+        ::core::option::Option::Some(::core::cmp::Ord::cmp(self, other))
       }
     }
 

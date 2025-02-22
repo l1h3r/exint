@@ -4,15 +4,15 @@
 ///
 /// [`transmute`]: crate::llapi::utils::transmute
 macro_rules! cast {
-  (N $expr:expr) => {
+  (N $expr:expr_2021) => {
     // SAFETY: This is guaranteed to be safe by the caller.
     unsafe { $crate::llapi::utils::transmute::<T, [u8; N]>($expr) }
   };
-  (T $expr:expr) => {
+  (T $expr:expr_2021) => {
     // SAFETY: This is guaranteed to be safe by the caller.
     unsafe { $crate::llapi::utils::transmute::<[u8; N], T>($expr) }
   };
-  ((T, bool) $expr:expr) => {{
+  ((T, bool) $expr:expr_2021) => {{
     let out: ([u8; N], bool) = $expr;
     let int: T = $crate::llapi::macros::cast!(T out.0);
 
@@ -57,7 +57,7 @@ macro_rules! maybe_intrinsic {
 /// Read the least significant byte of an array.
 #[cfg(target_endian = "big")]
 macro_rules! read_lsb {
-  ($size:expr, $data:expr, $index:expr) => {
+  ($size:expr_2021, $data:expr_2021, $index:expr_2021) => {
     $data[$size - 1 - $index]
   };
 }
@@ -65,7 +65,7 @@ macro_rules! read_lsb {
 /// Read the least significant byte of an array.
 #[cfg(target_endian = "little")]
 macro_rules! read_lsb {
-  ($_size:expr, $data:expr, $index:expr) => {
+  ($_size:expr_2021, $data:expr_2021, $index:expr_2021) => {
     $data[$index]
   };
 }
@@ -73,7 +73,7 @@ macro_rules! read_lsb {
 /// Read the most significant byte of an array.
 #[cfg(target_endian = "big")]
 macro_rules! read_msb {
-  ($_size:expr, $data:expr, $index:expr) => {
+  ($_size:expr_2021, $data:expr_2021, $index:expr_2021) => {
     $data[$index]
   };
 }
@@ -81,7 +81,7 @@ macro_rules! read_msb {
 /// Read the most significant byte of an array.
 #[cfg(target_endian = "little")]
 macro_rules! read_msb {
-  ($size:expr, $data:expr, $index:expr) => {
+  ($size:expr_2021, $data:expr_2021, $index:expr_2021) => {
     $data[$size - 1 - $index]
   };
 }
@@ -98,8 +98,8 @@ macro_rules! specialize {
     }
   };
   (impl const $trait:ident for Int<$head:literal $(| $tail:literal)*> { $($tt:tt)+ }) => {
-    $crate::llapi::macros::specialize!(impl const $trait for Int<$head> { $($tt)* });
-    $crate::llapi::macros::specialize!(impl const $trait for Int<$($tail)|*> { $($tt)* });
+    $crate::llapi::macros::specialize!(impl const $trait for Int<$head> { $($tt)+ });
+    $crate::llapi::macros::specialize!(impl const $trait for Int<$($tail)|*> { $($tt)+ });
   };
   (impl const $trait:ident for Int<$type:ty> { $($tt:tt)+ }) => {
     $crate::llapi::macros::const_trait_impl! {
@@ -109,8 +109,8 @@ macro_rules! specialize {
     }
   };
   (impl const $trait:ident for Int<$head:ty $(| $tail:ty)*> { $($tt:tt)+ }) => {
-    $crate::llapi::macros::specialize!(impl const $trait for Int<$head> { $($tt)* });
-    $crate::llapi::macros::specialize!(impl const $trait for Int<$($tail)|*> { $($tt)* });
+    $crate::llapi::macros::specialize!(impl const $trait for Int<$head> { $($tt)+ });
+    $crate::llapi::macros::specialize!(impl const $trait for Int<$($tail)|*> { $($tt)+ });
   };
 }
 

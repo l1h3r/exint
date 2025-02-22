@@ -1,14 +1,14 @@
 macro_rules! maybe_convert_arg {
-  (Shl, $expr:expr) => {
+  (Shl, $expr:expr_2021) => {
     maybe_convert_arg!("shift left", $expr)
   };
-  (Shr, $expr:expr) => {
+  (Shr, $expr:expr_2021) => {
     maybe_convert_arg!("shift right", $expr)
   };
-  ($_trait:ident, $expr:expr) => {
+  ($_trait:ident, $expr:expr_2021) => {
     $expr
   };
-  ($method:literal, $expr:expr) => {
+  ($method:literal, $expr:expr_2021) => {
     $crate::utils::TryConvert::<u32>::try_convert($expr).unwrap_or(u32::MAX)
   };
 }

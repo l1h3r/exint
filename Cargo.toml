@@ -111,6 +111,54 @@ unsigned_signed_diff = []
 wrapping_next_power_of_two = []
 
 [lints.rust]
+# Lint Groups
+warnings = "deny"
+deprecated-safe = "deny"
+future-incompatible = "deny"
+keyword-idents = "deny"
+let-underscore = "deny"
+nonstandard-style = "deny"
+refining-impl-trait = "deny"
+rust-2018-compatibility = "deny"
+rust-2018-idioms = "deny"
+rust-2021-compatibility = "deny"
+rust-2024-compatibility = "deny"
+unused = "deny"
+
+# Standalone Lints
+ambiguous_negative_literals = "deny"
+ffi_unwind_calls = "deny"
+macro_use_extern_crate = "deny"
+meta_variable_misuse = "deny"
+missing_abi = "deny"
+missing_copy_implementations = "deny"
+missing_debug_implementations = "deny"
+non_ascii_idents = "deny"
+redundant_imports = "deny"
+redundant_lifetimes = "deny"
+single_use_lifetimes = "allow" # allow because noisy
+trivial_casts = "deny"
+trivial_numeric_casts = "deny"
+unit_bindings = "deny"
+unnameable_types = "deny"
+unreachable_pub = "deny"
+unsafe_code = "allow" # allow because we define and use unsafe APIs
+unstable_features = "allow" # allow because we allow user-enabled features
+unused_crate_dependencies = "deny"
+unused_import_braces = "deny"
+unused_lifetimes = "deny"
+unused_qualifications = "deny"
+unused_results = "deny"
+variant_size_differences = "deny"
+
+# Standalone Lints (unstable)
+# closure_returning_async_block = "deny"
+# fuzzy_provenance_casts = "deny"
+# lossy_provenance_casts = "deny"
+# multiple_supertrait_upcastable = "deny"
+# must_not_suspend = "deny"
+# non_exhaustive_omitted_patterns = "deny"
+# unqualified_local_imports = "deny"
 
 [lints.clippy]
 

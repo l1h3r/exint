@@ -186,6 +186,7 @@ macro_rules! internals {
     $crate::types::macros::internals!(@conv, isize, from_isize, into_isize);
   };
   (@conv, $type:ty, $from:ident, $into:ident) => {
+    #[allow(dead_code)] // Not all impls are currently used
     #[inline]
     pub(crate) const fn $from(other: $type) -> Self {
       const M: usize = ::core::mem::size_of::<$type>();
@@ -196,6 +197,7 @@ macro_rules! internals {
       Self::from_ne_bytes(value)
     }
 
+    #[allow(dead_code)] // Not all impls are currently used
     #[inline]
     pub(crate) const fn $into(self) -> $type {
       const M: usize = ::core::mem::size_of::<$type>();

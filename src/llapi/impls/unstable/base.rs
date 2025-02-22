@@ -43,6 +43,7 @@ macro_rules! define_traits {
 
     impl<const N: usize> const $base_name for [u8; N] {
       $(
+        #[allow(unsafe_op_in_unsafe_fn)]
         #[inline]
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           $crate::llapi::impls::fallback::$function($($name),+)
@@ -53,6 +54,7 @@ macro_rules! define_traits {
     #[cfg(feature = "min_specialization")]
     impl<T: ~const $base_name> const $spec_name for T {
       $(
+        #[allow(unsafe_op_in_unsafe_fn)]
         #[inline]
         default $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           <T as $base_name>::$function($($name),+)
@@ -63,6 +65,7 @@ macro_rules! define_traits {
     #[cfg(not(feature = "min_specialization"))]
     impl<T: ~const $base_name> const $spec_name for T {
       $(
+        #[allow(unsafe_op_in_unsafe_fn)]
         #[inline]
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           <T as $base_name>::$function($($name),+)
@@ -71,6 +74,7 @@ macro_rules! define_traits {
     }
 
     $(
+      #[allow(unsafe_op_in_unsafe_fn)]
       #[inline]
       pub(crate) const $($safety)? fn $function<const N: usize>($($name: arg!($type)),+) $(-> arg!($return))? {
         <[u8; N] as $spec_name>::$function($($name),+)
