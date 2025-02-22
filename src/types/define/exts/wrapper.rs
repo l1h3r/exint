@@ -31,10 +31,13 @@ macro_rules! implement {
     }
 
     impl<const N: usize> $name<$crate::uint<N>> {
+      #[doc = $crate::utils::include_doc!($name, uint, "BITS")]
       pub const BITS: u32 = $crate::uint::<N>::BITS;
 
+      #[doc = $crate::utils::include_doc!($name, uint, "MAX")]
       pub const MAX: Self = Self($crate::uint::<N>::MAX);
 
+      #[doc = $crate::utils::include_doc!($name, uint, "MIN")]
       pub const MIN: Self = Self($crate::uint::<N>::MIN);
     }
 
@@ -70,10 +73,13 @@ macro_rules! implement {
     }
 
     impl<const N: usize> $name<$crate::int<N>> {
+      #[doc = $crate::utils::include_doc!($name, int, "BITS")]
       pub const BITS: u32 = $crate::int::<N>::BITS;
 
+      #[doc = $crate::utils::include_doc!($name, int, "MAX")]
       pub const MAX: Self = Self($crate::int::<N>::MAX);
 
+      #[doc = $crate::utils::include_doc!($name, int, "MIN")]
       pub const MIN: Self = Self($crate::int::<N>::MIN);
     }
 

@@ -73,24 +73,28 @@ macro_rules! bin_tools {
     }
   };
   ($outer:ident<$inner:ident>) => {
+    #[doc = $crate::utils::include_doc!($outer, $inner, "reverse_bits")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn reverse_bits(self) -> Self {
       Self(self.0.reverse_bits())
     }
 
+    #[doc = $crate::utils::include_doc!($outer, $inner, "swap_bytes")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn swap_bytes(self) -> Self {
       Self(self.0.swap_bytes())
     }
 
+    #[doc = $crate::utils::include_doc!($outer, $inner, "rotate_left")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn rotate_left(self, bits: u32) -> Self {
       Self(self.0.rotate_left(bits))
     }
 
+    #[doc = $crate::utils::include_doc!($outer, $inner, "rotate_right")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn rotate_right(self, bits: u32) -> Self {
@@ -99,36 +103,42 @@ macro_rules! bin_tools {
 
     #[doc(alias = "popcount")]
     #[doc(alias = "popcnt")]
+    #[doc = $crate::utils::include_doc!($outer, $inner, "count_ones")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn count_ones(self) -> u32 {
       self.0.count_ones()
     }
 
+    #[doc = $crate::utils::include_doc!($outer, $inner, "count_zeros")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn count_zeros(self) -> u32 {
       self.0.count_zeros()
     }
 
+    #[doc = $crate::utils::include_doc!($outer, $inner, "leading_ones")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn leading_ones(self) -> u32 {
       self.0.leading_ones()
     }
 
+    #[doc = $crate::utils::include_doc!($outer, $inner, "leading_zeros")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn leading_zeros(self) -> u32 {
       self.0.leading_zeros()
     }
 
+    #[doc = $crate::utils::include_doc!($outer, $inner, "trailing_ones")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn trailing_ones(self) -> u32 {
       self.0.trailing_ones()
     }
 
+    #[doc = $crate::utils::include_doc!($outer, $inner, "trailing_zeros")]
     #[must_use = $crate::utils::must_use_doc!()]
     #[inline]
     pub const fn trailing_zeros(self) -> u32 {
