@@ -38,8 +38,11 @@ pub use self::error::ParseIntError;
 pub use self::error::TryFromIntError;
 pub use self::types::int;
 pub use self::types::uint;
+pub use self::types::Saturating;
+pub use self::types::Strict;
 pub use self::types::ToAtomic;
 pub use self::types::ToNonZero;
+pub use self::types::Wrapping;
 
 pub mod primitive {
   //! Integer type-aliases.

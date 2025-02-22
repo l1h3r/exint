@@ -78,6 +78,67 @@ macro_rules! byteorder {
       self.bytes
     }
   };
+  ($outer:ident<$inner:ident>) => {
+    #[must_use]
+    #[inline]
+    pub const fn from_be(value: Self) -> Self {
+      Self($crate::$inner::from_be(value.0))
+    }
+
+    #[must_use]
+    #[inline]
+    pub const fn from_le(value: Self) -> Self {
+      Self($crate::$inner::from_le(value.0))
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn to_be(self) -> Self {
+      Self(self.0.to_be())
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn to_le(self) -> Self {
+      Self(self.0.to_le())
+    }
+
+    #[must_use]
+    #[inline]
+    pub const fn from_be_bytes(bytes: [u8; N]) -> Self {
+      Self($crate::$inner::from_be_bytes(bytes))
+    }
+
+    #[must_use]
+    #[inline]
+    pub const fn from_le_bytes(bytes: [u8; N]) -> Self {
+      Self($crate::$inner::from_le_bytes(bytes))
+    }
+
+    #[must_use]
+    #[inline]
+    pub const fn from_ne_bytes(bytes: [u8; N]) -> Self {
+      Self($crate::$inner::from_ne_bytes(bytes))
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn to_be_bytes(self) -> [u8; N] {
+      self.0.to_be_bytes()
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn to_le_bytes(self) -> [u8; N] {
+      self.0.to_le_bytes()
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn to_ne_bytes(self) -> [u8; N] {
+      self.0.to_ne_bytes()
+    }
+  };
 }
 
 pub(crate) use byteorder;

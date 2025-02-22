@@ -74,3 +74,12 @@ macro_rules! implement {
 
 implement!(crate::int<N>);
 implement!(crate::uint<N>);
+
+implement!(crate::Saturating<crate::int<N>>);
+implement!(crate::Saturating<crate::uint<N>>);
+
+implement!(crate::Strict<crate::int<N>>);
+implement!(crate::Strict<crate::uint<N>>);
+
+implement!(crate::Wrapping<crate::int<N>>);
+implement!(crate::Wrapping<crate::uint<N>>);

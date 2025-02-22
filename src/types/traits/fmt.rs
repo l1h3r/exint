@@ -52,3 +52,7 @@ macro_rules! implement {
 
 implement!(int);
 implement!(uint);
+
+implement!(Saturating<T>);
+implement!(Strict<T>);
+implement!(Wrapping<T>);

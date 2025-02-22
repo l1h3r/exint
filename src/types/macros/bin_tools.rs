@@ -72,6 +72,69 @@ macro_rules! bin_tools {
       $crate::llapi::cttz::<Self, N>(self)
     }
   };
+  ($outer:ident<$inner:ident>) => {
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn reverse_bits(self) -> Self {
+      Self(self.0.reverse_bits())
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn swap_bytes(self) -> Self {
+      Self(self.0.swap_bytes())
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn rotate_left(self, bits: u32) -> Self {
+      Self(self.0.rotate_left(bits))
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn rotate_right(self, bits: u32) -> Self {
+      Self(self.0.rotate_right(bits))
+    }
+
+    #[doc(alias = "popcount")]
+    #[doc(alias = "popcnt")]
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn count_ones(self) -> u32 {
+      self.0.count_ones()
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn count_zeros(self) -> u32 {
+      self.0.count_zeros()
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn leading_ones(self) -> u32 {
+      self.0.leading_ones()
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn leading_zeros(self) -> u32 {
+      self.0.leading_zeros()
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn trailing_ones(self) -> u32 {
+      self.0.trailing_ones()
+    }
+
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn trailing_zeros(self) -> u32 {
+      self.0.trailing_zeros()
+    }
+  };
 }
 
 pub(crate) use bin_tools;

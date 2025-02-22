@@ -773,6 +773,14 @@ impl<const N: usize> uint<N> {
     self.wrapping_div(rhs)
   }
 
+  // TODO: Remove this - only exists for macro code in types/macros/internals
+  #[must_use = must_use_doc!()]
+  #[inline]
+  pub(crate) const fn saturating_neg(self) -> Self {
+    // SAFETY: This is never even called
+    unsafe { ::core::hint::unreachable_unchecked() }
+  }
+
   #[doc = include_doc!(uint, "saturating_pow")]
   #[must_use = must_use_doc!()]
   #[inline]

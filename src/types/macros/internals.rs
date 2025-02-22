@@ -209,6 +209,172 @@ macro_rules! internals {
       <$type>::from_ne_bytes(value)
     }
   };
+  (Saturating<$inner:ident>) => {
+    $crate::types::macros::internals!(@core, Saturating<$inner>);
+
+    // -------------------------------------------------------------------------
+    // Constant Ops
+    // -------------------------------------------------------------------------
+
+    #[inline]
+    pub(crate) const fn const_add(self, rhs: Self) -> Self {
+      Self(self.0.saturating_add(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_sub(self, rhs: Self) -> Self {
+      Self(self.0.saturating_sub(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_mul(self, rhs: Self) -> Self {
+      Self(self.0.saturating_mul(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_div(self, rhs: Self) -> Self {
+      Self(self.0.saturating_div(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_rem(self, rhs: Self) -> Self {
+      Self(self.0.const_rem(rhs.0))
+    }
+
+    pub(crate) const fn const_shl(self, _rhs: u32) -> Self {
+      ::core::panic!("const_shl")
+    }
+
+    pub(crate) const fn const_shr(self, _rhs: u32) -> Self {
+      ::core::panic!("const_shr")
+    }
+
+    #[inline]
+    pub(crate) const fn const_neg(self) -> Self {
+      Self(self.0.saturating_neg())
+    }
+  };
+  (Strict<$inner:ident>) => {
+    $crate::types::macros::internals!(@core, Strict<$inner>);
+
+    // -------------------------------------------------------------------------
+    // Constant Ops
+    // -------------------------------------------------------------------------
+
+    #[inline]
+    pub(crate) const fn const_add(self, rhs: Self) -> Self {
+      Self(self.0.strict_add(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_sub(self, rhs: Self) -> Self {
+      Self(self.0.strict_sub(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_mul(self, rhs: Self) -> Self {
+      Self(self.0.strict_mul(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_div(self, rhs: Self) -> Self {
+      Self(self.0.strict_div(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_rem(self, rhs: Self) -> Self {
+      Self(self.0.strict_rem(rhs.0))
+    }
+
+    pub(crate) const fn const_shl(self, _rhs: u32) -> Self {
+      ::core::panic!("const_shl")
+    }
+
+    pub(crate) const fn const_shr(self, _rhs: u32) -> Self {
+      ::core::panic!("const_shr")
+    }
+
+    #[inline]
+    pub(crate) const fn const_neg(self) -> Self {
+      Self(self.0.strict_neg())
+    }
+  };
+  (Wrapping<$inner:ident>) => {
+    $crate::types::macros::internals!(@core, Wrapping<$inner>);
+
+    // -------------------------------------------------------------------------
+    // Constant Ops
+    // -------------------------------------------------------------------------
+
+    #[inline]
+    pub(crate) const fn const_add(self, rhs: Self) -> Self {
+      Self(self.0.wrapping_add(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_sub(self, rhs: Self) -> Self {
+      Self(self.0.wrapping_sub(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_mul(self, rhs: Self) -> Self {
+      Self(self.0.wrapping_mul(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_div(self, rhs: Self) -> Self {
+      Self(self.0.wrapping_div(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_rem(self, rhs: Self) -> Self {
+      Self(self.0.wrapping_rem(rhs.0))
+    }
+
+    pub(crate) const fn const_shl(self, _rhs: u32) -> Self {
+      ::core::panic!("const_shl")
+    }
+
+    pub(crate) const fn const_shr(self, _rhs: u32) -> Self {
+      ::core::panic!("const_shr")
+    }
+
+    pub(crate) const fn const_neg(self) -> Self {
+      Self(self.0.wrapping_neg())
+    }
+  };
+  (@core, $outer:ident<$inner:ident>) => {
+    // -------------------------------------------------------------------------
+    // Constants
+    // -------------------------------------------------------------------------
+
+    pub(crate) const ZERO: Self = Self($crate::$inner::ZERO);
+    pub(crate) const ONE:  Self = Self($crate::$inner::ONE);
+
+    // -------------------------------------------------------------------------
+    // Constant Bitwise Ops
+    // -------------------------------------------------------------------------
+
+    #[inline]
+    pub(crate) const fn const_band(self, rhs: Self) -> Self {
+      Self(self.0.const_band(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_bor(self, rhs: Self) -> Self {
+      Self(self.0.const_bor(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_bxor(self, rhs: Self) -> Self {
+      Self(self.0.const_bxor(rhs.0))
+    }
+
+    #[inline]
+    pub(crate) const fn const_not(self) -> Self {
+      Self(self.0.const_not())
+    }
+  };
 }
 
 pub(crate) use internals;

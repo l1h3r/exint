@@ -6,7 +6,8 @@ macro_rules! maybe_convert_arg {
     maybe_convert_arg!("shift right", $expr)
   };
   ($_trait:ident, $expr:expr_2021) => {
-    $expr
+    // This conversion is only used to support the Wrapper<T> types
+    ::core::convert::Into::into($expr)
   };
   ($method:literal, $expr:expr_2021) => {
     $crate::utils::TryConvert::<u32>::try_convert($expr).unwrap_or(u32::MAX)
@@ -84,7 +85,7 @@ macro_rules! implement_binary {
       }
     }
   };
-  // Entrypoint
+  // Entrypoint (1)
   ($name:ident) => {
     // Standard Operators
     implement_binary!(impl Add::add for $crate::$name<N> as const_add);
@@ -181,10 +182,65 @@ macro_rules! implement_binary {
     // TODO: impl<const N: usize, const M: usize> ShlAssign<$name<M>> for $name<N>;
     // TODO: impl<const N: usize, const M: usize> ShrAssign<$name<M>> for $name<N>;
   };
+  // Entrypoint (2)
+  ($outer:ident<$inner:ident>) => {
+    // Standard Operators
+    implement_binary!(impl Add::add for $crate::$outer<$crate::$inner<N>> as const_add);
+    implement_binary!(impl Div::div for $crate::$outer<$crate::$inner<N>> as const_div);
+    implement_binary!(impl Mul::mul for $crate::$outer<$crate::$inner<N>> as const_mul);
+    implement_binary!(impl Rem::rem for $crate::$outer<$crate::$inner<N>> as const_rem);
+    implement_binary!(impl Sub::sub for $crate::$outer<$crate::$inner<N>> as const_sub);
+
+    implement_binary!(impl Add::add for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as const_add);
+    implement_binary!(impl Div::div for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as const_div);
+    implement_binary!(impl Mul::mul for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as const_mul);
+    implement_binary!(impl Rem::rem for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as const_rem);
+    implement_binary!(impl Sub::sub for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as const_sub);
+
+    // Bitwise Operators
+    implement_binary!(impl BitAnd::bitand for $crate::$outer<$crate::$inner<N>> as const_band);
+    implement_binary!(impl BitOr::bitor   for $crate::$outer<$crate::$inner<N>> as const_bor);
+    implement_binary!(impl BitXor::bitxor for $crate::$outer<$crate::$inner<N>> as const_bxor);
+
+    implement_binary!(impl BitAnd::bitand for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as const_band);
+    implement_binary!(impl BitOr::bitor   for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as const_bor);
+    implement_binary!(impl BitXor::bitxor for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as const_bxor);
+
+    // Standard Operators (Assign)
+    implement_binary!(impl AddAssign::add_assign for $crate::$outer<$crate::$inner<N>> as Add::add);
+    implement_binary!(impl DivAssign::div_assign for $crate::$outer<$crate::$inner<N>> as Div::div);
+    implement_binary!(impl MulAssign::mul_assign for $crate::$outer<$crate::$inner<N>> as Mul::mul);
+    implement_binary!(impl RemAssign::rem_assign for $crate::$outer<$crate::$inner<N>> as Rem::rem);
+    implement_binary!(impl SubAssign::sub_assign for $crate::$outer<$crate::$inner<N>> as Sub::sub);
+
+    implement_binary!(impl AddAssign::add_assign for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as Add::add);
+    implement_binary!(impl DivAssign::div_assign for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as Div::div);
+    implement_binary!(impl MulAssign::mul_assign for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as Mul::mul);
+    implement_binary!(impl RemAssign::rem_assign for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as Rem::rem);
+    implement_binary!(impl SubAssign::sub_assign for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as Sub::sub);
+
+    // Bitwise Operators (Assign)
+    implement_binary!(impl BitAndAssign::bitand_assign for $crate::$outer<$crate::$inner<N>> as BitAnd::bitand);
+    implement_binary!(impl BitOrAssign::bitor_assign   for $crate::$outer<$crate::$inner<N>> as BitOr::bitor);
+    implement_binary!(impl BitXorAssign::bitxor_assign for $crate::$outer<$crate::$inner<N>> as BitXor::bitxor);
+
+    implement_binary!(impl BitAndAssign::bitand_assign for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as BitAnd::bitand);
+    implement_binary!(impl BitOrAssign::bitor_assign   for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as BitOr::bitor);
+    implement_binary!(impl BitXorAssign::bitxor_assign for $crate::$outer<$crate::$inner<N>>, $crate::$inner<N> as BitXor::bitxor);
+  };
 }
 
 implement_binary!(int);
 implement_binary!(uint);
+
+implement_binary!(Saturating<int>);
+implement_binary!(Saturating<uint>);
+
+implement_binary!(Strict<int>);
+implement_binary!(Strict<uint>);
+
+implement_binary!(Wrapping<int>);
+implement_binary!(Wrapping<uint>);
 
 macro_rules! implement_unary {
   (impl $trait:ident::$func:ident for $type:ty as $impl:ident) => {
@@ -213,7 +269,23 @@ macro_rules! implement_unary {
   (uint) => {
     implement_unary!(impl Not::not for $crate::uint<N> as const_not);
   };
+  (Saturating<uint>) => {
+    implement_unary!(impl Not::not for $crate::Saturating<$crate::uint<N>> as const_not);
+  };
+  ($outer:ident<$inner:ident>) => {
+    implement_unary!(impl Neg::neg for $crate::$outer<$crate::$inner<N>> as const_neg);
+    implement_unary!(impl Not::not for $crate::$outer<$crate::$inner<N>> as const_not);
+  };
 }
 
 implement_unary!(int);
 implement_unary!(uint);
+
+implement_unary!(Saturating<int>);
+implement_unary!(Saturating<uint>);
+
+implement_unary!(Strict<int>);
+implement_unary!(Strict<uint>);
+
+implement_unary!(Wrapping<int>);
+implement_unary!(Wrapping<uint>);
