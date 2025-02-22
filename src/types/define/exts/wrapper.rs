@@ -1,12 +1,13 @@
 macro_rules! implement {
   (
     $(#[$meta:meta])*
-    pub struct $name:ident
-    $(
-      impl $_name:ident {
-        $($tt:tt)*
-      }
-    )?
+    pub struct $name:ident;
+    forward {
+      $(#[$pow_docs:meta])+
+      pow = $pow:ident;
+      $(#[$abs_docs:meta])+
+      abs = $abs:ident;
+    }
   ) => {
     $(#[$meta])*
     #[derive(Clone, Copy, Default, Hash, PartialEq, Eq, PartialOrd, Ord)]
@@ -49,11 +50,14 @@ macro_rules! implement {
       $crate::types::macros::bin_tools!($name<uint>);
     }
 
-    $(
-      impl<const N: usize> $name<$crate::uint<N>> {
-        $($tt)*
+    impl<const N: usize> $name<$crate::uint<N>> {
+      $(#[$pow_docs])+
+      #[must_use = $crate::utils::must_use_doc!()]
+      #[inline]
+      pub const fn pow(self, exp: u32) -> Self {
+        Self(self.0.$pow(exp))
       }
-    )?
+    }
 
     // -------------------------------------------------------------------------
     // Implementation - int
@@ -91,11 +95,21 @@ macro_rules! implement {
       $crate::types::macros::bin_tools!($name<int>);
     }
 
-    $(
-      impl<const N: usize> $name<$crate::int<N>> {
-        $($tt)*
+    impl<const N: usize> $name<$crate::int<N>> {
+      $(#[$pow_docs])+
+      #[must_use = $crate::utils::must_use_doc!()]
+      #[inline]
+      pub const fn pow(self, exp: u32) -> Self {
+        Self(self.0.$pow(exp))
       }
-    )?
+
+      $(#[$abs_docs])+
+      #[must_use = $crate::utils::must_use_doc!()]
+      #[inline]
+      pub const fn abs(self) -> Self {
+        Self(self.0.$abs())
+      }
+    }
   };
 }
 
@@ -118,14 +132,47 @@ implement! {
   /// # Layout
   ///
   /// `Saturating<T>` is guaranteed to have the same layout and ABI as `T`.
-  pub struct Saturating
+  pub struct Saturating;
 
-  impl Saturating {
-    #[must_use = crate::utils::must_use_doc!()]
-    #[inline]
-    pub const fn pow(self, exp: u32) -> Self {
-      Self(self.0.saturating_pow(exp))
-    }
+  forward {
+    /// Raises self to the power of `exp`, using exponentiation by squaring.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// use exint::{int, Saturating};
+    ///
+    /// assert_eq!(Saturating(int!(3)).pow(4), Saturating(int!(81)));
+    /// ```
+    ///
+    /// Results that are too large are saturated:
+    ///
+    /// ```
+    /// use exint::{int, Saturating};
+    ///
+    /// assert_eq!(Saturating(int!(3 i8)).pow(5), Saturating(int!(127 i8)));
+    /// assert_eq!(Saturating(int!(3 i8)).pow(6), Saturating(int!(127 i8)));
+    /// ```
+    pow = saturating_pow;
+    /// Saturating absolute value. Computes `self.0.abs()`,
+    /// returning `MAX` if `self == MIN` instead of overflowing.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// use exint::{int, Saturating};
+    ///
+    /// assert_eq!(Saturating(int!(100)).abs(), Saturating(int!(100)));
+    /// assert_eq!(Saturating(int!(-100)).abs(), Saturating(int!(100)));
+    /// assert_eq!(Saturating(<int>::MIN).abs(), Saturating((<int>::MIN + int!(1)).abs()));
+    /// assert_eq!(Saturating(<int>::MIN).abs(), Saturating(<int>::MIN.saturating_abs()));
+    /// assert_eq!(Saturating(<int>::MIN).abs(), Saturating(<int>::MAX));
+    /// ```
+    abs = saturating_abs;
   }
 }
 
@@ -148,14 +195,50 @@ implement! {
   /// # Layout
   ///
   /// `Strict<T>` is guaranteed to have the same layout and ABI as `T`.
-  pub struct Strict
+  pub struct Strict;
 
-  impl Strict {
-    #[must_use = crate::utils::must_use_doc!()]
-    #[inline]
-    pub const fn pow(self, exp: u32) -> Self {
-      Self(self.0.strict_pow(exp))
-    }
+  forward {
+    /// Raises self to the power of `exp`, using exponentiation by squaring.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// use exint::{int, Strict};
+    ///
+    /// assert_eq!(Strict(int!(3)).pow(4), Strict(int!(81)));
+    /// ```
+    ///
+    /// Results that are too large trigger a panic:
+    ///
+    /// ```should_panic
+    /// use exint::{int, Strict};
+    ///
+    /// let _ = Strict(int!(3 i8)).pow(5);
+    /// ```
+    pow = strict_pow;
+    /// Strict absolute value. Computes `self.0.abs()`,
+    /// panicking if `self == MIN`.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// use exint::{int, Strict};
+    ///
+    /// assert_eq!(Strict(int!(-5)).abs(), Strict(int!(5)));
+    /// ```
+    ///
+    /// The following panics because of overflow:
+    ///
+    /// ```should_panic
+    /// use exint::{int, Strict};
+    ///
+    /// let _ = Strict(<int>::MIN).abs();
+    /// ```
+    abs = strict_abs;
   }
 }
 
@@ -178,13 +261,51 @@ implement! {
   /// # Layout
   ///
   /// `Wrapping<T>` is guaranteed to have the same layout and ABI as `T`.
-  pub struct Wrapping
+  pub struct Wrapping;
 
-  impl Wrapping {
-    #[must_use = crate::utils::must_use_doc!()]
-    #[inline]
-    pub const fn pow(self, exp: u32) -> Self {
-      Self(self.0.wrapping_pow(exp))
-    }
+  forward {
+    /// Raises self to the power of `exp`, using exponentiation by squaring.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// use exint::{int, Wrapping};
+    ///
+    /// assert_eq!(Wrapping(int!(3)).pow(4), Wrapping(int!(81)));
+    /// ```
+    ///
+    /// Results that are too large are wrapped:
+    ///
+    /// ```
+    /// use exint::{int, Wrapping};
+    ///
+    /// assert_eq!(Wrapping(int!(3 i8)).pow(5), Wrapping(int!(-13 i8)));
+    /// assert_eq!(Wrapping(int!(3 i8)).pow(6), Wrapping(int!(-39 i8)));
+    /// ```
+    pow = wrapping_pow;
+    /// Wrapping (modular) absolute value. Computes `self.0.abs()`,
+    /// wrapping around at the boundary of the type.
+    ///
+    /// The only case where such wrapping can occur is when one takes the
+    /// absolute value of the negative minimal value for the type; this is a
+    /// positive value that is too large to represent in the type. In such a
+    /// case, this function returns `MIN` itself.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// use exint::{int, uint, Wrapping};
+    ///
+    /// assert_eq!(Wrapping(int!(100)).abs(), Wrapping(int!(100)));
+    /// assert_eq!(Wrapping(int!(-100)).abs(), Wrapping(int!(100)));
+    /// assert_eq!(Wrapping(<int>::MIN).abs(), Wrapping(<int>::MIN));
+    /// ```
+    // TODO: FIXME
+    // assert_eq!(Wrapping(int!(-128)).abs().cast_unsigned(), Wrapping(uint!(128)));
+    abs = wrapping_abs;
   }
 }
