@@ -3,8 +3,9 @@ macro_rules! from_str {
     impl<const S: usize> ::core::str::FromStr for $name<S> {
       type Err = $crate::errors::ParseIntError;
 
+      #[inline]
       fn from_str(src: &str) -> Result<Self, Self::Err> {
-        panic!("FromStr::from_str")
+        Self::from_str_radix(src, 10)
       }
     }
   };

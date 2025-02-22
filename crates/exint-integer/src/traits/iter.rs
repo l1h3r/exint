@@ -5,7 +5,7 @@ macro_rules! product {
       where
         I: ::core::iter::Iterator<Item = Self>,
       {
-        panic!("Product::product")
+        iter.fold(Self::ONE, |a, b| a * b)
       }
     }
 
@@ -14,7 +14,7 @@ macro_rules! product {
       where
         I: ::core::iter::Iterator<Item = &'a Self>,
       {
-        panic!("Product::product")
+        iter.fold(Self::ONE, |a, b| a * b)
       }
     }
   };
@@ -27,7 +27,7 @@ macro_rules! sum {
       where
         I: ::core::iter::Iterator<Item = Self>,
       {
-        panic!("Sum::sum")
+        iter.fold(Self::ZERO, |a, b| a + b)
       }
     }
 
@@ -36,7 +36,7 @@ macro_rules! sum {
       where
         I: ::core::iter::Iterator<Item = &'a Self>,
       {
-        panic!("Sum::sum")
+        iter.fold(Self::ZERO, |a, b| a + b)
       }
     }
   };

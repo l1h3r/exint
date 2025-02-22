@@ -17,11 +17,18 @@ macro_rules! binops {
   };
   // Implementation - Binary Op
   (impl $trait:ident::$func:ident for $lhs:ty, $rhs:ty as $impl:ident) => {
+    macro_rules! __convert {
+      (Shl, $_type:ty, $expr:expr) => { 0u32 /* TODO: Convert $expr to u32 */ };
+      (Shr, $_type:ty, $expr:expr) => { 0u32 /* TODO: Convert $expr to u32 */ };
+      ($_trait:ident, $_type:ty, $expr:expr) => { $expr };
+    }
+
     impl<const S: usize> ::core::ops::$trait<$rhs> for $lhs {
       type Output = Self;
 
+      #[inline]
       fn $func(self, rhs: $rhs) -> Self::Output {
-        panic!(concat!(stringify!($trait), "::", stringify!($func)))
+        Self::$impl(self, __convert!($trait, $rhs, rhs))
       }
     }
 
@@ -30,6 +37,7 @@ macro_rules! binops {
   // Implementation - Binary Assign Op
   (impl $trait:ident::$func:ident for $lhs:ty, $rhs:ty as $base:ident::$impl:ident) => {
     impl<const S: usize> ::core::ops::$trait<$rhs> for $lhs {
+      #[inline]
       fn $func(&mut self, rhs: $rhs) {
         *self = ::core::ops::$base::$impl(*self, rhs);
       }
@@ -42,6 +50,7 @@ macro_rules! binops {
     impl<'a, const S: usize> ::core::ops::$trait<$rhs> for &'a $lhs {
       type Output = <$lhs as ::core::ops::$trait<$rhs>>::Output;
 
+      #[inline]
       fn $func(self, rhs: $rhs) -> Self::Output {
         ::core::ops::$trait::$func(*self, rhs)
       }
@@ -50,6 +59,7 @@ macro_rules! binops {
     impl<const S: usize> ::core::ops::$trait<&'_ $rhs> for $lhs {
       type Output = <$lhs as ::core::ops::$trait<$rhs>>::Output;
 
+      #[inline]
       fn $func(self, rhs: &'_ $rhs) -> Self::Output {
         ::core::ops::$trait::$func(self, *rhs)
       }
@@ -58,6 +68,7 @@ macro_rules! binops {
     impl<const S: usize> ::core::ops::$trait<&'_ $rhs> for &'_ $lhs {
       type Output = <$lhs as ::core::ops::$trait<$rhs>>::Output;
 
+      #[inline]
       fn $func(self, rhs: &'_ $rhs) -> Self::Output {
         ::core::ops::$trait::$func(*self, *rhs)
       }
@@ -66,6 +77,7 @@ macro_rules! binops {
   // Implementation - Binary Assign Op Reference
   (impl ref assign $trait:ident::$func:ident for $lhs:ty, $rhs:ty) => {
     impl<const S: usize> ::core::ops::$trait<&'_ $rhs> for $lhs {
+      #[inline]
       fn $func(&mut self, rhs: &'_ $rhs) {
         ::core::ops::$trait::$func(self, *rhs);
       }
@@ -74,16 +86,16 @@ macro_rules! binops {
   // Entrypoint
   ($name:ident) => {
     // Standard Operators
-    $crate::traits::binops!(impl Add::add for $name as add);
-    $crate::traits::binops!(impl Div::div for $name as div);
-    $crate::traits::binops!(impl Mul::mul for $name as mul);
-    $crate::traits::binops!(impl Rem::rem for $name as rem);
-    $crate::traits::binops!(impl Sub::sub for $name as sub);
+    $crate::traits::binops!(impl Add::add for $name as const_add);
+    $crate::traits::binops!(impl Div::div for $name as const_div);
+    $crate::traits::binops!(impl Mul::mul for $name as const_mul);
+    $crate::traits::binops!(impl Rem::rem for $name as const_rem);
+    $crate::traits::binops!(impl Sub::sub for $name as const_sub);
 
     // Bitwise Operators
-    $crate::traits::binops!(impl BitAnd::bitand for $name as bitand);
-    $crate::traits::binops!(impl BitOr::bitor   for $name as bitor);
-    $crate::traits::binops!(impl BitXor::bitxor for $name as bitxor);
+    $crate::traits::binops!(impl BitAnd::bitand for $name as const_band);
+    $crate::traits::binops!(impl BitOr::bitor   for $name as const_bor);
+    $crate::traits::binops!(impl BitXor::bitxor for $name as const_bxor);
 
     // Standard Operators (Assign)
     $crate::traits::binops!(impl AddAssign::add_assign for $name as Add::add);
@@ -98,37 +110,37 @@ macro_rules! binops {
     $crate::traits::binops!(impl BitXorAssign::bitxor_assign for $name as BitXor::bitxor);
 
     // Shift Operators (Crate Types)
-    $crate::traits::binops!(impl Shl::shl for $name as shl);
-    $crate::traits::binops!(impl Shr::shr for $name as shr);
+    $crate::traits::binops!(impl Shl::shl for $name as const_shl);
+    $crate::traits::binops!(impl Shr::shr for $name as const_shr);
 
     // Shift Operators (Core Types)
-    $crate::traits::binops!(impl Shl::shl for $name, u8    as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, u16   as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, u32   as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, u64   as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, u128  as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, usize as shl);
+    $crate::traits::binops!(impl Shl::shl for $name, u8    as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, u16   as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, u32   as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, u64   as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, u128  as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, usize as const_shl);
 
-    $crate::traits::binops!(impl Shl::shl for $name, i8    as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, i16   as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, i32   as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, i64   as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, i128  as shl);
-    $crate::traits::binops!(impl Shl::shl for $name, isize as shl);
+    $crate::traits::binops!(impl Shl::shl for $name, i8    as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, i16   as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, i32   as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, i64   as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, i128  as const_shl);
+    $crate::traits::binops!(impl Shl::shl for $name, isize as const_shl);
 
-    $crate::traits::binops!(impl Shr::shr for $name, u8    as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, u16   as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, u32   as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, u64   as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, u128  as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, usize as shr);
+    $crate::traits::binops!(impl Shr::shr for $name, u8    as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, u16   as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, u32   as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, u64   as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, u128  as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, usize as const_shr);
 
-    $crate::traits::binops!(impl Shr::shr for $name, i8    as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, i16   as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, i32   as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, i64   as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, i128  as shr);
-    $crate::traits::binops!(impl Shr::shr for $name, isize as shr);
+    $crate::traits::binops!(impl Shr::shr for $name, i8    as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, i16   as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, i32   as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, i64   as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, i128  as const_shr);
+    $crate::traits::binops!(impl Shr::shr for $name, isize as const_shr);
 
     // Shift Assign Operators (Crate Types)
     $crate::traits::binops!(impl ShlAssign::shl_assign for $name as Shl::shl);
@@ -173,26 +185,28 @@ macro_rules! binops {
 macro_rules! unops {
   // Forwarding (1)
   (uint, $name:ident) => {
-    $crate::traits::unops!(impl Not::not for $name as not);
+    $crate::traits::unops!(impl Not::not for $name as const_not);
   };
   // Forwarding (2)
   (int, $name:ident) => {
-    $crate::traits::unops!(impl Neg::neg for $name as neg);
-    $crate::traits::unops!(impl Not::not for $name as not);
+    $crate::traits::unops!(impl Neg::neg for $name as const_neg);
+    $crate::traits::unops!(impl Not::not for $name as const_not);
   };
   // Implementation - Unary Op
   (impl $trait:ident::$func:ident for $name:ident as $impl:ident) => {
     impl<const S: usize> ::core::ops::$trait for $name<S> {
       type Output = Self;
 
+      #[inline]
       fn $func(self) -> Self::Output {
-        panic!(concat!(stringify!($trait), "::", stringify!($func)))
+        Self::$impl(self)
       }
     }
 
     impl<const S: usize> ::core::ops::$trait for &'_ $name<S> {
       type Output = <$name<S> as ::core::ops::$trait>::Output;
 
+      #[inline]
       fn $func(self) -> Self::Output {
         ::core::ops::$trait::$func(*self)
       }
