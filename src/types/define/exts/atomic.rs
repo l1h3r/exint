@@ -36,7 +36,6 @@ macro_rules! implement {
     impl ToAtomic for $crate::$name<$size> {
       type Atomic = ::core::sync::atomic::$atomic;
 
-      #[must_use]
       #[inline]
       fn to_atomic(self) -> Self::Atomic {
         self.to_atomic()

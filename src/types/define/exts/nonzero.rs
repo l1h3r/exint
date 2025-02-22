@@ -49,13 +49,11 @@ macro_rules! implement {
     impl ToNonZero for $crate::$name<$size> {
       type NonZero = ::core::num::$nonzero;
 
-      #[must_use]
       #[inline]
       fn to_nonzero(self) -> ::core::option::Option<Self::NonZero> {
         self.to_nonzero()
       }
 
-      #[must_use]
       #[inline]
       unsafe fn to_nonzero_unchecked(self) -> Self::NonZero {
         // SAFETY: This is guaranteed to be safe by the caller.
