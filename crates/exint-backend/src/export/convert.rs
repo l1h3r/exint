@@ -104,7 +104,7 @@ specialize! {
     //       even number of bytes (positive multiple of 16 bits).
     #[inline]
     fn swap8(self) -> Self {
-      (::core::intrinsics::bswap(self.zext()) >> Self::UDIFF).trunc()
+      ::core::intrinsics::bswap(self.zext() << Self::UDIFF).trunc()
     }
   }
 }
