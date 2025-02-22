@@ -76,6 +76,15 @@ macro_rules! overflowing {
 
     #[must_use]
     #[inline]
+    pub const fn overflowing_sub_signed(self, rhs: $crate::int<S>) -> (Self, bool) {
+      let out: (Self, bool) = self.overflowing_sub(rhs.to_uint());
+      let cmp: bool = out.1 ^ rhs.const_lt(&$crate::int::ZERO);
+
+      (out.0, cmp)
+    }
+
+    #[must_use]
+    #[inline]
     pub const fn overflowing_div(self, rhs: Self) -> (Self, bool) {
       (self.const_div(rhs), false)
     }

@@ -92,6 +92,12 @@ macro_rules! wrapping {
 
     #[must_use]
     #[inline]
+    pub const fn wrapping_sub_signed(self, rhs: $crate::int<S>) -> Self {
+      self.wrapping_sub(rhs.to_uint())
+    }
+
+    #[must_use]
+    #[inline]
     pub const fn wrapping_div(self, rhs: Self) -> Self {
       self.const_div(rhs)
     }
