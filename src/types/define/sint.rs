@@ -268,11 +268,11 @@ impl<const N: usize> int<N> {
   #[doc = include_doc!(int, "abs_diff")]
   #[must_use = must_use_doc!()]
   #[inline]
-  pub const fn abs_diff(self, other: Self) -> uint<N> {
-    if self.const_lt(&other) {
-      other.cast_unsigned().wrapping_sub(self.cast_unsigned())
+  pub const fn abs_diff(self, rhs: Self) -> uint<N> {
+    if self.const_lt(&rhs) {
+      rhs.cast_unsigned().wrapping_sub(self.cast_unsigned())
     } else {
-      self.cast_unsigned().wrapping_sub(other.cast_unsigned())
+      self.cast_unsigned().wrapping_sub(rhs.cast_unsigned())
     }
   }
 

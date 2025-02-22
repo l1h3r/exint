@@ -260,11 +260,11 @@ impl<const N: usize> uint<N> {
   #[doc = include_doc!(uint, "abs_diff")]
   #[must_use = must_use_doc!()]
   #[inline]
-  pub const fn abs_diff(self, other: Self) -> Self {
-    if self.const_lt(&other) {
-      other.const_sub(self)
+  pub const fn abs_diff(self, rhs: Self) -> Self {
+    if self.const_lt(&rhs) {
+      rhs.const_sub(self)
     } else {
-      self.const_sub(other)
+      self.const_sub(rhs)
     }
   }
 
@@ -1278,8 +1278,8 @@ impl uint<1> {
 
   #[doc = include_doc!(uint, "eq_ignore_ascii_case")]
   #[inline]
-  pub const fn eq_ignore_ascii_case(&self, other: &Self) -> bool {
-    self.into_u8().eq_ignore_ascii_case(&other.into_u8())
+  pub const fn eq_ignore_ascii_case(&self, rhs: &Self) -> bool {
+    self.into_u8().eq_ignore_ascii_case(&rhs.into_u8())
   }
 
   #[doc = include_doc!(uint, "escape_ascii")]

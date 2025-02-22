@@ -1,4 +1,4 @@
-Computes the absolute difference between `self` and `other`.
+Computes the absolute difference between `self` and `rhs`.
 
 # Examples
 

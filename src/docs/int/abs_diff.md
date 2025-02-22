@@ -1,4 +1,4 @@
-Computes the absolute difference between `self` and `other`.
+Computes the absolute difference between `self` and `rhs`.
 
 This function always returns the correct answer without overflow or panics by
 returning an unsigned integer.

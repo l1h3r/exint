@@ -168,7 +168,7 @@ assert_eq!(uint!(10).isqrt(), uint!(3));
 
 [abs_diff]
 overview = """
-Computes the absolute difference between `self` and `other`.
+Computes the absolute difference between `self` and `rhs`.
 """
 examples = """
 assert_eq!(uint!(100).abs_diff(uint!(80)), uint!(20));
