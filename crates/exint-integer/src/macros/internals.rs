@@ -227,6 +227,12 @@ macro_rules! internals {
     pub(crate) const fn to_int(self) -> $crate::int<S> {
       $crate::int::from_ne_bytes(self.to_ne_bytes())
     }
+
+    #[must_use]
+    #[inline]
+    pub(crate) const fn one_less_than_next_power_of_two(self) -> Self {
+      panic!("TODO: one_less_than_next_power_of_two")
+    }
   };
   (int) => {
     $crate::macros::internals!(core, int, false);
