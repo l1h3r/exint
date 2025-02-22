@@ -16,6 +16,37 @@ pub mod errors {
   pub type ParseIntError = ();
 }
 
+// TODO: Move to exint-backend
+pub mod intrinsics {
+  pub const fn ctpop<T: Copy, const S: usize>(integer: T) -> u32 {
+    panic!("intrinsics::ctpop")
+  }
+
+  pub const fn ctlz<T: Copy, const S: usize>(integer: T) -> u32 {
+    panic!("intrinsics::ctlz")
+  }
+
+  pub const fn cttz<T: Copy, const S: usize>(integer: T) -> u32 {
+    panic!("intrinsics::cttz")
+  }
+
+  pub const fn swap1<T: Copy, const S: usize>(integer: T) -> T {
+    panic!("intrinsics::swap1")
+  }
+
+  pub const fn swap8<T: Copy, const S: usize>(integer: T) -> T {
+    panic!("intrinsics::swap8")
+  }
+
+  pub const fn rotl<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
+    panic!("intrinsics::rotl")
+  }
+
+  pub const fn rotr<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
+    panic!("intrinsics::rotr")
+  }
+}
+
 pub use self::types::sint::int;
 pub use self::types::uint::uint;
 
