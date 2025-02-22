@@ -8,6 +8,9 @@ readme = "README.md"
 [lints]
 workspace = true
 
+[dependencies]
+exint-backend = { version = "=0.1", path = "../exint-backend" }
+
 [features]
 default = []
 

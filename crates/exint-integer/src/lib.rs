@@ -19,67 +19,8 @@ mod traits;
 mod types;
 mod value;
 
-// TODO: Move to exint-backend
 pub(crate) mod intrinsics {
-  use ::core::panic;
-  use ::core::cmp::Ordering;
-  use ::core::marker::Copy;
-
-  pub const fn cast<const T: usize, const U: usize, const UINT: bool>(integer: [u8; T]) -> [u8; U] {
-    panic!("intrinsics::cast")
-  }
-
-  pub const fn eq<T: Copy, const S: usize>(lhs: T, rhs: T) -> bool {
-    panic!("intrinsics::eq")
-  }
-
-  pub const fn cmp<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> Ordering {
-    panic!("intrinsics::cmp")
-  }
-
-  pub const fn ctpop<T: Copy, const S: usize>(integer: T) -> u32 {
-    panic!("intrinsics::ctpop")
-  }
-
-  pub const fn ctlz<T: Copy, const S: usize>(integer: T) -> u32 {
-    panic!("intrinsics::ctlz")
-  }
-
-  pub const fn cttz<T: Copy, const S: usize>(integer: T) -> u32 {
-    panic!("intrinsics::cttz")
-  }
-
-  pub const fn swap1<T: Copy, const S: usize>(integer: T) -> T {
-    panic!("intrinsics::swap1")
-  }
-
-  pub const fn swap8<T: Copy, const S: usize>(integer: T) -> T {
-    panic!("intrinsics::swap8")
-  }
-
-  pub const fn rotl<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
-    panic!("intrinsics::rotl")
-  }
-
-  pub const fn rotr<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
-    panic!("intrinsics::rotr")
-  }
-
-  pub const fn band<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
-    panic!("intrinsics::band")
-  }
-
-  pub const fn bor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
-    panic!("intrinsics::bor")
-  }
-
-  pub const fn bxor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
-    panic!("intrinsics::bxor")
-  }
-
-  pub const fn bnot<T: Copy, const S: usize>(integer: T) -> T {
-    panic!("intrinsics::bnot")
-  }
+  pub use ::exint_backend::intrinsics::*;
 }
 
 pub use self::errors::ParseIntError;
