@@ -187,10 +187,43 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  // TODO: Optimize with Karatsuba
+  // https://en.wikipedia.org/wiki/Integer_square_root#Karatsuba_square_root_algorithm
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn isqrt(self) -> Self {
-    ::core::panic!("uint::isqrt")
+    if self.const_lt(&Self::TWO) {
+      return self;
+    }
+
+    // -------------------------------------------------------------------------
+    // This implementation is based on:
+    // https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Binary_numeral_system_(base_2)
+    // -------------------------------------------------------------------------
+
+    let mut val: Self = self;
+    let mut res: Self = Self::ZERO;
+    let mut one: Self = Self::ONE.const_shl(self.ilog2() & !1);
+
+    while !one.is_zero() {
+      if val.const_ge(&res.const_add(one)) {
+        val = val.const_sub(res.const_add(one));
+        res = res.const_shr(1).const_add(one);
+      } else {
+        res = res.const_shr(1);
+      }
+
+      one = one.const_shr(2);
+    }
+
+    // SAFETY: the result is positive and fits in an integer with half as many
+    //         bits. Inform the optimizer about it.
+    unsafe {
+      ::core::hint::assert_unchecked(Self::ZERO.const_lt(&res));
+      ::core::hint::assert_unchecked(res.const_lt(&Self::ONE.const_shl(Self::BITS / 2)));
+    }
+
+    res
   }
 
   // TODO: Optimize for u8
