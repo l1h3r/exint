@@ -7,6 +7,7 @@
 #![cfg_attr(feature = "docs",                 feature(doc_cfg_hide))]
 #![cfg_attr(feature = "f16",                  feature(f16))]
 #![cfg_attr(feature = "f128",                 feature(f128))]
+#![cfg_attr(feature = "integer_atomics",      feature(integer_atomics))]
 #![cfg_attr(feature = "never_type",           feature(never_type))]
 #![cfg_attr(feature = "random",               feature(random))]
 #![cfg_attr(feature = "specialization",       feature(min_specialization))]
@@ -35,6 +36,7 @@ pub use self::error::ParseIntError;
 pub use self::error::TryFromIntError;
 pub use self::types::int;
 pub use self::types::uint;
+pub use self::types::ToAtomic;
 
 pub mod primitive {
   //! Integer type-aliases.

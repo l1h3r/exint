@@ -67,6 +67,11 @@ int_from_ascii = []
 # Tracking Issue: https://github.com/rust-lang/rust/issues/88581
 int_roundings = []
 
+# Enable support for `integer_atomics` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/99069
+integer_atomics = ["nightly"]
+
 # Enable support for `integer_sign_cast` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/125882
