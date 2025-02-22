@@ -65,14 +65,11 @@ impl<const N: usize> int<N> {
     Self::MIN
   }
 
-  macros::stability! {
-    #[unstable(feature = "integer_sign_cast")]
-    #[doc = include_doc!(int, "cast_unsigned")]
-    #[must_use = must_use_doc!()]
-    #[inline]
-    pub const fn cast_unsigned(self) -> uint<N> {
-      uint::from_ne_bytes(self.to_ne_bytes())
-    }
+  #[doc = include_doc!(int, "cast_unsigned")]
+  #[must_use = must_use_doc!()]
+  #[inline]
+  pub const fn cast_unsigned(self) -> uint<N> {
+    uint::from_ne_bytes(self.to_ne_bytes())
   }
 
   // TODO: Optimize with wide type
