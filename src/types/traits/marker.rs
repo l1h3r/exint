@@ -8,7 +8,7 @@ macro_rules! implement {
     #[cfg(feature = "unsized_const_params")]
     impl<const N: usize> ::core::marker::UnsizedConstParamTy for $crate::$name<N> {}
 
-    #[cfg(feature = "unsized_const_params")]
+    #[cfg(feature = "adt_const_params")]
     impl<const N: usize> ::core::marker::ConstParamTy_ for $crate::$name<N> {}
   };
 }

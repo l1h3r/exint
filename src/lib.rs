@@ -1,5 +1,6 @@
 //! Exint - Exotic Integer Types
 
+#![cfg_attr(feature = "adt_const_params",     feature(adt_const_params))]
 #![cfg_attr(feature = "ascii_char",           feature(ascii_char))]
 #![cfg_attr(feature = "const_trait_impl",     feature(const_trait_impl))]
 #![cfg_attr(feature = "core_intrinsics",      feature(core_intrinsics))]
