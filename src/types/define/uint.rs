@@ -1245,14 +1245,14 @@ impl uint<1> {
   }
 
   #[doc = include_doc!(uint, "to_ascii_uppercase")]
-  #[must_use = "to uppercase the value in-place, use `make_ascii_uppercase()`"]
+  #[must_use = must_use_doc!("to_ascii_uppercase")]
   #[inline]
   pub const fn to_ascii_uppercase(&self) -> uint<1> {
     Self::from_u8(self.into_u8().to_ascii_uppercase())
   }
 
   #[doc = include_doc!(uint, "to_ascii_lowercase")]
-  #[must_use = "to lowercase the value in-place, use `make_ascii_lowercase()`"]
+  #[must_use = must_use_doc!("to_ascii_lowercase")]
   #[inline]
   pub const fn to_ascii_lowercase(&self) -> uint<1> {
     Self::from_u8(self.into_u8().to_ascii_lowercase())

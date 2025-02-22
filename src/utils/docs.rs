@@ -14,6 +14,12 @@ macro_rules! must_use_doc {
   () => {
     "this returns the result of the operation, without modifying the original"
   };
+  ("to_ascii_uppercase") => {
+    "to uppercase the value in-place, use `make_ascii_uppercase()`"
+  };
+  ("to_ascii_lowercase") => {
+    "to lowercase the value in-place, use `make_ascii_lowercase()`"
+  };
 }
 
 pub(crate) use include_doc;
