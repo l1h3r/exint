@@ -3,13 +3,13 @@ macro_rules! internals {
     #[must_use]
     #[inline]
     pub(crate) const fn $from_fn(other: $name) -> Self {
-      panic!(stringify!($from_fn))
+      $crate::macros::cast!($name as Self, other)
     }
 
     #[must_use]
     #[inline]
     pub(crate) const fn $into_fn(self) -> $name {
-      panic!(stringify!($into_fn))
+      $crate::macros::cast!(Self as $name, self)
     }
   };
 
@@ -18,8 +18,8 @@ macro_rules! internals {
     // Constants
     // -------------------------------------------------------------------------
 
-    pub(crate) const ZERO: Self = Self::from_ne_bytes([0x00; S]);
-    pub(crate) const ONE:  Self = panic!("ONE");
+    pub(crate) const ZERO: Self = Self::from_u8(0);
+    pub(crate) const ONE:  Self = Self::from_u8(1);
 
     // -------------------------------------------------------------------------
     // Constant Eq

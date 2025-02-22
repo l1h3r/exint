@@ -22,3 +22,4 @@ pub(crate) use self::constants::constants;
 pub(crate) use self::internals::internals;
 pub(crate) use self::parse_str::parse_str;
 pub(crate) use self::utilities::arithmetic_select;
+pub(crate) use self::utilities::cast;

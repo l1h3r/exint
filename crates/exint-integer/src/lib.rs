@@ -8,9 +8,15 @@
 #![no_std]
 #![no_implicit_prelude]
 
+// Use to support `cast!` macro.
+//
+// Tracking Issue: https://github.com/rust-lang/rust/issues/85077
+#![feature(generic_arg_infer)]
+
 mod macros;
 mod traits;
 mod types;
+mod value;
 
 // TODO
 pub mod errors {
@@ -22,6 +28,10 @@ pub mod intrinsics {
   use ::core::panic;
   use ::core::cmp::Ordering;
   use ::core::marker::Copy;
+
+  pub const fn cast<const T: usize, const U: usize, const UINT: bool>(integer: [u8; T]) -> [u8; U] {
+    panic!("intrinsics::cast")
+  }
 
   pub const fn eq<T: Copy, const S: usize>(lhs: T, rhs: T) -> bool {
     panic!("intrinsics::eq")
