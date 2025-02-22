@@ -17,5 +17,5 @@ Basic usage:
 assert_eq!(int!(100).wrapping_abs(), int!(100));
 assert_eq!(int!(-100).wrapping_abs(), int!(100));
 assert_eq!(int::MIN.wrapping_abs(), int::MIN);
-assert_eq!((-128i8).wrapping_abs() as u8, 128);
+assert_eq!(int!(-128 i8).wrapping_abs().cast_unsigned(), uint!(128 u8));
 ```

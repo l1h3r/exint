@@ -19,5 +19,5 @@ Basic usage:
 # type int  = exint::int<4>;
 # use exint::*;
 assert_eq!(int!(100).wrapping_rem(int!(10)), int!(0));
-assert_eq!((-128i8).wrapping_rem(-1), 0);
+assert_eq!(int!(-128 i8).wrapping_rem(int!(-1 i8)), int!(0 i8));
 ```

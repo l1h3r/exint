@@ -45,7 +45,7 @@ wrapping around at the boundary of the type.
 """
 examples = """
 assert_eq!(int!(10).wrapping_mul(int!(12)), int!(120));
-assert_eq!(11i8.wrapping_mul(12), -124);
+assert_eq!(int!(11 i8).wrapping_mul(int!(12 i8)), int!(-124 i8));
 """
 
 [wrapping_div]
@@ -64,7 +64,7 @@ This function will panic if `rhs` is zero.
 """
 examples = """
 assert_eq!(int!(100).wrapping_div(int!(10)), int!(10));
-assert_eq!((-128i8).wrapping_div(-1), -128);
+assert_eq!(int!(-128 i8).wrapping_div(int!(-1 i8)), int!(-128 i8));
 """
 
 [wrapping_div_euclid]
@@ -83,7 +83,7 @@ This function will panic if `rhs` is zero.
 """
 examples = """
 assert_eq!(int!(100).wrapping_div_euclid(int!(10)), int!(10));
-assert_eq!((-128i8).wrapping_div_euclid(-1), -128);
+assert_eq!(int!(-128 i8).wrapping_div_euclid(int!(-1 i8)), int!(-128 i8));
 """
 
 [wrapping_rem]
@@ -101,7 +101,7 @@ This function will panic if `rhs` is zero.
 """
 examples = """
 assert_eq!(int!(100).wrapping_rem(int!(10)), int!(0));
-assert_eq!((-128i8).wrapping_rem(-1), 0);
+assert_eq!(int!(-128 i8).wrapping_rem(int!(-1 i8)), int!(0 i8));
 """
 
 [wrapping_rem_euclid]
@@ -118,7 +118,7 @@ This function will panic if `rhs` is zero.
 """
 examples = """
 assert_eq!(int!(100).wrapping_rem_euclid(int!(10)), int!(0));
-assert_eq!((-128i8).wrapping_rem_euclid(-1), 0);
+assert_eq!(int!(-128 i8).wrapping_rem_euclid(int!(-1 i8)), int!(0 i8));
 """
 
 [wrapping_shl]
@@ -154,7 +154,7 @@ implement a [`rotate_right`] function, which may be what you want instead.
 """
 examples = """
 assert_eq!(int!(-128).wrapping_shr(7), int!(-1));
-assert_eq!((-128i16).wrapping_shr(64), -128);
+assert_eq!(int!(-128 i16).wrapping_shr(64), int!(-128 i16));
 """
 
 [wrapping_neg]
@@ -180,8 +180,8 @@ wrapping around at the boundary of the type.
 """
 examples = """
 assert_eq!(int!(3).wrapping_pow(4), int!(81));
-assert_eq!(3i8.wrapping_pow(5), -13);
-assert_eq!(3i8.wrapping_pow(6), -39);
+assert_eq!(int!(3 i8).wrapping_pow(5), int!(-13 i8));
+assert_eq!(int!(3 i8).wrapping_pow(6), int!(-39 i8));
 """
 
 [wrapping_abs]
@@ -197,5 +197,5 @@ examples = """
 assert_eq!(int!(100).wrapping_abs(), int!(100));
 assert_eq!(int!(-100).wrapping_abs(), int!(100));
 assert_eq!(int::MIN.wrapping_abs(), int::MIN);
-assert_eq!((-128i8).wrapping_abs() as u8, 128);
+assert_eq!(int!(-128 i8).wrapping_abs().cast_unsigned(), uint!(128 u8));
 """

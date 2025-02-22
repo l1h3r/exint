@@ -20,5 +20,5 @@ Basic usage:
 # type int  = exint::int<4>;
 # use exint::*;
 assert_eq!(int!(100).wrapping_div_euclid(int!(10)), int!(10));
-assert_eq!((-128i8).wrapping_div_euclid(-1), -128);
+assert_eq!(int!(-128 i8).wrapping_div_euclid(int!(-1 i8)), int!(-128 i8));
 ```

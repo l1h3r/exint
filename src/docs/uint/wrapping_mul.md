@@ -11,5 +11,5 @@ Basic usage:
 # type int  = exint::int<4>;
 # use exint::*;
 assert_eq!(uint!(10).wrapping_mul(uint!(12)), uint!(120));
-assert_eq!(25u8.wrapping_mul(12), 44);
+assert_eq!(uint!(25 u8).wrapping_mul(uint!(12 u8)), uint!(44 u8));
 ```

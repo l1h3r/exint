@@ -13,5 +13,5 @@ Basic usage:
 # type int  = exint::int<4>;
 # use exint::*;
 assert_eq!(int!(3).overflowing_pow(4), (int!(81), false));
-assert_eq!(3i8.overflowing_pow(5), (-13, true));
+assert_eq!(int!(3 i8).overflowing_pow(5), (int!(-13 i8), true));
 ```

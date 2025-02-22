@@ -11,5 +11,5 @@ Basic usage:
 # type int  = exint::int<4>;
 # use exint::*;
 assert_eq!(uint!(3).wrapping_pow(5), uint!(243));
-assert_eq!(3u8.wrapping_pow(6), 217);
+assert_eq!(uint!(3 u8).wrapping_pow(6), uint!(217 u8));
 ```

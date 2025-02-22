@@ -47,7 +47,7 @@ wrapping around at the boundary of the type.
 """
 examples = """
 assert_eq!(uint!(10).wrapping_mul(uint!(12)), uint!(120));
-assert_eq!(25u8.wrapping_mul(12), 44);
+assert_eq!(uint!(25 u8).wrapping_mul(uint!(12 u8)), uint!(44 u8));
 """
 
 [wrapping_div]
@@ -179,7 +179,7 @@ wrapping around at the boundary of the type.
 """
 examples = """
 assert_eq!(uint!(3).wrapping_pow(5), uint!(243));
-assert_eq!(3u8.wrapping_pow(6), 217);
+assert_eq!(uint!(3 u8).wrapping_pow(6), uint!(217 u8));
 """
 
 [wrapping_next_power_of_two]
