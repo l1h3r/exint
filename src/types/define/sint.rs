@@ -70,8 +70,19 @@ impl<const N: usize> int<N> {
   #[cfg(feature = "num_midpoint_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
-  pub const fn midpoint(self, _rhs: Self) -> Self {
-    ::core::panic!("int::midpoint")
+  pub const fn midpoint(self, rhs: Self) -> Self {
+    let out: Self = self
+      .const_bxor(rhs)
+      .const_shr(1)
+      .const_add(self.const_band(rhs));
+
+    let add: Self = if out.is_negative() {
+      Self::ONE.const_band(self.const_bxor(rhs))
+    } else {
+      Self::ZERO.const_band(self.const_bxor(rhs))
+    };
+
+    out.const_add(add)
   }
 
   #[must_use = crate::utils::must_use_doc!()]

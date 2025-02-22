@@ -79,8 +79,11 @@ impl<const N: usize> uint<N> {
 
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
-  pub const fn midpoint(self, _rhs: Self) -> Self {
-    ::core::panic!("uint::midpoint")
+  pub const fn midpoint(self, rhs: Self) -> Self {
+    self
+      .const_bxor(rhs)
+      .const_shr(1)
+      .const_add(self.const_band(rhs))
   }
 
   #[must_use = crate::utils::must_use_doc!()]
