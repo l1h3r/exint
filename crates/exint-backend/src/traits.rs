@@ -95,7 +95,7 @@ impl<const S: usize> const Consts for Integer<S> {
 
   const SMIN: Self = {
     let mut bytes: Self = Self::UMIN;
-    bytes[msb_index::<{ S }>()] &= SIGN;
+    bytes[msb_index::<{ S }>()] |= SIGN;
     bytes
   };
 }
