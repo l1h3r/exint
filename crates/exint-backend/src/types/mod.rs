@@ -1,2 +1,5 @@
-/// Alias for an integer byte array of size `S`.
-pub(crate) type Int<const S: usize> = [u8; S];
+mod int;
+mod pad;
+
+pub(crate) use self::int::Int;
+pub(crate) use self::pad::Pad;
