@@ -2,15 +2,15 @@
 // TODO: Move everything to separate crate with script (alias to cargo mkdocs)
 
 use basic_toml::from_str;
+use core::error::Error;
+use core::fmt::Error as FmtError;
+use core::fmt::Write as _;
+use core::iter;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::env;
-use std::error::Error;
 use std::ffi::OsString;
-use std::fmt::Error as FmtError;
-use std::fmt::Write;
 use std::fs;
-use std::iter;
 use std::path::Path;
 use std::path::PathBuf;
 use std::sync::LazyLock;

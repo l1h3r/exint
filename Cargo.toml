@@ -7,7 +7,7 @@ readme = "README.md"
 
 [build-dependencies]
 basic-toml = { version = "0.1" }
-serde = { version = "1.0", default-features = false, features = ["derive", "alloc"] }
+serde = { version = "1.0", default-features = false, features = ["derive"] }
 
 [features]
 default = []
