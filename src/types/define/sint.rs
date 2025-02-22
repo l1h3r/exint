@@ -30,13 +30,13 @@ impl<const N: usize> int<N> {
 }
 
 impl<const N: usize> int<N> {
-  #[doc = include_doc!("int", "BITS")]
+  #[doc = include_doc!(int, "BITS")]
   pub const BITS: u32 = uint::<N>::BITS;
 
-  #[doc = include_doc!("int", "MAX")]
+  #[doc = include_doc!(int, "MAX")]
   pub const MAX: Self = uint::<N>::MAX.const_shr(1).cast_signed();
 
-  #[doc = include_doc!("int", "MIN")]
+  #[doc = include_doc!(int, "MIN")]
   pub const MIN: Self = Self::MAX.const_not();
 }
 

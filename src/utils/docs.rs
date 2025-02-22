@@ -1,7 +1,4 @@
 macro_rules! include_doc {
-  ($type:literal, $name:literal) => {
-    include_str!(concat!(env!("OUT_DIR"), "/docs/", $type, "/", $name, ".md"))
-  };
   ($type:ident, $name:literal) => {
     include_str!(concat!(env!("OUT_DIR"), "/docs/", stringify!($type), "/", $name, ".md"))
   };

@@ -40,13 +40,13 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
-  #[doc = include_doc!("uint", "BITS")]
+  #[doc = include_doc!(uint, "BITS")]
   pub const BITS: u32 = Self::MAX.count_ones();
 
-  #[doc = include_doc!("uint", "MAX")]
+  #[doc = include_doc!(uint, "MAX")]
   pub const MAX: Self = Self::MIN.const_not();
 
-  #[doc = include_doc!("uint", "MIN")]
+  #[doc = include_doc!(uint, "MIN")]
   pub const MIN: Self = Self::ZERO;
 }
 
