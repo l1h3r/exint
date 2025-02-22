@@ -1,5 +1,6 @@
 //! Exint Integer
 
+#![feature(core_intrinsics)]
 #![feature(doc_cfg)]
 #![cfg_attr(feature = "random",       feature(random))]
 #![cfg_attr(feature = "step_trait",   feature(step_trait))]
@@ -7,6 +8,7 @@
 #![cfg_attr(feature = "trusted_step", feature(trusted_step))]
 #![no_std]
 #![no_implicit_prelude]
+#![allow(internal_features)]
 
 // Use to support `cast!` macro.
 //
