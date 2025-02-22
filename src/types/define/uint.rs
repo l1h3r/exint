@@ -19,7 +19,7 @@ use crate::utils::must_use_doc;
 ///
 /// [`uint<4>`]: Self
 /// [`uint`]: crate::uint!
-#[expect(non_camel_case_types)]
+#[expect(non_camel_case_types, reason = "Intentional naming")]
 #[repr(transparent)]
 pub struct uint<const N: usize = 4> {
   bytes: [u8; N],

@@ -549,10 +549,8 @@ macro_rules! impl_float {
   ) => {
     $(#[$meta])?
     impl ::core::convert::From<$name<$size>> for $float {
-      // This cast is 'okay' since it eventually gets optimized to a
-      // properly-sized uitofp/sitofp instruction.
-      #[allow(clippy::cast_lossless)]
-      #[allow(clippy::cast_precision_loss)]
+      #[allow(clippy::cast_lossless, reason = "False positive due to upcast")]
+      #[allow(clippy::cast_precision_loss, reason = "False positive due to upcast")]
       #[doc = docstring!($name<$size>, $float)]
       #[inline]
       fn from(other: $name<$size>) -> Self {

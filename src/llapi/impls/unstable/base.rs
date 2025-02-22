@@ -43,7 +43,7 @@ macro_rules! define_traits {
 
     impl<const N: usize> const $base_name for [u8; N] {
       $(
-        #[allow(unsafe_op_in_unsafe_fn)]
+        #[allow(unsafe_op_in_unsafe_fn, reason = "Non-public macro-generated code")]
         #[inline]
         $(#[$meta])*
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
@@ -55,7 +55,7 @@ macro_rules! define_traits {
     #[cfg(feature = "min_specialization")]
     impl<T: ~const $base_name> const $spec_name for T {
       $(
-        #[allow(unsafe_op_in_unsafe_fn)]
+        #[allow(unsafe_op_in_unsafe_fn, reason = "Non-public macro-generated code")]
         #[inline]
         $(#[$meta])*
         default $($safety)? fn $function($($name: $type),+) $(-> $return)? {
@@ -67,7 +67,7 @@ macro_rules! define_traits {
     #[cfg(not(feature = "min_specialization"))]
     impl<T: ~const $base_name> const $spec_name for T {
       $(
-        #[allow(unsafe_op_in_unsafe_fn)]
+        #[allow(unsafe_op_in_unsafe_fn, reason = "Non-public macro-generated code")]
         #[inline]
         $(#[$meta])*
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
@@ -77,7 +77,7 @@ macro_rules! define_traits {
     }
 
     $(
-      #[allow(unsafe_op_in_unsafe_fn)]
+      #[allow(unsafe_op_in_unsafe_fn, reason = "Non-public macro-generated code")]
       #[inline]
       $(#[$meta])*
       pub(crate) const $($safety)? fn $function<const N: usize>($($name: arg!($type)),+) $(-> arg!($return))? {

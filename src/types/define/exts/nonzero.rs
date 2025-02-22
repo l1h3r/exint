@@ -1,5 +1,5 @@
 mod private {
-  #[expect(unnameable_types)]
+  #[expect(unnameable_types, reason = "This prevents downstream implementations")]
   pub trait Sealed {}
 }
 

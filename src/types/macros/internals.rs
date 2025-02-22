@@ -1,4 +1,4 @@
-#[allow(unused_macro_rules)] // Strict type is not not always used
+#[allow(unused_macro_rules, reason = "Strict type is not not always used")]
 macro_rules! internals {
   (uint) => {
     $crate::types::macros::internals!(@core);
@@ -154,7 +154,7 @@ macro_rules! internals {
       }
     }
 
-    #[allow(dead_code)] // TODO: Not used by uint
+    #[allow(dead_code, reason = "TODO: Not used by uint")]
     #[inline]
     pub(crate) const fn const_neg(self) -> Self {
       $crate::types::macros::arithmetic_select! {
@@ -250,6 +250,7 @@ macro_rules! internals {
       ::core::panic!("const_shr")
     }
 
+    #[allow(dead_code, reason = "TODO: Not used by uint")]
     #[inline]
     pub(crate) const fn const_neg(self) -> Self {
       Self(self.0.saturating_neg())

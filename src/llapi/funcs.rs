@@ -1,4 +1,4 @@
-#![allow(unused_unsafe)] // cast! macro
+#![expect(unused_unsafe, reason = "Happens in macro-generated code")]
 
 use ::core::cmp::Ordering;
 
@@ -200,6 +200,7 @@ pub(crate) const unsafe fn ctlz_nonzero<T: Uint, const N: usize>(integer: T) -> 
 /// # Safety
 ///
 /// This results in undefined behavior when given an `integer` with value `0`.
+#[allow(dead_code, reason = "Not currently used")]
 #[inline]
 #[track_caller]
 pub(crate) const unsafe fn cttz_nonzero<T: Uint, const N: usize>(integer: T) -> u32 {

@@ -10,6 +10,7 @@ pub(crate) const SIGN: u8 = 0b10000000;
 /// Get the index of the least-significant byte from an [`Integer`] of size `N`.
 ///
 /// [`Integer`]: crate::types::Integer
+#[expect(dead_code, reason = "Not currently used")]
 #[inline]
 pub(crate) const fn lsb_index<const N: usize>() -> usize {
   #[cfg(target_endian = "big")]
