@@ -1,27 +1,41 @@
 macro_rules! inspect {
-  (core, $name:ident, $uint:expr) => {
+  (core, $_name:ident, $_uint:expr) => {
+    #[doc(alias = "popcount")]
+    #[doc(alias = "popcnt")]
+    #[must_use]
+    #[inline]
     pub const fn count_ones(self) -> u32 {
-      panic!("count_ones")
+      $crate::intrinsics::ctpop::<Self, S>(self)
     }
 
+    #[must_use]
+    #[inline]
     pub const fn count_zeros(self) -> u32 {
-      panic!("count_zeros")
+      self.const_not().count_ones()
     }
 
+    #[must_use]
+    #[inline]
     pub const fn leading_ones(self) -> u32 {
-      panic!("leading_ones")
+      self.const_not().leading_zeros()
     }
 
+    #[must_use]
+    #[inline]
     pub const fn leading_zeros(self) -> u32 {
-      panic!("leading_zeros")
+      $crate::intrinsics::ctlz::<Self, S>(self)
     }
 
+    #[must_use]
+    #[inline]
     pub const fn trailing_ones(self) -> u32 {
-      panic!("trailing_ones")
+      self.const_not().trailing_zeros()
     }
 
+    #[must_use]
+    #[inline]
     pub const fn trailing_zeros(self) -> u32 {
-      panic!("trailing_zeros")
+      $crate::intrinsics::cttz::<Self, S>(self)
     }
   };
   (uint) => {
