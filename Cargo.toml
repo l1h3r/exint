@@ -92,11 +92,6 @@ mixed_integer_ops_unsigned_sub = []
 # Tracking Issue: https://github.com/rust-lang/rust/issues/35121
 never_type = ["nightly"]
 
-# Enable support for `num_midpoint_signed` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/110840
-num_midpoint_signed = []
-
 # Enable support for `random` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/130703
