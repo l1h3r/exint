@@ -17,6 +17,7 @@
 
 mod errors;
 mod macros;
+mod panic;
 mod traits;
 mod types;
 mod value;
