@@ -3,6 +3,7 @@
 use ::core::cmp::Ordering;
 
 use crate::llapi::macros::cast;
+use crate::llapi::macros::maybe_intrinsic;
 use crate::llapi::utils::resize_bytes;
 use crate::utils::Uint;
 
@@ -17,19 +18,25 @@ mod api {
 // Compiler Hints
 // -----------------------------------------------------------------------------
 
-#[cold]
-const fn cold() {}
-
 /// A hint to the compiler that the given `condition` is likely to be `false`.
 #[inline]
 #[track_caller]
 pub(crate) const fn unlikely(condition: bool) -> bool {
-  // TODO: Consider `::core::hint::unlikely` or `::core::intrinsics::unlikely`
-  if condition {
-    cold();
-    true
-  } else {
-    false
+  maybe_intrinsic! {
+    @enabled => {
+      ::core::intrinsics::unlikely(condition)
+    }
+    @default => {
+      #[cold]
+      const fn cold() {}
+
+      if condition {
+        cold();
+        true
+      } else {
+        false
+      }
+    }
   }
 }
 
