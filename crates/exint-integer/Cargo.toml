@@ -29,11 +29,6 @@ int_roundings = []
 # Tracking Issue: https://github.com/rust-lang/rust/issues/125882
 integer_sign_cast = []
 
-# Enables support for `isqrt` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/116226
-isqrt = []
-
 # Enables support for `num_midpoint` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/110840

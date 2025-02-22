@@ -26,8 +26,6 @@ macro_rules! generic {
       panic!("ilog2")
     }
 
-    #[cfg(feature = "isqrt")]
-    #[doc(cfg(feature = "isqrt"))]
     pub const fn isqrt(self) -> Self {
       panic!("isqrt")
     }

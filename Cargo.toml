@@ -25,7 +25,6 @@ default = [
   "bigint_helper_methods",
   "int_roundings",
   "integer_sign_cast",
-  "isqrt",
   "num_midpoint",
   "random",
   "step_trait",
@@ -45,7 +44,6 @@ default = [
 bigint_helper_methods      = ["exint-integer/bigint_helper_methods"]
 int_roundings              = ["exint-integer/int_roundings"]
 integer_sign_cast          = ["exint-integer/integer_sign_cast"]
-isqrt                      = ["exint-integer/isqrt"]
 num_midpoint               = ["exint-integer/num_midpoint"]
 random                     = ["exint-integer/random"]
 step_trait                 = ["exint-integer/step_trait"]
