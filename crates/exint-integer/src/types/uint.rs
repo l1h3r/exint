@@ -1,3 +1,10 @@
+use ::core::panic;
+use ::core::marker::Sized;
+use ::core::option::Option;
+use ::core::option::Option::None;
+use ::core::option::Option::Some;
+use ::core::result::Result;
+
 /// The generic unsigned integer type.
 #[allow(non_camel_case_types)]
 #[repr(transparent)]

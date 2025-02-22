@@ -6,6 +6,7 @@
 #![cfg_attr(feature = "trusted_step", feature(min_specialization))]
 #![cfg_attr(feature = "trusted_step", feature(trusted_step))]
 #![no_std]
+#![no_implicit_prelude]
 
 mod macros;
 mod traits;
@@ -18,6 +19,10 @@ pub mod errors {
 
 // TODO: Move to exint-backend
 pub mod intrinsics {
+  use ::core::panic;
+  use ::core::cmp::Ordering;
+  use ::core::marker::Copy;
+
   pub const fn eq<T: Copy, const S: usize>(lhs: T, rhs: T) -> bool {
     panic!("intrinsics::eq")
   }
