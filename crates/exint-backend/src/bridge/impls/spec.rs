@@ -3,6 +3,10 @@ use ::core::intrinsics;
 
 use crate::bridge::traits::SpecCompare;
 use crate::bridge::traits::SpecConvert;
+use crate::bridge::traits::SpecSadd;
+use crate::bridge::traits::SpecSdiv;
+use crate::bridge::traits::SpecSmul;
+use crate::bridge::traits::SpecSsub;
 use crate::bridge::traits::SpecUadd;
 use crate::bridge::traits::SpecUmul;
 use crate::bridge::traits::SpecUsub;
@@ -190,9 +194,12 @@ specialize! {
       (out & Self::UMAX.zext()).trunc()
     }
 
+    // LLVM generates `add $type` instruction
+    //
+    // TODO: Figure out `nuw` keyword
     #[inline]
-    unsafe fn uadd(self, _other: Self) -> Self {
-      ::core::panic!("SpecUadd::uadd")
+    unsafe fn uadd(self, other: Self) -> Self {
+      SpecUadd::wadd(self, other)
     }
   }
 }
@@ -215,9 +222,12 @@ specialize! {
       SpecUadd::wadd(self, other)
     }
 
+    // LLVM generates `add $type` instruction
+    //
+    // TODO: Figure out `nsw` keyword
     #[inline]
-    unsafe fn uadd(self, _other: Self) -> Self {
-      ::core::panic!("SpecSadd::uadd")
+    unsafe fn uadd(self, other: Self) -> Self {
+      SpecSadd::wadd(self, other)
     }
   }
 }
@@ -249,9 +259,12 @@ specialize! {
       (out & Self::UMAX.zext()).trunc()
     }
 
+    // LLVM generates `sub $type` instruction
+    //
+    // TODO: Figure out `nuw` keyword
     #[inline]
-    unsafe fn usub(self, _other: Self) -> Self {
-      ::core::panic!("SpecUsub::usub")
+    unsafe fn usub(self, other: Self) -> Self {
+      SpecUsub::wsub(self, other)
     }
   }
 }
@@ -274,9 +287,12 @@ specialize! {
       SpecUsub::wsub(self, other)
     }
 
+    // LLVM generates `sub $type` instruction
+    //
+    // TODO: Figure out `nsw` keyword
     #[inline]
-    unsafe fn usub(self, _other: Self) -> Self {
-      ::core::panic!("SpecSsub::usub")
+    unsafe fn usub(self, other: Self) -> Self {
+      SpecSsub::wsub(self, other)
     }
   }
 }
@@ -311,9 +327,12 @@ specialize! {
       (out & Self::UMAX.zext()).trunc()
     }
 
+    // LLVM generates `mul $type` instruction
+    //
+    // TODO: Figure out `nuw` keyword
     #[inline]
-    unsafe fn umul(self, _other: Self) -> Self {
-      ::core::panic!("SpecUmul::umul")
+    unsafe fn umul(self, other: Self) -> Self {
+      SpecUmul::wmul(self, other)
     }
   }
 }
@@ -325,14 +344,18 @@ specialize! {
       ::core::panic!("SpecSmul::omul")
     }
 
+    // LLVM generates `mul $type` instruction
     #[inline]
     fn wmul(self, other: Self) -> Self {
       SpecUmul::wmul(self, other)
     }
 
+    // LLVM generates `mul $type` instruction
+    //
+    // TODO: Figure out `nsw` keyword
     #[inline]
-    unsafe fn umul(self, _other: Self) -> Self {
-      ::core::panic!("SpecSmul::umul")
+    unsafe fn umul(self, other: Self) -> Self {
+      SpecSmul::wmul(self, other)
     }
   }
 }
@@ -353,9 +376,13 @@ specialize! {
       unsafe { intrinsics::unchecked_rem(self.zext(), other.zext()).trunc() }
     }
 
+    // LLVM generates `udiv $type` instruction
+    //
+    // TODO: Figure out `exact` keyword
     #[inline]
-    unsafe fn ediv(self, _other: Self) -> Self {
-      ::core::panic!("SpecUdiv::ediv")
+    unsafe fn ediv(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe { intrinsics::exact_div(self.zext(), other.zext()).trunc() }
     }
   }
 }
