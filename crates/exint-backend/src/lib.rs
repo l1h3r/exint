@@ -6,6 +6,7 @@
 #![no_std]
 #![no_implicit_prelude]
 #![allow(internal_features)]
+#![allow(unused_unsafe)]
 
 mod export;
 mod macros;

@@ -1,6 +1,14 @@
 use ::core::cmp::Ordering;
 use ::core::marker::Copy;
 
+use crate::export::arithmetic::SpecSadd;
+use crate::export::arithmetic::SpecSdiv;
+use crate::export::arithmetic::SpecSmul;
+use crate::export::arithmetic::SpecSsub;
+use crate::export::arithmetic::SpecUadd;
+use crate::export::arithmetic::SpecUdiv;
+use crate::export::arithmetic::SpecUmul;
+use crate::export::arithmetic::SpecUsub;
 use crate::export::bitwise::SpecBitwise;
 use crate::export::compare::SpecCompare;
 use crate::export::convert::SpecConvert;
@@ -23,8 +31,13 @@ macro_rules! cast {
   ($type:ident from $expr:expr) => {
     cast!($expr => $type)
   };
+  (($type:ident, bool) from $expr:expr) => {{
+    let out: ($crate::types::Int<S>, bool) = $expr;
+    let num: $type = cast!($type from out.0);
+
+    (num, out.1)
+  }};
   ($expr:expr => $type:ty) => {
-    #[allow(unused_unsafe)]
     // SAFETY: This is guaranteed to be safe by the caller.
     unsafe { $crate::utils::transmute::<_, $type>($expr) }
   };
@@ -190,7 +203,11 @@ pub const unsafe fn cttz_nonzero<T: Copy, const S: usize>(integer: T) -> u32 {
 #[track_caller]
 pub const fn overflowing_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> (T, bool) {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::overflowing_add")
+  if UINT {
+    cast!((T, bool) from SpecUadd::oadd(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!((T, bool) from SpecSadd::oadd(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -198,7 +215,11 @@ pub const fn overflowing_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, 
 #[track_caller]
 pub const fn overflowing_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> (T, bool) {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::overflowing_sub")
+  if UINT {
+    cast!((T, bool) from SpecUsub::osub(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!((T, bool) from SpecSsub::osub(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -206,7 +227,11 @@ pub const fn overflowing_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, 
 #[track_caller]
 pub const fn overflowing_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> (T, bool) {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::overflowing_mul")
+  if UINT {
+    cast!((T, bool) from SpecUmul::omul(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!((T, bool) from SpecSmul::omul(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -218,7 +243,11 @@ pub const fn overflowing_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, 
 #[track_caller]
 pub const fn saturating_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::saturating_add")
+  if UINT {
+    cast!(T from SpecUadd::sadd(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSadd::sadd(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -226,7 +255,11 @@ pub const fn saturating_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, r
 #[track_caller]
 pub const fn saturating_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::saturating_sub")
+  if UINT {
+    cast!(T from SpecUsub::ssub(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSsub::ssub(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -238,7 +271,11 @@ pub const fn saturating_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, r
 #[track_caller]
 pub const unsafe fn unchecked_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::unchecked_add")
+  if UINT {
+    cast!(T from SpecUadd::uadd(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSadd::uadd(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -246,7 +283,11 @@ pub const unsafe fn unchecked_add<T: Copy, const S: usize, const UINT: bool>(lhs
 #[track_caller]
 pub const unsafe fn unchecked_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::unchecked_sub")
+  if UINT {
+    cast!(T from SpecUsub::usub(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSsub::usub(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -254,7 +295,11 @@ pub const unsafe fn unchecked_sub<T: Copy, const S: usize, const UINT: bool>(lhs
 #[track_caller]
 pub const unsafe fn unchecked_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::unchecked_mul")
+  if UINT {
+    cast!(T from SpecUmul::umul(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSmul::umul(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -262,7 +307,11 @@ pub const unsafe fn unchecked_mul<T: Copy, const S: usize, const UINT: bool>(lhs
 #[track_caller]
 pub const unsafe fn unchecked_div<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::unchecked_div")
+  if UINT {
+    cast!(T from SpecUdiv::udiv(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSdiv::udiv(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -270,7 +319,11 @@ pub const unsafe fn unchecked_div<T: Copy, const S: usize, const UINT: bool>(lhs
 #[track_caller]
 pub const unsafe fn unchecked_rem<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::unchecked_rem")
+  if UINT {
+    cast!(T from SpecUdiv::urem(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSdiv::urem(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -298,7 +351,11 @@ pub const unsafe fn unchecked_shr<T: Copy, const S: usize, const UINT: bool>(lhs
 #[track_caller]
 pub const fn wrapping_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::wrapping_add")
+  if UINT {
+    cast!(T from SpecUadd::wadd(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSadd::wadd(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -306,7 +363,11 @@ pub const fn wrapping_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs
 #[track_caller]
 pub const fn wrapping_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::wrapping_sub")
+  if UINT {
+    cast!(T from SpecUsub::wsub(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSsub::wsub(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 #[must_use]
@@ -314,7 +375,11 @@ pub const fn wrapping_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs
 #[track_caller]
 pub const fn wrapping_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::wrapping_mul")
+  if UINT {
+    cast!(T from SpecUmul::wmul(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSmul::wmul(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -324,7 +389,11 @@ pub const fn wrapping_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs
 #[must_use]
 #[inline]
 #[track_caller]
-pub const fn exact_div<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+pub const unsafe fn exact_div<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::exact_div")
+  if UINT {
+    cast!(T from SpecUdiv::ediv(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  } else {
+    cast!(T from SpecSdiv::ediv(cast!(int(S) from lhs), cast!(int(S) from rhs)))
+  }
 }
