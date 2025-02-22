@@ -56,43 +56,67 @@ macro_rules! internals {
     #[must_use]
     #[inline]
     const fn const_add(self, rhs: Self) -> Self {
-      panic!("const_add")
+      $crate::macros::arithmetic_select! {
+        message: "attempt to add with overflow",
+        checked: self.checked_add(rhs),
+        wrapped: self.wrapping_add(rhs),
+      }
     }
 
     #[must_use]
     #[inline]
     const fn const_sub(self, rhs: Self) -> Self {
-      panic!("const_sub")
+      $crate::macros::arithmetic_select! {
+        message: "attempt to subtract with overflow",
+        checked: self.checked_sub(rhs),
+        wrapped: self.wrapping_sub(rhs),
+      }
     }
 
     #[must_use]
     #[inline]
     const fn const_mul(self, rhs: Self) -> Self {
-      panic!("const_mul")
+      $crate::macros::arithmetic_select! {
+        message: "attempt to multiply with overflow",
+        checked: self.checked_mul(rhs),
+        wrapped: self.wrapping_mul(rhs),
+      }
     }
 
     #[must_use]
     #[inline]
     const fn const_div(self, rhs: Self) -> Self {
-      panic!("const_div")
+      self
+        .checked_div(rhs)
+        .expect("attempt to divide by zero")
     }
 
     #[must_use]
     #[inline]
     const fn const_rem(self, rhs: Self) -> Self {
-      panic!("const_rem")
+      self
+        .checked_rem(rhs)
+        .expect("attempt to calculate the remainder with a divisor of zero")
     }
 
     #[must_use]
     #[inline]
     const fn const_shl(self, rhs: u32) -> Self {
-      panic!("const_shl")
+      $crate::macros::arithmetic_select! {
+        message: "attempt to shift left with overflow",
+        checked: self.checked_shl(rhs),
+        wrapped: self.wrapping_shl(rhs),
+      }
     }
 
     #[must_use]
     #[inline]
     const fn const_shr(self, rhs: u32) -> Self {
-      panic!("const_shr")
+      $crate::macros::arithmetic_select! {
+        message: "attempt to shift right with overflow",
+        checked: self.checked_shr(rhs),
+        wrapped: self.wrapping_shr(rhs),
+      }
     }
 
     // -------------------------------------------------------------------------
@@ -108,7 +132,11 @@ macro_rules! internals {
     #[must_use]
     #[inline]
     const fn const_neg(self) -> Self {
-      panic!("const_neg")
+      $crate::macros::arithmetic_select! {
+        message: "attempt to negate with overflow",
+        checked: self.checked_neg(),
+        wrapped: self.wrapping_neg(),
+      }
     }
   };
   (uint) => {
