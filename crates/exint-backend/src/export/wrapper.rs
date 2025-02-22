@@ -13,6 +13,7 @@ use crate::export::bitwise::SpecBitwise;
 use crate::export::compare::SpecCompare;
 use crate::export::convert::SpecConvert;
 use crate::export::inspect::SpecInspect;
+use crate::export::shift::SpecShift;
 use crate::types::Int;
 
 macro_rules! assert_size_of {
@@ -329,17 +330,21 @@ pub const unsafe fn unchecked_rem<T: Copy, const S: usize, const UINT: bool>(lhs
 #[must_use]
 #[inline]
 #[track_caller]
-pub const unsafe fn unchecked_shl<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: u32) -> T {
+pub const unsafe fn unchecked_shl<T: Copy, const S: usize, const UINT: bool>(integer: T, bits: u32) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::unchecked_shl")
+  cast!(T from SpecShift::shl(cast!(int(S) from integer), bits))
 }
 
 #[must_use]
 #[inline]
 #[track_caller]
-pub const unsafe fn unchecked_shr<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: u32) -> T {
+pub const unsafe fn unchecked_shr<T: Copy, const S: usize, const UINT: bool>(integer: T, bits: u32) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::unchecked_shr")
+  if UINT {
+    cast!(T from SpecShift::lshr(cast!(int(S) from integer), bits))
+  } else {
+    cast!(T from SpecShift::ashr(cast!(int(S) from integer), bits))
+  }
 }
 
 // -----------------------------------------------------------------------------
