@@ -1,0 +1,23 @@
+[unbounded_shl]
+overview = """
+Unbounded shift left. Computes `self << rhs`, without bounding the value of `rhs`.
+
+If `rhs` is larger or equal to the number of bits in `self`,
+the entire value is shifted out, and `0` is returned.
+"""
+examples = """
+assert_eq!(uint!(0x1).unbounded_shl(4), uint!(0x10));
+assert_eq!(uint!(0x1).unbounded_shl(129), uint!(0));
+"""
+
+[unbounded_shr]
+overview = """
+Unbounded shift right. Computes `self >> rhs`, without bounding the value of `rhs`.
+
+If `rhs` is larger or equal to the number of bits in `self`,
+the entire value is shifted out, and `0` is returned.
+"""
+examples = """
+assert_eq!(uint!(0x10).unbounded_shr(4), uint!(0x1));
+assert_eq!(uint!(0x10).unbounded_shr(129), uint!(0));
+"""

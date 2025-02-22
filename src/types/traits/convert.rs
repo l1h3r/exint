@@ -6,6 +6,9 @@ macro_rules! try_from {
     impl ::core::convert::TryFrom<$from> for $into {
       type Error = $crate::error::TryFromIntError;
 
+      /// Tries to create the target number type from a source number type.
+      /// This returns an error if the source value is outside of the range of
+      /// the target type.
       #[inline]
       fn try_from($binding: $from) -> ::core::result::Result<Self, Self::Error> {
         $block
@@ -17,6 +20,7 @@ macro_rules! try_from {
 macro_rules! impl_bool {
   ($name:ident) => {
     impl<const N: usize> ::core::convert::From<bool> for $crate::$name<N> {
+      #[doc = $crate::utils::include_doc!($name, "convert_bool")]
       #[inline]
       fn from(other: bool) -> Self {
         Self::from_bool(other)
@@ -28,6 +32,8 @@ macro_rules! impl_bool {
 macro_rules! impl_cast {
   (@impl From<$from:ty> for $into:ty) => {
     impl ::core::convert::From<$from> for $into {
+      // TODO: Fix rustdoc links
+      #[doc = concat!("Converts [`", stringify!($from), "`] to [`", stringify!($into), "`] losslessly.")]
       #[inline]
       fn from(other: $from) -> Self {
         $crate::utils::Cast::cast(other)
@@ -116,6 +122,7 @@ macro_rules! impl_range_bounded {
   ($_std:ident -> $name:ident<>) => {};
 }
 
+// TODO: From<char> and TryFrom<char>
 // TODO: From<uint<S>> for int<S> via impl_upper_bounded
 // TODO: From<int<S>> for uint<S> via impl_lower_bounded
 // TODO: Platform-specific pointer sizes

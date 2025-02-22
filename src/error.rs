@@ -9,6 +9,7 @@ use ::core::fmt::Result;
 // TryFromIntError
 // -----------------------------------------------------------------------------
 
+/// The error type returned when a checked integral type conversion fails.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct TryFromIntError(());
 
@@ -44,20 +45,63 @@ impl From<!> for TryFromIntError {
 // IntErrorKind
 // -----------------------------------------------------------------------------
 
+/// Enum to store the various types of errors that can cause parsing an integer to fail.
+///
+/// # Examples
+///
+/// ```should_panic
+/// # use exint::int;
+/// if let Err(e) = int::<4>::from_str_radix("a12", 10) {
+///     panic!("Failed conversion to int: {:?}", e.kind());
+/// }
+/// ```
 #[derive(Clone, Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum IntErrorKind {
+  /// Value being parsed is empty.
+  ///
+  /// This variant will be constructed when parsing an empty string.
   Empty,
+  /// Contains an invalid digit in its context.
+  ///
+  /// Among other causes, this variant will be constructed when parsing a string
+  /// that contains a non-ASCII char.
+  ///
+  /// This variant is also constructed when a `+` or `-` is misplaced within a
+  /// string either on its own or in the middle of a number.
   InvalidDigit,
+  /// Integer is too large to store in target integer type.
   PosOverflow,
+  /// Integer is too small to store in target integer type.
   NegOverflow,
-  Zero,
 }
 
 // -----------------------------------------------------------------------------
 // ParseIntError
 // -----------------------------------------------------------------------------
 
+/// An error which can be returned when parsing an integer.
+///
+/// This error is used as the error type for the `from_str_radix()` functions on
+/// the generic integer types, such as [`int::from_str_radix`].
+///
+/// # Potential causes
+///
+/// Among other causes, `ParseIntError` can be thrown because of leading or
+/// trailing whitespace in the string e.g., when it is obtained from the
+/// standard input. Using the [`str::trim()`] method ensures that no whitespace
+/// remains before parsing.
+///
+/// # Examples
+///
+/// ```should_panic
+/// # use exint::int;
+/// if let Err(e) = int::<4>::from_str_radix("a12", 10) {
+///     panic!("Failed conversion to int: {e}");
+/// }
+/// ```
+///
+/// [`int::from_str_radix`]: crate::int::from_str_radix
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ParseIntError {
   kind: IntErrorKind,
@@ -69,6 +113,7 @@ impl ParseIntError {
     Self { kind }
   }
 
+  /// Outputs the detailed cause of parsing an integer failing.
   #[must_use]
   pub const fn kind(&self) -> &IntErrorKind {
     &self.kind
@@ -83,7 +128,6 @@ impl ParseIntError {
       IntErrorKind::InvalidDigit => "invalid digit found in string",
       IntErrorKind::PosOverflow => "number too large to fit in target type",
       IntErrorKind::NegOverflow => "number too small to fit in target type",
-      IntErrorKind::Zero => "number would be zero for non-zero type",
     }
   }
 }

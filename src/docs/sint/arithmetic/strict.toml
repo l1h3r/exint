@@ -1,0 +1,235 @@
+[strict_add]
+overview = """
+Strict integer addition. Computes `self + rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!((int::MAX - int!(2)).strict_add(int!(1)), int::MAX - int!(1));
+"""
+examples_overflow = """
+let _ = (int::MAX - int!(2)).strict_add(int!(3));
+"""
+
+[strict_add_unsigned]
+overview = """
+Strict addition with an unsigned integer. Computes `self + rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(int!(1).strict_add_unsigned(uint!(2)), int!(3));
+"""
+examples_overflow = """
+let _ = (int::MAX - int!(2)).strict_add_unsigned(uint!(3));
+"""
+
+[strict_sub]
+overview = """
+Strict integer subtraction. Computes `self - rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!((int::MIN + int!(2)).strict_sub(int!(1)), int::MIN + int!(1));
+"""
+examples_overflow = """
+let _ = (int::MIN + int!(2)).strict_sub(int!(3));
+"""
+
+[strict_sub_unsigned]
+overview = """
+Strict subtraction with an unsigned integer. Computes `self - rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(int!(1).strict_sub_unsigned(uint!(2)), int!(-1));
+"""
+examples_overflow = """
+let _ = (int::MIN + int!(2)).strict_sub_unsigned(uint!(3));
+"""
+
+[strict_mul]
+overview = """
+Strict integer multiplication. Computes `self * rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(int::MAX.strict_mul(int!(1)), int::MAX);
+"""
+examples_overflow = """
+let _ = int::MAX.strict_mul(int!(2));
+"""
+
+[strict_div]
+overview = """
+Strict integer division. Computes `self / rhs`, panicking if overflow occurred.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+
+## Overflow behavior
+
+This function will always panic on overflow, regardless of whether overflow checks are enabled.
+
+The only case where such an overflow can occur is when one divides `MIN / -1` on
+a signed type (where `MIN` is the negative minimal value for the type); this is
+equivalent to `-MIN`, a positive value that is too large to represent in the type.
+"""
+examples = """
+assert_eq!((int::MIN + int!(1)).strict_div(int!(-1)), int::MAX);
+"""
+examples_overflow = """
+let _ = int::MIN.strict_div(int!(-1));
+"""
+examples_div_zero = """
+let _ = int!(1).strict_div(int!(0));
+"""
+
+[strict_div_euclid]
+overview = """
+Strict Euclidean division. Computes `self.div_euclid(rhs)`, panicking if overflow occurred.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+
+## Overflow behavior
+
+This function will always panic on overflow, regardless of whether overflow checks are enabled.
+
+The only case where such an overflow can occur is when one divides `MIN / -1` on
+a signed type (where `MIN` is the negative minimal value for the type); this is
+equivalent to `-MIN`, a positive value that is too large to represent in the type.
+"""
+examples = """
+assert_eq!((int::MIN + int!(1)).strict_div_euclid(int!(-1)), int::MAX);
+"""
+examples_overflow = """
+let _ = int::MIN.strict_div_euclid(int!(-1));
+"""
+examples_div_zero = """
+let _ = int!(1).strict_div_euclid(int!(0));
+"""
+
+[strict_rem]
+overview = """
+Strict integer remainder. Computes `self % rhs`, panicking if the division results in overflow.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+
+## Overflow behavior
+
+This function will always panic on overflow, regardless of whether overflow checks are enabled.
+
+The only case where such an overflow can occur is `x % y` for `MIN / -1` on a
+signed type (where `MIN` is the negative minimal value), which is invalid due to
+implementation artifacts.
+"""
+examples = """
+assert_eq!(int!(5).strict_rem(int!(2)), int!(1));
+"""
+examples_overflow = """
+let _ = int::MIN.strict_rem(int!(-1));
+"""
+examples_div_zero = """
+let _ = int!(5).strict_rem(int!(0));
+"""
+
+[strict_rem_euclid]
+overview = """
+Strict Euclidean remainder. Computes `self.rem_euclid(rhs)`, panicking if the division results in overflow.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+
+## Overflow behavior
+
+This function will always panic on overflow, regardless of whether overflow checks are enabled.
+
+The only case where such an overflow can occur is `x % y` for `MIN / -1` on a
+signed type (where `MIN` is the negative minimal value), which is invalid due to
+implementation artifacts.
+"""
+examples = """
+assert_eq!(int!(5).strict_rem_euclid(int!(2)), int!(1));
+"""
+examples_overflow = """
+let _ = int::MIN.strict_rem_euclid(int!(-1));
+"""
+examples_div_zero = """
+let _ = int!(5).strict_rem_euclid(int!(0));
+"""
+
+[strict_shl]
+overview = """
+Strict shift left. Computes `self << rhs`,
+panicking if `rhs` is larger than or equal to the number of bits in `self`.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(int!(0x1).strict_shl(4), int!(0x10));
+"""
+examples_overflow = """
+let _ = int!(0x1).strict_shl(129);
+"""
+
+[strict_shr]
+overview = """
+Strict shift right. Computes `self >> rhs`,
+panicking if `rhs` is larger than or equal to the number of bits in `self`.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(int!(0x10).strict_shr(4), int!(0x1));
+"""
+examples_overflow = """
+let _ = int!(0x10).strict_shr(128);
+"""
+
+[strict_neg]
+overview = """
+Strict negation. Computes `-self`, panicking if `self == MIN`.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(int!(5).strict_neg(), int!(-5));
+"""
+examples_overflow = """
+let _ = int::MIN.strict_neg();
+"""
+
+[strict_pow]
+overview = """
+Strict exponentiation. Computes `self.pow(exp)`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(int!(8).strict_pow(2), int!(64));
+"""
+examples_overflow = """
+let _ = int::MAX.strict_pow(2);
+"""
+
+[strict_abs]
+overview = """
+Strict absolute value. Computes `self.abs()`, panicking if `self == MIN`.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(int!(-5).strict_abs(), int!(5));
+"""
+examples_overflow = """
+let _ = int::MIN.strict_abs();
+"""

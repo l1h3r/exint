@@ -1,0 +1,188 @@
+[strict_add]
+overview = """
+Strict integer addition. Computes `self + rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!((uint::MAX - uint!(2)).strict_add(uint!(1)), uint::MAX - uint!(1));
+"""
+examples_overflow = """
+let _ = (uint::MAX - uint!(2)).strict_add(uint!(3));
+"""
+
+[strict_add_signed]
+overview = """
+Strict addition with a signed integer. Computes `self + rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(uint!(1).strict_add_signed(int!(2)), uint!(3));
+"""
+examples_overflow = [
+  "let _ = uint!(1).strict_add_signed(int!(-2));",
+  "let _ = (uint::MAX - uint!(2)).strict_add_signed(int!(3));",
+]
+
+[strict_sub]
+overview = """
+Strict integer subtraction. Computes `self - rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(uint!(1).strict_sub(uint!(1)), uint!(0));
+"""
+examples_overflow = """
+let _ = uint!(0).strict_sub(uint!(1));
+"""
+
+[strict_mul]
+overview = """
+Strict integer multiplication. Computes `self * rhs`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(uint!(5).strict_mul(uint!(1)), uint!(5));
+"""
+examples_overflow = """
+let _ = uint::MAX.strict_mul(uint!(2));
+"""
+
+[strict_div]
+overview = """
+Strict integer division. Computes `self / rhs`.
+
+Strict division on unsigned types is just normal division. There's no way
+overflow could ever happen. This function exists so that all operations are
+accounted for in the strict operations.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(uint!(100).strict_div(uint!(10)), uint!(10));
+"""
+examples_div_zero = """
+let _ = uint!(1).strict_div(uint!(0));
+"""
+
+[strict_div_euclid]
+overview = """
+Strict Euclidean division. Computes `self.div_euclid(rhs)`.
+
+Strict division on unsigned types is just normal division. There's no way
+overflow could ever happen. This function exists so that all operations are
+accounted for in the strict operations. Since, for the positive integers, all
+common definitions of division are equal, this is exactly equal to
+`self.strict_div(rhs)`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(uint!(100).strict_div_euclid(uint!(10)), uint!(10));
+"""
+examples_div_zero = """
+let _ = uint!(1).strict_div_euclid(uint!(0));
+"""
+
+[strict_rem]
+overview = """
+Strict integer remainder. Computes `self % rhs`.
+
+Strict remainder calculation on unsigned types is just the regular remainder
+calculation. There's no way overflow could ever happen. This function exists so
+that all operations are accounted for in the strict operations.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(uint!(100).strict_rem(uint!(10)), uint!(0));
+"""
+examples_div_zero = """
+let _ = uint!(5).strict_rem(uint!(0));
+"""
+
+[strict_rem_euclid]
+overview = """
+Strict Euclidean modulo. Computes `self.rem_euclid(rhs)`.
+
+Strict modulo calculation on unsigned types is just the regular remainder
+calculation. There's no way overflow could ever happen. This function exists so
+that all operations are accounted for in the strict operations. Since, for the
+positive integers, all common definitions of division are equal, this is exactly
+equal to `self.strict_rem(rhs)`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(uint!(100).strict_rem_euclid(uint!(10)), uint!(0));
+"""
+examples_div_zero = """
+let _ = uint!(5).strict_rem_euclid(uint!(0));
+"""
+
+[strict_shl]
+overview = """
+Strict shift left. Computes `self << rhs`,
+panicking if `rhs` is larger than or equal to the number of bits in `self`.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(uint!(0x1).strict_shl(4), uint!(0x10));
+"""
+examples_overflow = """
+let _ = uint!(0x10).strict_shl(129);
+"""
+
+[strict_shr]
+overview = """
+Strict shift right. Computes `self >> rhs`,
+panicking if `rhs` is larger than or equal to the number of bits in `self`.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(uint!(0x10).strict_shr(4), uint!(0x1));
+"""
+examples_overflow = """
+let _ = uint!(0x10).strict_shr(129);
+"""
+
+[strict_neg]
+overview = """
+Strict negation. Computes `-self`, panicking unless `self == 0`.
+
+Note that negating any positive integer will overflow.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(uint!(0).strict_neg(), uint!(0));
+"""
+examples_overflow = """
+let _ = uint!(1).strict_neg();
+"""
+
+[strict_pow]
+overview = """
+Strict exponentiation. Computes `self.pow(exp)`, panicking if overflow occurred.
+
+%STRICT_OVERFLOW%
+"""
+examples = """
+assert_eq!(uint!(2).strict_pow(5), uint!(32));
+"""
+examples_overflow = """
+let _ = uint::MAX.strict_pow(2);
+"""

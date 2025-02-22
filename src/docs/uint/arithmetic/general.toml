@@ -1,0 +1,215 @@
+[max_value]
+overview = """
+New code should prefer to use [`uint::MAX`] instead.
+
+Returns the largest value that can be represented by this integer type.
+"""
+
+[min_value]
+overview = """
+New code should prefer to use [`uint::MIN`] instead.
+
+Returns the smallest value that can be represented by this integer type.
+"""
+
+[cast_signed]
+overview = """
+Returns the bit pattern of `self` reinterpreted as a signed integer of the same size.
+
+This produces the same result as an `as` cast, but ensures that the bit-width
+remains the same.
+"""
+examples = """
+assert_eq!(uint::MAX.cast_signed(), int!(-1));
+"""
+
+[midpoint]
+overview = """
+Calculates the middle point of `self` and `rhs`.
+
+`midpoint(a, b)` is `(a + b) >> 1` as if it were performed in a
+sufficiently-large signed integral type. This implies that the result is always
+rounded towards negative infinity and that no overflow will ever occur.
+"""
+examples = """
+assert_eq!(uint!(0).midpoint(uint!(4)), uint!(2));
+assert_eq!(uint!(1).midpoint(uint!(4)), uint!(2));
+"""
+
+[div_euclid]
+overview = """
+Performs Euclidean division.
+
+Since, for the positive integers, all common definitions of division are equal,
+this is exactly equal to `self / rhs`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(uint!(7).div_euclid(uint!(4)), uint!(1));
+"""
+
+[rem_euclid]
+overview = """
+Calculates the least remainder of `self (mod rhs)`.
+
+Since, for the positive integers, all common definitions of division are equal,
+this is exactly equal to `self % rhs`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(uint!(7).rem_euclid(uint!(4)), uint!(3));
+"""
+
+[div_ceil]
+overview = """
+Calculates the quotient of `self` and `rhs`, rounding the result towards positive infinity.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(uint!(7).div_ceil(uint!(4)), uint!(2));
+"""
+
+[div_floor]
+overview = """
+Calculates the quotient of `self` and `rhs`, rounding the result towards negative infinity.
+
+This is the same as performing `self / rhs` for all unsigned integers.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(uint!(7).div_floor(uint!(4)), uint!(1));
+"""
+
+[next_multiple_of]
+overview = """
+Calculates the smallest value greater than or equal to `self` that is a multiple of `rhs`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+
+## Overflow behavior
+
+On overflow, this function will panic if overflow checks are enabled (default in
+debug mode) and wrap if overflow checks are disabled (default in release mode).
+"""
+examples = """
+assert_eq!(uint!(16).next_multiple_of(uint!(8)), uint!(16));
+assert_eq!(uint!(23).next_multiple_of(uint!(8)), uint!(24));
+"""
+
+[pow]
+overview = """
+Raises self to the power of `exp`, using exponentiation by squaring.
+"""
+examples = """
+assert_eq!(uint!(2).pow(5), uint!(32));
+"""
+
+[ilog]
+overview = """
+Returns the logarithm of the number with respect to an arbitrary base, rounded down.
+
+This method might not be optimized owing to implementation details; `ilog2` can
+produce results more efficiently for base 2, and `ilog10` can produce results
+more efficiently for base 10.
+
+# Panics
+
+This function will panic if `self` is zero, or if `base` is less than 2.
+"""
+examples = """
+assert_eq!(uint!(5).ilog(uint!(5)), 1);
+"""
+
+[ilog2]
+overview = """
+Returns the base 2 logarithm of the number, rounded down.
+
+# Panics
+
+This function will panic if `self` is zero.
+"""
+examples = """
+assert_eq!(uint!(2).ilog2(), 1);
+"""
+
+[ilog10]
+overview = """
+Returns the base 10 logarithm of the number, rounded down.
+
+# Panics
+
+This function will panic if `self` is zero.
+"""
+examples = """
+assert_eq!(uint!(10).ilog10(), 1);
+"""
+
+[isqrt]
+overview = """
+Returns the square root of the number, rounded down.
+"""
+examples = """
+assert_eq!(uint!(10).isqrt(), uint!(3));
+"""
+
+[abs_diff]
+overview = """
+Computes the absolute difference between `self` and `other`.
+"""
+examples = """
+assert_eq!(uint!(100).abs_diff(uint!(80)), uint!(20));
+assert_eq!(uint!(100).abs_diff(uint!(110)), uint!(10));
+"""
+
+[next_power_of_two]
+overview = """
+Returns the smallest power of two greater than or equal to `self`.
+
+When return value overflows (i.e., `self > (1 << (N-1))` for type `uN`), it
+panics in debug mode and the return value is wrapped to 0 in release mode (the
+only situation in which this method can return 0).
+"""
+examples = """
+assert_eq!(uint!(2).next_power_of_two(), uint!(2));
+assert_eq!(uint!(3).next_power_of_two(), uint!(4));
+assert_eq!(uint!(0).next_power_of_two(), uint!(1));
+"""
+
+[is_power_of_two]
+overview = """
+Returns `true` if and only if `self == 2^k` for some `k`.
+"""
+examples = """
+assert!(uint!(16).is_power_of_two());
+assert!(!uint!(10).is_power_of_two());
+"""
+
+[is_multiple_of]
+overview = """
+Returns `true` if `self` is an integer multiple of `rhs`, and false otherwise.
+
+This function is equivalent to `self % rhs == 0`, except that it will not panic
+for `rhs == 0`. Instead, `0.is_multiple_of(0) == true`, and for any non-zero
+`n`, `n.is_multiple_of(0) == false`.
+"""
+examples = """
+assert!(uint!(6).is_multiple_of(uint!(2)));
+assert!(!uint!(5).is_multiple_of(uint!(2)));
+
+assert!(uint!(0).is_multiple_of(uint!(0)));
+assert!(!uint!(6).is_multiple_of(uint!(0)));
+"""

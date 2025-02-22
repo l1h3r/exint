@@ -1,5 +1,6 @@
 macro_rules! parse_str {
-  ($_name:ident) => {
+  ($name:ident) => {
+    #[doc = $crate::utils::include_doc!($name, "from_str_radix")]
     #[inline]
     pub const fn from_str_radix(
       src: &str,
@@ -8,6 +9,7 @@ macro_rules! parse_str {
       Self::from_ascii_radix(src.as_bytes(), radix)
     }
 
+    #[doc = $crate::utils::include_doc!($name, "from_ascii")]
     #[cfg(feature = "int_from_ascii")]
     #[inline]
     pub const fn from_ascii(
@@ -18,6 +20,7 @@ macro_rules! parse_str {
 
     macros::stability! {
       #[unstable(feature = "int_from_ascii")]
+      #[doc = $crate::utils::include_doc!($name, "int_from_ascii")]
       #[inline]
       pub const fn from_ascii_radix(
         src: &[u8],

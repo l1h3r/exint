@@ -38,10 +38,13 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!("uint", "BITS")]
   pub const BITS: u32 = Self::MAX.count_ones();
 
+  #[doc = crate::utils::include_doc!("uint", "MAX")]
   pub const MAX: Self = Self::MIN.const_not();
 
+  #[doc = crate::utils::include_doc!("uint", "MIN")]
   pub const MIN: Self = Self::ZERO;
 }
 
@@ -54,6 +57,7 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "max_value")]
   #[deprecated(since = "TBD", note = "replaced by the `MAX` associated constant on this type")]
   #[must_use]
   #[inline]
@@ -61,6 +65,7 @@ impl<const N: usize> uint<N> {
     Self::MAX
   }
 
+  #[doc = crate::utils::include_doc!(uint, "min_value")]
   #[deprecated(since = "TBD", note = "replaced by the `MIN` associated constant on this type")]
   #[must_use]
   #[inline]
@@ -70,6 +75,7 @@ impl<const N: usize> uint<N> {
 
   macros::stability! {
     #[unstable(feature = "integer_sign_cast")]
+    #[doc = crate::utils::include_doc!(uint, "cast_signed")]
     #[must_use = crate::utils::must_use_doc!()]
     #[inline]
     pub const fn cast_signed(self) -> int<N> {
@@ -77,6 +83,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "midpoint")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn midpoint(self, rhs: Self) -> Self {
@@ -86,18 +93,21 @@ impl<const N: usize> uint<N> {
       .const_add(self.const_band(rhs))
   }
 
+  #[doc = crate::utils::include_doc!(uint, "div_euclid")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn div_euclid(self, rhs: Self) -> Self {
     self.const_div(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "rem_euclid")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn rem_euclid(self, rhs: Self) -> Self {
     self.const_rem(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "div_ceil")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn div_ceil(self, rhs: Self) -> Self {
@@ -111,6 +121,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "div_floor")]
   #[cfg(feature = "int_roundings")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -118,6 +129,7 @@ impl<const N: usize> uint<N> {
     self.const_div(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "next_multiple_of")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn next_multiple_of(self, rhs: Self) -> Self {
@@ -131,6 +143,7 @@ impl<const N: usize> uint<N> {
   }
 
   // TODO: Optimize with is_val_statically_known
+  #[doc = crate::utils::include_doc!(uint, "pow")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn pow(self, mut exp: u32) -> Self {
@@ -155,6 +168,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "ilog")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn ilog(self, base: Self) -> u32 {
@@ -169,6 +183,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "ilog2")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn ilog2(self) -> u32 {
@@ -178,6 +193,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "ilog10")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn ilog10(self) -> u32 {
@@ -189,6 +205,7 @@ impl<const N: usize> uint<N> {
 
   // TODO: Optimize with Karatsuba
   // https://en.wikipedia.org/wiki/Integer_square_root#Karatsuba_square_root_algorithm
+  #[doc = crate::utils::include_doc!(uint, "isqrt")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn isqrt(self) -> Self {
@@ -227,6 +244,7 @@ impl<const N: usize> uint<N> {
   }
 
   // TODO: Optimize for u8
+  #[doc = crate::utils::include_doc!(uint, "abs_diff")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn abs_diff(self, other: Self) -> Self {
@@ -237,18 +255,21 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "next_power_of_two")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn next_power_of_two(self) -> Self {
     self.one_less_than_next_power_of_two().const_add(Self::ONE)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "is_power_of_two")]
   #[must_use]
   #[inline]
   pub const fn is_power_of_two(self) -> bool {
     self.count_ones() == 1
   }
 
+  #[doc = crate::utils::include_doc!(uint, "is_multiple_of")]
   #[cfg(feature = "unsigned_is_multiple_of")]
   #[must_use]
   #[inline]
@@ -262,6 +283,7 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "carrying_add")]
   #[cfg(feature = "bigint_helper_methods")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -272,6 +294,7 @@ impl<const N: usize> uint<N> {
     (c, b | d)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "borrowing_sub")]
   #[cfg(feature = "bigint_helper_methods")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -282,6 +305,7 @@ impl<const N: usize> uint<N> {
     (c, b | d)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "carrying_mul")]
   #[cfg(feature = "bigint_helper_methods")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -289,6 +313,7 @@ impl<const N: usize> uint<N> {
     Self::carrying_mul_add(self, rhs, carry, Self::ZERO)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "carrying_mul_add")]
   #[cfg(feature = "bigint_helper_methods")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -296,6 +321,7 @@ impl<const N: usize> uint<N> {
     llapi::carrying_mul_add::<Self, Self, N>(self, rhs, carry, add)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "widening_mul")]
   #[cfg(feature = "bigint_helper_methods")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -305,6 +331,7 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "checked_add")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_add(self, rhs: Self) -> Option<Self> {
@@ -316,6 +343,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_add_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_add_signed(self, rhs: int<N>) -> Option<Self> {
@@ -328,6 +356,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_sub")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_sub(self, rhs: Self) -> Option<Self> {
@@ -339,6 +368,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_sub_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_sub_signed(self, rhs: int<N>) -> Option<Self> {
@@ -351,6 +381,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_mul")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_mul(self, rhs: Self) -> Option<Self> {
@@ -363,6 +394,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_div")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_div(self, rhs: Self) -> Option<Self> {
@@ -374,6 +406,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_div_euclid")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_div_euclid(self, rhs: Self) -> Option<Self> {
@@ -384,6 +417,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_rem")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_rem(self, rhs: Self) -> Option<Self> {
@@ -395,6 +429,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_rem_euclid")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_rem_euclid(self, rhs: Self) -> Option<Self> {
@@ -405,6 +440,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_shl")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_shl(self, rhs: u32) -> Option<Self> {
@@ -416,6 +452,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_shr")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_shr(self, rhs: u32) -> Option<Self> {
@@ -427,6 +464,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_neg")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_neg(self) -> Option<Self> {
@@ -439,6 +477,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_pow")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_pow(self, mut exp: u32) -> Option<Self> {
@@ -463,6 +502,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_next_power_of_two")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_next_power_of_two(self) -> Option<Self> {
@@ -471,6 +511,7 @@ impl<const N: usize> uint<N> {
       .checked_add(Self::ONE)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_next_multiple_of")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_next_multiple_of(self, rhs: Self) -> Option<Self> {
@@ -482,6 +523,7 @@ impl<const N: usize> uint<N> {
   }
 
   // TODO: Optimize for u128
+  #[doc = crate::utils::include_doc!(uint, "checked_ilog")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_ilog(self, base: Self) -> Option<u32> {
@@ -503,6 +545,7 @@ impl<const N: usize> uint<N> {
   }
 
   // TODO: Optimize with NonZero
+  #[doc = crate::utils::include_doc!(uint, "checked_ilog2")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_ilog2(self) -> Option<u32> {
@@ -515,12 +558,14 @@ impl<const N: usize> uint<N> {
   }
 
   // TODO: Optimize with Specialization
+  #[doc = crate::utils::include_doc!(uint, "checked_ilog10")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn checked_ilog10(self) -> Option<u32> {
     self.checked_ilog(Self::from_u8(10))
   }
 
+  #[doc = crate::utils::include_doc!(uint, "checked_signed_diff")]
   #[cfg(feature = "unsigned_signed_diff")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -537,12 +582,14 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "overflowing_add")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_add(self, rhs: Self) -> (Self, bool) {
     llapi::overflowing_uadd::<Self, N>(self, rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_add_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_add_signed(self, rhs: int<N>) -> (Self, bool) {
@@ -552,12 +599,14 @@ impl<const N: usize> uint<N> {
     (out.0, cmp)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_sub")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_sub(self, rhs: Self) -> (Self, bool) {
     llapi::overflowing_usub::<Self, N>(self, rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_sub_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_sub_signed(self, rhs: int<N>) -> (Self, bool) {
@@ -567,54 +616,63 @@ impl<const N: usize> uint<N> {
     (out.0, cmp)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_mul")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_mul(self, rhs: Self) -> (Self, bool) {
     llapi::overflowing_umul::<Self, N>(self, rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_div")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_div(self, rhs: Self) -> (Self, bool) {
     (self.const_div(rhs), false)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_div_euclid")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_div_euclid(self, rhs: Self) -> (Self, bool) {
     (self.const_div(rhs), false)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_rem")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_rem(self, rhs: Self) -> (Self, bool) {
     (self.const_rem(rhs), false)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_rem_euclid")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_rem_euclid(self, rhs: Self) -> (Self, bool) {
     (self.const_rem(rhs), false)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_shl")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_shl(self, rhs: u32) -> (Self, bool) {
     (self.wrapping_shl(rhs), rhs >= Self::BITS)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_shr")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_shr(self, rhs: u32) -> (Self, bool) {
     (self.wrapping_shr(rhs), rhs >= Self::BITS)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_neg")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_neg(self) -> (Self, bool) {
     (self.const_not().wrapping_add(Self::ONE), !self.is_zero())
   }
 
+  #[doc = crate::utils::include_doc!(uint, "overflowing_pow")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn overflowing_pow(self, mut exp: u32) -> (Self, bool) {
@@ -649,12 +707,14 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "saturating_add")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn saturating_add(self, rhs: Self) -> Self {
     llapi::saturating_uadd::<Self, N>(self, rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "saturating_add_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn saturating_add_signed(self, rhs: int<N>) -> Self {
@@ -669,12 +729,14 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "saturating_sub")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn saturating_sub(self, rhs: Self) -> Self {
     llapi::saturating_usub::<Self, N>(self, rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "saturating_sub_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn saturating_sub_signed(self, rhs: int<N>) -> Self {
@@ -689,6 +751,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "saturating_mul")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn saturating_mul(self, rhs: Self) -> Self {
@@ -698,12 +761,14 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "saturating_div")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn saturating_div(self, rhs: Self) -> Self {
     self.wrapping_div(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "saturating_pow")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn saturating_pow(self, exp: u32) -> Self {
@@ -715,6 +780,7 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "strict_add")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -725,6 +791,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_add_signed")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -735,6 +802,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_sub")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -745,6 +813,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_mul")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -755,6 +824,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_div")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -762,6 +832,7 @@ impl<const N: usize> uint<N> {
     self.const_div(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_div_euclid")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -769,6 +840,7 @@ impl<const N: usize> uint<N> {
     self.const_div(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_rem")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -776,6 +848,7 @@ impl<const N: usize> uint<N> {
     self.const_rem(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_rem_euclid")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -783,6 +856,7 @@ impl<const N: usize> uint<N> {
     self.const_rem(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_shl")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -793,6 +867,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_shr")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -803,6 +878,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_neg")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -813,6 +889,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "strict_pow")]
   #[cfg(feature = "strict_overflow_ops")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -825,6 +902,7 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "unbounded_shl")]
   #[cfg(feature = "unbounded_shifts")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -837,6 +915,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "unbounded_shr")]
   #[cfg(feature = "unbounded_shifts")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
@@ -851,6 +930,7 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "unchecked_add")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const unsafe fn unchecked_add(self, rhs: Self) -> Self {
@@ -858,6 +938,7 @@ impl<const N: usize> uint<N> {
     unsafe { llapi::unchecked_uadd::<Self, N>(self, rhs) }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "unchecked_sub")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const unsafe fn unchecked_sub(self, rhs: Self) -> Self {
@@ -865,6 +946,7 @@ impl<const N: usize> uint<N> {
     unsafe { llapi::unchecked_usub::<Self, N>(self, rhs) }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "unchecked_mul")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const unsafe fn unchecked_mul(self, rhs: Self) -> Self {
@@ -874,6 +956,7 @@ impl<const N: usize> uint<N> {
 
   macros::stability! {
     #[unstable(feature = "unchecked_shifts")]
+    #[doc = crate::utils::include_doc!(uint, "unchecked_shl")]
     #[must_use = crate::utils::must_use_doc!()]
     #[inline]
     pub const unsafe fn unchecked_shl(self, rhs: u32) -> Self {
@@ -884,6 +967,7 @@ impl<const N: usize> uint<N> {
 
   macros::stability! {
     #[unstable(feature = "unchecked_shifts")]
+    #[doc = crate::utils::include_doc!(uint, "unchecked_shr")]
     #[must_use = crate::utils::must_use_doc!()]
     #[inline]
     pub const unsafe fn unchecked_shr(self, rhs: u32) -> Self {
@@ -894,60 +978,70 @@ impl<const N: usize> uint<N> {
 }
 
 impl<const N: usize> uint<N> {
+  #[doc = crate::utils::include_doc!(uint, "wrapping_add")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_add(self, rhs: Self) -> Self {
     llapi::wrapping_add::<Self, N>(self, rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_add_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_add_signed(self, rhs: int<N>) -> Self {
     self.wrapping_add(rhs.cast_unsigned())
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_sub")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_sub(self, rhs: Self) -> Self {
     llapi::wrapping_sub::<Self, N>(self, rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_sub_signed")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_sub_signed(self, rhs: int<N>) -> Self {
     self.wrapping_sub(rhs.cast_unsigned())
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_mul")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_mul(self, rhs: Self) -> Self {
     llapi::wrapping_mul::<Self, N>(self, rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_div")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_div(self, rhs: Self) -> Self {
     self.const_div(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_div_euclid")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_div_euclid(self, rhs: Self) -> Self {
     self.const_div(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_rem")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_rem(self, rhs: Self) -> Self {
     self.const_rem(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_rem_euclid")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_rem_euclid(self, rhs: Self) -> Self {
     self.const_rem(rhs)
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_shl")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_shl(self, rhs: u32) -> Self {
@@ -955,6 +1049,7 @@ impl<const N: usize> uint<N> {
     unsafe { self.unchecked_shl(rhs & (Self::BITS - 1)) }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_shr")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_shr(self, rhs: u32) -> Self {
@@ -962,6 +1057,7 @@ impl<const N: usize> uint<N> {
     unsafe { self.unchecked_shr(rhs & (Self::BITS - 1)) }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_neg")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_neg(self) -> Self {
@@ -969,6 +1065,7 @@ impl<const N: usize> uint<N> {
   }
 
   // TODO: Optimize with is_val_statically_known
+  #[doc = crate::utils::include_doc!(uint, "wrapping_pow")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]
   pub const fn wrapping_pow(self, mut exp: u32) -> Self {
@@ -993,6 +1090,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  #[doc = crate::utils::include_doc!(uint, "wrapping_next_power_of_two")]
   #[cfg(feature = "wrapping_next_power_of_two")]
   #[must_use = crate::utils::must_use_doc!()]
   #[inline]

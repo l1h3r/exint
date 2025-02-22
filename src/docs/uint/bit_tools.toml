@@ -1,0 +1,116 @@
+[reverse_bits]
+overview = """
+Reverses the order of bits in the integer. The least significant bit becomes the
+most significant bit, second least-significant bit becomes second
+most-significant bit, etc.
+"""
+examples = """
+let n = uint!(%TO_SWAP%);
+let m = n.swap_bytes();
+
+assert_eq!(m, uint!(%SWAPPED%));
+"""
+
+[swap_bytes]
+overview = """
+Reverses the byte order of the integer.
+"""
+examples = """
+let n = uint!(%TO_SWAP%);
+let m = n.reverse_bits();
+
+assert_eq!(m, uint!(%REVERSE%));
+assert_eq!(uint!(0), uint!(0).reverse_bits());
+"""
+
+[rotate_left]
+overview = """
+Shifts the bits to the left by a specified amount, `n`,
+wrapping the truncated bits to the end of the resulting integer.
+
+Please note this isn't the same operation as the `<<` shifting operator!
+"""
+examples = """
+let n = uint!(%ROTATE_FROM%);
+let m = uint!(%ROTATE_INTO%);
+
+assert_eq!(n.rotate_left(%ROTATE_SIZE%), m);
+"""
+
+[rotate_right]
+overview = """
+Shifts the bits to the right by a specified amount, `n`,
+wrapping the truncated bits to the beginning of the resulting integer.
+
+Please note this isn't the same operation as the `>>` shifting operator!
+"""
+examples = """
+let n = uint!(%ROTATE_INTO%);
+let m = uint!(%ROTATE_FROM%);
+
+assert_eq!(n.rotate_right(%ROTATE_SIZE%), m);
+"""
+
+[count_ones]
+overview = """
+Returns the number of ones in the binary representation of `self`.
+"""
+examples = """
+assert_eq!(uint!(0b01001100).count_ones(), 3);
+assert_eq!(uint!(0).count_ones(), 0);
+assert_eq!(uint::MAX.count_ones(), %SIZE_BITS%);
+"""
+
+[count_zeros]
+overview = """
+Returns the number of zeros in the binary representation of `self`.
+"""
+examples = """
+assert_eq!(uint!(0).count_zeros(), %SIZE_BITS%);
+assert_eq!(uint::MAX.count_zeros(), 0);
+"""
+
+[leading_ones]
+overview = """
+Returns the number of leading ones in the binary representation of `self`.
+"""
+examples = """
+assert_eq!((!(uint::MAX >> 2u32)).leading_ones(), 2);
+assert_eq!(uint!(0).leading_ones(), 0);
+assert_eq!(uint::MAX.leading_ones(), %SIZE_BITS%);
+"""
+
+[leading_zeros]
+overview = """
+Returns the number of leading zeros in the binary representation of `self`.
+
+Depending on what you're doing with the value, you might also be interested in the
+[`ilog2`] function which returns a consistent number, even if the type widens.
+
+[`ilog2`]: Self::ilog2
+"""
+examples = """
+assert_eq!((uint::MAX >> 2u32).leading_zeros(), 2);
+assert_eq!(uint!(0).leading_zeros(), %SIZE_BITS%);
+assert_eq!(uint::MAX.leading_zeros(), 0);
+"""
+
+[trailing_ones]
+overview = """
+Returns the number of trailing ones in the binary representation of `self`.
+"""
+examples = """
+assert_eq!(uint!(0b1010111).trailing_ones(), 3);
+assert_eq!(uint!(0).trailing_ones(), 0);
+assert_eq!(uint::MAX.trailing_ones(), %SIZE_BITS%);
+"""
+
+[trailing_zeros]
+overview = """
+Returns the number of trailing zeros in the binary representation of `self`.
+"""
+examples = """
+assert_eq!(uint!(0b00101000).trailing_zeros(), 3);
+assert_eq!(uint!(0).trailing_zeros(), %SIZE_BITS%);
+assert_eq!(uint::MAX.trailing_zeros(), 0);
+"""

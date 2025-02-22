@@ -1,0 +1,102 @@
+[saturating_add]
+overview = """
+Saturating integer addition. Computes `self + rhs`,
+saturating at the numeric bounds instead of overflowing.
+"""
+examples = """
+assert_eq!(int!(100).saturating_add(int!(1)), int!(101));
+assert_eq!(int::MAX.saturating_add(int!(100)), int::MAX);
+assert_eq!(int::MIN.saturating_add(int!(-1)), int::MIN);
+"""
+
+[saturating_add_unsigned]
+overview = """
+Saturating addition with an unsigned integer. Computes `self + rhs`,
+saturating at the numeric bounds instead of overflowing.
+"""
+examples = """
+assert_eq!(int!(1).saturating_add_unsigned(uint!(2)), int!(3));
+assert_eq!(int::MAX.saturating_add_unsigned(uint!(100)), int::MAX);
+"""
+
+[saturating_sub]
+overview = """
+Saturating integer subtraction. Computes `self - rhs`,
+saturating at the numeric bounds instead of overflowing.
+"""
+examples = """
+assert_eq!(int!(100).saturating_sub(int!(127)), int!(-27));
+assert_eq!(int::MIN.saturating_sub(int!(100)), int::MIN);
+assert_eq!(int::MAX.saturating_sub(int!(-1)), int::MAX);
+"""
+
+[saturating_sub_unsigned]
+overview = """
+Saturating subtraction with an unsigned integer. Computes `self - rhs`,
+saturating at the numeric bounds instead of overflowing.
+"""
+examples = """
+assert_eq!(int!(100).saturating_sub_unsigned(uint!(127)), int!(-27));
+assert_eq!(int::MIN.saturating_sub_unsigned(uint!(100)), int::MIN);
+"""
+
+[saturating_mul]
+overview = """
+Saturating integer multiplication. Computes `self * rhs`,
+saturating at the numeric bounds instead of overflowing.
+"""
+examples = """
+assert_eq!(int!(10).saturating_mul(int!(12)), int!(120));
+assert_eq!(int::MAX.saturating_mul(int!(10)), int::MAX);
+assert_eq!(int::MIN.saturating_mul(int!(10)), int::MIN);
+"""
+
+[saturating_div]
+overview = """
+Saturating integer division. Computes `self / rhs`,
+saturating at the numeric bounds instead of overflowing.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(int!(5).saturating_div(int!(2)), int!(2));
+assert_eq!(int::MAX.saturating_div(int!(-1)), int::MIN + int!(1));
+assert_eq!(int::MIN.saturating_div(int!(-1)), int::MAX);
+"""
+
+[saturating_neg]
+overview = """
+Saturating integer negation. Computes `-self`,
+returning `MAX` if `self == MIN` instead of overflowing.
+"""
+examples = """
+assert_eq!(int!(100).saturating_neg(), int!(-100));
+assert_eq!(int!(-100).saturating_neg(), int!(100));
+assert_eq!(int::MIN.saturating_neg(), int::MAX);
+assert_eq!(int::MAX.saturating_neg(), int::MIN + int!(1));
+"""
+
+[saturating_pow]
+overview = """
+Saturating integer exponentiation. Computes `self.pow(exp)`,
+saturating at the numeric bounds instead of overflowing.
+"""
+examples = """
+assert_eq!(int!(-4).saturating_pow(3), int!(-64));
+assert_eq!(int::MIN.saturating_pow(2), int::MAX);
+assert_eq!(int::MIN.saturating_pow(3), int::MIN);
+"""
+
+[saturating_abs]
+overview = """
+Saturating absolute value. Computes `self.abs()`,
+returning `MAX` if `self == MIN` instead of overflowing.
+"""
+examples = """
+assert_eq!(int!(100).saturating_abs(), int!(100));
+assert_eq!(int!(-100).saturating_abs(), int!(100));
+assert_eq!(int::MIN.saturating_abs(), int::MAX);
+assert_eq!((int::MIN + int!(1)).saturating_abs(), int::MAX);
+"""

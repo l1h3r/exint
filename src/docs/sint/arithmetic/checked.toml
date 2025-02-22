@@ -1,0 +1,208 @@
+[checked_add]
+overview = """
+Checked integer addition. Computes `self + rhs`,
+returning `None` if overflow occurred.
+"""
+examples = """
+assert_eq!((int::MAX - int!(2)).checked_add(int!(1)), Some(int::MAX - int!(1)));
+assert_eq!((int::MAX - int!(2)).checked_add(int!(3)), None);
+"""
+
+[checked_add_unsigned]
+overview = """
+Checked addition with an unsigned integer. Computes `self + rhs`,
+returning `None` if overflow occurred.
+"""
+examples = """
+assert_eq!(int!(1).checked_add_unsigned(uint!(2)), Some(int!(3)));
+assert_eq!((int::MAX - int!(2)).checked_add_unsigned(uint!(3)), None);
+"""
+
+[checked_sub]
+overview = """
+Checked integer subtraction. Computes `self - rhs`,
+returning `None` if overflow occurred.
+"""
+examples = """
+assert_eq!((int::MIN + int!(2)).checked_sub(int!(1)), Some(int::MIN + int!(1)));
+assert_eq!((int::MIN + int!(2)).checked_sub(int!(3)), None);
+"""
+
+[checked_sub_unsigned]
+overview = """
+Checked subtraction with an unsigned integer. Computes `self - rhs`,
+returning `None` if overflow occurred.
+"""
+examples = """
+assert_eq!(int!(1).checked_sub_unsigned(uint!(2)), Some(int!(-1)));
+assert_eq!((int::MIN + int!(2)).checked_sub_unsigned(uint!(3)), None);
+"""
+
+[checked_mul]
+overview = """
+Checked integer multiplication. Computes `self * rhs`,
+returning `None` if overflow occurred.
+"""
+examples = """
+assert_eq!(int::MAX.checked_mul(int!(1)), Some(int::MAX));
+assert_eq!(int::MAX.checked_mul(int!(2)), None);
+"""
+
+[checked_div]
+overview = """
+Checked integer division. Computes `self / rhs`,
+returning `None` if `rhs == 0` or the division results in overflow.
+"""
+examples = """
+assert_eq!((int::MIN + int!(1)).checked_div(int!(-1)), Some(int::MAX));
+assert_eq!(int::MIN.checked_div(int!(-1)), None);
+assert_eq!(int!(1).checked_div(int!(0)), None);
+"""
+
+[checked_div_euclid]
+overview = """
+Checked Euclidean division. Computes `self.div_euclid(rhs)`,
+returning `None` if `rhs == 0` or the division results in overflow.
+"""
+examples = """
+assert_eq!((int::MIN + int!(1)).checked_div_euclid(int!(-1)), Some(int::MAX));
+assert_eq!(int::MIN.checked_div_euclid(int!(-1)), None);
+assert_eq!(int!(1).checked_div_euclid(int!(0)), None);
+"""
+
+[checked_rem]
+overview = """
+Checked integer remainder. Computes `self % rhs`,
+returning `None` if `rhs == 0` or the division results in overflow.
+"""
+examples = """
+assert_eq!(int!(5).checked_rem(int!(2)), Some(int!(1)));
+assert_eq!(int!(5).checked_rem(int!(0)), None);
+assert_eq!(int::MIN.checked_rem(int!(-1)), None);
+"""
+
+[checked_rem_euclid]
+overview = """
+Checked Euclidean modulo. Computes `self.rem_euclid(rhs)`,
+returning `None` if `rhs == 0` or the division results in overflow.
+"""
+examples = """
+assert_eq!(int!(5).checked_rem_euclid(int!(2)), Some(int!(1)));
+assert_eq!(int!(5).checked_rem_euclid(int!(0)), None);
+assert_eq!(int::MIN.checked_rem_euclid(int!(-1)), None);
+"""
+
+[checked_shl]
+overview = """
+Checked shift left. Computes `self << rhs`, returning `None`
+if `rhs` is larger than or equal to the number of bits in `self`.
+"""
+examples = """
+assert_eq!(int!(0x1).checked_shl(4), Some(int!(0x10)));
+assert_eq!(int!(0x1).checked_shl(129), None);
+assert_eq!(int!(0x10).checked_shl(int::BITS - 1), Some(int!(0)));
+"""
+
+[checked_shr]
+overview = """
+Checked shift right. Computes `self >> rhs`, returning `None`
+if `rhs` is larger than or equal to the number of bits in `self`.
+"""
+examples = """
+assert_eq!(int!(0x10).checked_shr(4), Some(int!(0x1)));
+assert_eq!(int!(0x10).checked_shr(128), None);
+"""
+
+[checked_neg]
+overview = """
+Checked negation. Computes `-self`,
+returning `None` if `self == MIN`.
+"""
+examples = """
+assert_eq!(int!(5).checked_neg(), Some(int!(-5)));
+assert_eq!(int::MIN.checked_neg(), None);
+"""
+
+[checked_pow]
+overview = """
+Checked exponentiation. Computes `self.pow(exp)`,
+returning `None` if overflow occurred.
+"""
+examples = """
+assert_eq!(int!(8).checked_pow(2), Some(int!(64)));
+assert_eq!(int::MAX.checked_pow(2), None);
+"""
+
+[checked_next_multiple_of]
+overview = """
+If `rhs` is positive, calculates the smallest value greater than or equal to
+`self` that is a multiple of `rhs`. If `rhs` is negative, calculates the largest
+value less than or equal to `self` that is a multiple of `rhs`. Returns `None`
+if `rhs` is zero or the operation would result in overflow.
+"""
+examples = """
+assert_eq!(int!(16).checked_next_multiple_of(int!(8)), Some(int!(16)));
+assert_eq!(int!(23).checked_next_multiple_of(int!(8)), Some(int!(24)));
+assert_eq!(int!(16).checked_next_multiple_of(int!(-8)), Some(int!(16)));
+assert_eq!(int!(23).checked_next_multiple_of(int!(-8)), Some(int!(16)));
+assert_eq!(int!(-16).checked_next_multiple_of(int!(8)), Some(int!(-16)));
+assert_eq!(int!(-23).checked_next_multiple_of(int!(8)), Some(int!(-16)));
+assert_eq!(int!(-16).checked_next_multiple_of(int!(-8)), Some(int!(-16)));
+assert_eq!(int!(-23).checked_next_multiple_of(int!(-8)), Some(int!(-24)));
+assert_eq!(int!(1).checked_next_multiple_of(int!(0)), None);
+assert_eq!(int::MAX.checked_next_multiple_of(int!(2)), None);
+"""
+
+[checked_ilog]
+overview = """
+Returns the logarithm of the number with respect to an arbitrary base, rounded down.
+
+Returns `None` if the number is negative or zero, or if the base is not at least 2.
+
+This method might not be optimized owing to implementation details;
+`checked_ilog2` can produce results more efficiently for base 2, and
+`checked_ilog10` can produce results more efficiently for base 10.
+"""
+examples = """
+assert_eq!(int!(5).checked_ilog(int!(5)), Some(1));
+"""
+
+[checked_ilog2]
+overview = """
+Returns the base 2 logarithm of the number, rounded down.
+
+Returns `None` if the number is negative or zero.
+"""
+examples = """
+assert_eq!(int!(2).checked_ilog2(), Some(1));
+"""
+
+[checked_ilog10]
+overview = """
+Returns the base 10 logarithm of the number, rounded down.
+
+Returns `None` if the number is negative or zero.
+"""
+examples = """
+assert_eq!(int!(10).checked_ilog10(), Some(1));
+"""
+
+[checked_abs]
+overview = """
+Checked absolute value. Computes `self.abs()`,
+returning `None` if `self == MIN`.
+"""
+examples = """
+assert_eq!(int!(-5).checked_abs(), Some(int!(5)));
+assert_eq!(int::MIN.checked_abs(), None);
+"""
+
+[checked_isqrt]
+overview = """
+Returns the square root of the number, rounded down.
+
+Returns `None` if `self` is negative.
+"""
+examples = """
+assert_eq!(int!(10).checked_isqrt(), Some(int!(3)));
+"""
