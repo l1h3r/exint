@@ -24,7 +24,9 @@ impl<const S: usize> const SpecCompare for Int<S> {
     // SAFETY:
     //   - integer bytes **are not** uninitialized
     //   - integer types **do not** have padding
-    unsafe { ::core::intrinsics::raw_eq(&self, &other) }
+    unsafe {
+      ::core::intrinsics::raw_eq(&self, &other)
+    }
   }
 
   default fn ucmp(self, other: Self) -> ::core::cmp::Ordering {

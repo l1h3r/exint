@@ -87,14 +87,18 @@ specialize! {
     #[inline]
     unsafe fn ctlz_nonzero(self) -> u32 {
       // SAFETY: This is guaranteed to be safe by the caller.
-      unsafe { ::core::intrinsics::ctlz_nonzero(self.ucast()) }
+      unsafe {
+        ::core::intrinsics::ctlz_nonzero(self.ucast())
+      }
     }
 
     // LLVM generates `@llvm.cttz.$type` intrinsic with `nonzero` flag
     #[inline]
     unsafe fn cttz_nonzero(self) -> u32 {
       // SAFETY: This is guaranteed to be safe by the caller.
-      unsafe { ::core::intrinsics::cttz_nonzero(self.ucast()) }
+      unsafe {
+        ::core::intrinsics::cttz_nonzero(self.ucast())
+      }
     }
   }
 }
@@ -108,7 +112,7 @@ specialize! {
     // LLVM generates `@llvm.ctpop.$type` intrinsic
     #[inline]
     fn ctpop(self) -> u32 {
-      self.zext().count_ones()
+      ::core::intrinsics::ctpop(self.zext())
     }
 
     // LLVM generates `@llvm.ctlz.$type` intrinsic
@@ -124,7 +128,7 @@ specialize! {
         return Self::BITS;
       }
 
-      self.zext().trailing_zeros()
+      ::core::intrinsics::cttz(self.zext())
     }
   }
 }
