@@ -15,7 +15,10 @@ default = [
   "integer_sign_cast",
   "isqrt",
   "num_midpoint",
+  "random",
+  "step_trait",
   "strict_overflow_ops",
+  "trusted_step",
   "unbounded_shifts",
   "unchecked_neg",
   "unchecked_shifts",
@@ -49,10 +52,25 @@ isqrt = []
 # Tracking Issue: https://github.com/rust-lang/rust/issues/110840
 num_midpoint = []
 
+# Enables support for `random` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/130703
+random = []
+
+# Enables support for `step_trait` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/42168
+step_trait = []
+
 # Enables support for `strict_overflow_ops` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/118260
 strict_overflow_ops = []
+
+# Enables support for `trusted_step` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85731
+trusted_step = ["step_trait"]
 
 # Enables support for `unbounded_shifts` core functionality.
 #

@@ -22,6 +22,7 @@ pub(crate) use self::hash::hash;
 pub(crate) use self::iter::product;
 pub(crate) use self::iter::step;
 pub(crate) use self::iter::sum;
+pub(crate) use self::iter::trusted_step;
 pub(crate) use self::marker::copy;
 pub(crate) use self::ops::binops;
 pub(crate) use self::ops::unops;

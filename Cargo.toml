@@ -22,7 +22,10 @@ default = [
   "integer_sign_cast",
   "isqrt",
   "num_midpoint",
+  "random",
+  "step_trait",
   "strict_overflow_ops",
+  "trusted_step",
   "unbounded_shifts",
   "unchecked_neg",
   "unchecked_shifts",
@@ -39,7 +42,10 @@ int_roundings              = ["exint-integer/int_roundings"]
 integer_sign_cast          = ["exint-integer/integer_sign_cast"]
 isqrt                      = ["exint-integer/isqrt"]
 num_midpoint               = ["exint-integer/num_midpoint"]
+random                     = ["exint-integer/random"]
+step_trait                 = ["exint-integer/step_trait"]
 strict_overflow_ops        = ["exint-integer/strict_overflow_ops"]
+trusted_step               = ["exint-integer/trusted_step"]
 unbounded_shifts           = ["exint-integer/unbounded_shifts"]
 unchecked_neg              = ["exint-integer/unchecked_neg"]
 unchecked_shifts           = ["exint-integer/unchecked_shifts"]

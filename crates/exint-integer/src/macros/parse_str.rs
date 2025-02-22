@@ -1,6 +1,6 @@
 macro_rules! parse_str {
   (core, $name:ident, $uint:expr) => {
-    pub const fn from_str_radix(src: &str, radix: u32) -> Result<Self, $crate::ParseIntError> {
+    pub const fn from_str_radix(src: &str, radix: u32) -> Result<Self, $crate::errors::ParseIntError> {
       panic!("from_str_radix")
     }
   };
