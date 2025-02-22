@@ -141,6 +141,11 @@ where
     write_examples(&mut writer, HEADER, examples, &mut formatter)?;
   }
 
+  if let Some(examples) = doc_str.examples_trailing() {
+    static HEADER: &str = "Trailing space returns error:";
+    write_examples(&mut writer, HEADER, examples, &mut formatter)?;
+  }
+
   if let Some(examples) = doc_str.examples_overflow() {
     static HEADER: &str = "The following panics because of overflow:";
     write_examples_panicking(&mut writer, HEADER, examples, &mut formatter)?;

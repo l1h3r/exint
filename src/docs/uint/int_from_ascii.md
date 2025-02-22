@@ -24,3 +24,13 @@ Basic usage:
 # use exint::*;
 assert_eq!(uint::from_ascii_radix(b"A", 16), Ok(uint!(10)));
 ```
+
+Trailing space returns error:
+
+```
+# #![allow(non_camel_case_types)]
+# type uint = exint::uint<4>;
+# type int  = exint::int<4>;
+# use exint::*;
+assert!(uint::from_ascii_radix(b"1 ", 10).is_err());
+```

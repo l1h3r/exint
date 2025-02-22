@@ -18,6 +18,9 @@ This function panics if `radix` is not in the range from 2 to 36.
 examples = """
 assert_eq!(int::from_str_radix("A", 16), Ok(int!(10)));
 """
+examples_trailing = """
+assert!(int::from_str_radix("1 ", 10).is_err());
+"""
 
 [from_ascii]
 overview = """
@@ -30,6 +33,9 @@ represent an error.
 """
 examples = """
 assert_eq!(int::from_ascii(b"+10"), Ok(int!(10)));
+"""
+examples_trailing = """
+assert!(int::from_ascii(b"1 ").is_err());
 """
 
 [int_from_ascii]
@@ -52,4 +58,7 @@ This function panics if `radix` is not in the range from 2 to 36.
 """
 examples = """
 assert_eq!(int::from_ascii_radix(b"A", 16), Ok(int!(10)));
+"""
+examples_trailing = """
+assert!(int::from_ascii_radix(b"1 ", 10).is_err());
 """
