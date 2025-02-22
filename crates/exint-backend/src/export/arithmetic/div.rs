@@ -1,5 +1,7 @@
 use crate::macros::specialize;
 use crate::traits::Cast;
+use crate::traits::Exts;
+use crate::traits::Trunc;
 use crate::types::Int;
 
 // -----------------------------------------------------------------------------
@@ -9,17 +11,17 @@ use crate::types::Int;
 /// Supporting trait for specialized intrinsics.
 #[const_trait]
 pub(crate) trait SpecUdiv {
-  unsafe fn udiv(self, rhs: Self) -> Self;
-  unsafe fn urem(self, rhs: Self) -> Self;
-  unsafe fn ediv(self, rhs: Self) -> Self;
+  unsafe fn udiv(self, other: Self) -> Self;
+  unsafe fn urem(self, other: Self) -> Self;
+  unsafe fn ediv(self, other: Self) -> Self;
 }
 
 /// Supporting trait for specialized intrinsics.
 #[const_trait]
 pub(crate) trait SpecSdiv: SpecUdiv {
-  unsafe fn udiv(self, rhs: Self) -> Self;
-  unsafe fn urem(self, rhs: Self) -> Self;
-  unsafe fn ediv(self, rhs: Self) -> Self;
+  unsafe fn udiv(self, other: Self) -> Self;
+  unsafe fn urem(self, other: Self) -> Self;
+  unsafe fn ediv(self, other: Self) -> Self;
 }
 
 // -----------------------------------------------------------------------------
@@ -123,3 +125,25 @@ specialize! {
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for common sizes
 // -----------------------------------------------------------------------------
+
+specialize! {
+  impl SpecUdiv for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    // LLVM generates `udiv $type` instruction
+    #[inline]
+    unsafe fn udiv(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::unchecked_div(self.zext(), other.zext()).trunc()
+      }
+    }
+
+    // LLVM generates `urem $type` instruction
+    #[inline]
+    unsafe fn urem(self, other: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::unchecked_rem(self.zext(), other.zext()).trunc()
+      }
+    }
+  }
+}

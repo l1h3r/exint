@@ -1,7 +1,10 @@
 use ::core::marker::Sized;
 
+use crate::export::compare::SpecCompare;
 use crate::macros::specialize;
 use crate::traits::Cast;
+use crate::traits::Exts;
+use crate::traits::Trunc;
 use crate::types::Int;
 
 // -----------------------------------------------------------------------------
@@ -140,3 +143,37 @@ specialize! {
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for common sizes
 // -----------------------------------------------------------------------------
+
+specialize! {
+  impl SpecUsub for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    // LLVM generates `@llvm.usub.sat.$type` intrinsic
+    #[inline]
+    fn ssub(self, other: Self) -> Self {
+      if SpecCompare::ucmp(self, other).is_lt() {
+        return Self::UMIN;
+      }
+
+      SpecUsub::wsub(self, other)
+    }
+
+    // LLVM generates `sub $type` instruction
+    #[inline]
+    fn wsub(self, other: Self) -> Self {
+      let lhs: <Self as Exts>::Uint = self.zext();
+      let rhs: <Self as Exts>::Uint = other.zext();
+      let out: <Self as Exts>::Uint = ::core::intrinsics::wrapping_sub(lhs, rhs);
+
+      (out & Self::UMASK).trunc()
+    }
+  }
+}
+
+specialize! {
+  impl SpecSsub for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    // LLVM generates `sub $type` instruction
+    #[inline]
+    fn wsub(self, other: Self) -> Self {
+      SpecUsub::wsub(self, other)
+    }
+  }
+}

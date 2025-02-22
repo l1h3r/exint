@@ -2,6 +2,8 @@ use ::core::marker::Sized;
 
 use crate::macros::specialize;
 use crate::traits::Cast;
+use crate::traits::Exts;
+use crate::traits::Trunc;
 use crate::types::Int;
 
 // -----------------------------------------------------------------------------
@@ -113,3 +115,44 @@ specialize! {
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for common sizes
 // -----------------------------------------------------------------------------
+
+specialize! {
+  impl SpecUmul for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    // LLVM generates `@llvm.umul.with.overflow.$type` intrinsic
+    #[inline]
+    fn omul(self, other: Self) -> (Self, bool) {
+      let lhs: <Self as Exts>::Uint = self.zext();
+      let rhs: <Self as Exts>::Uint = other.zext();
+
+      // SAFETY: Multiplication cannot overflow the next power-of-two size
+      let out: <Self as Exts>::Uint = unsafe {
+        ::core::intrinsics::unchecked_mul(lhs, rhs)
+      };
+
+      (out.trunc(), out > Self::UMASK)
+    }
+
+    // LLVM generates `mul $type` instruction
+    #[inline]
+    fn wmul(self, other: Self) -> Self {
+      let lhs: <Self as Exts>::Uint = self.zext();
+      let rhs: <Self as Exts>::Uint = other.zext();
+
+      // SAFETY: Multiplication cannot overflow the next power-of-two size
+      let out: <Self as Exts>::Uint = unsafe {
+        ::core::intrinsics::unchecked_mul(lhs, rhs)
+      };
+
+      (out & Self::UMASK).trunc()
+    }
+  }
+}
+
+specialize! {
+  impl SpecSmul for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    #[inline]
+    fn wmul(self, other: Self) -> Self {
+      SpecUmul::wmul(self, other)
+    }
+  }
+}

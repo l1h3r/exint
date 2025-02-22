@@ -1,7 +1,10 @@
 use ::core::marker::Sized;
 
+use crate::export::compare::SpecCompare;
 use crate::macros::specialize;
 use crate::traits::Cast;
+use crate::traits::Exts;
+use crate::traits::Trunc;
 use crate::types::Int;
 
 // -----------------------------------------------------------------------------
@@ -135,3 +138,43 @@ specialize! {
 // -----------------------------------------------------------------------------
 // Implementation - Specialization for common sizes
 // -----------------------------------------------------------------------------
+
+specialize! {
+  impl SpecUadd for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    // LLVM generates `@llvm.uadd.sat.$type` intrinsic
+    #[inline]
+    fn sadd(self, other: Self) -> Self {
+      let out: Self = SpecUadd::wadd(self, other);
+
+      if SpecCompare::ucmp(out, self).is_lt() {
+        return Self::UMAX;
+      }
+
+      out
+    }
+
+    // LLVM generates `add $type` instruction
+    #[inline]
+    fn wadd(self, other: Self) -> Self {
+      let lhs: <Self as Exts>::Uint = self.zext();
+      let rhs: <Self as Exts>::Uint = other.zext();
+
+      // SAFETY: Addition cannot overflow the next power-of-two size
+      let out: <Self as Exts>::Uint = unsafe {
+        ::core::intrinsics::unchecked_add(lhs, rhs)
+      };
+
+      (out & Self::UMASK).trunc()
+    }
+  }
+}
+
+specialize! {
+  impl SpecSadd for Int<3|5|6|7|9|10|11|12|13|14|15> {
+    // LLVM generates `add $type` instruction
+    #[inline]
+    fn wadd(self, other: Self) -> Self {
+      SpecUadd::wadd(self, other)
+    }
+  }
+}
