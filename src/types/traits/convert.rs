@@ -1,8 +1,8 @@
 use crate::error::TryFromIntError;
 use crate::types::int;
 use crate::types::uint;
-use crate::utils::Cast;
 use crate::utils::include_doc;
+use crate::utils::Cast;
 
 // -----------------------------------------------------------------------------
 // Crate Types
