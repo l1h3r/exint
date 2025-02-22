@@ -456,4 +456,3 @@ pub(crate) const fn carrying_mul_add<T: Uint, U: Uint, const N: usize>(
 ) -> (U, T) {
   ::core::panic!("carrying_mul_add")
 }
-
