@@ -130,5 +130,23 @@ specialize! {
 
       ::core::intrinsics::cttz(self.zext())
     }
+
+    // LLVM generates `@llvm.ctlz.$type` intrinsic with `nonzero` flag
+    #[inline]
+    unsafe fn ctlz_nonzero(self) -> u32 {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        SpecConvert::swap1(self).cttz_nonzero()
+      }
+    }
+
+    // LLVM generates `@llvm.cttz.$type` intrinsic with `nonzero` flag
+    #[inline]
+    unsafe fn cttz_nonzero(self) -> u32 {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        ::core::intrinsics::cttz_nonzero(self.zext())
+      }
+    }
   }
 }
