@@ -128,7 +128,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_div(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::ZERO)) {
+      if ::core::intrinsics::unlikely(rhs.is_zero()) {
         None
       } else {
         // SAFETY: We just ensured that we are not dividing by zero.
@@ -141,7 +141,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_div_euclid(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::ZERO)) {
+      if ::core::intrinsics::unlikely(rhs.is_zero()) {
         None
       } else {
         Some(self.div_euclid(rhs))
@@ -151,7 +151,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_rem(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::ZERO)) {
+      if ::core::intrinsics::unlikely(rhs.is_zero()) {
         None
       } else {
         // SAFETY: We just ensured that we are not calculating the remainder of
@@ -165,7 +165,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_rem_euclid(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::ZERO)) {
+      if ::core::intrinsics::unlikely(rhs.is_zero()) {
         None
       } else {
         Some(self.rem_euclid(rhs))
@@ -197,7 +197,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_ilog2(self) -> Option<u32> {
-      if !self.const_eq(&Self::ZERO) {
+      if !self.is_zero() {
         Some(Self::BITS - 1 - self.leading_zeros())
       } else {
         None
@@ -215,7 +215,7 @@ macro_rules! checked {
     #[inline]
     pub const fn checked_next_multiple_of(self, rhs: Self) -> Option<Self> {
       match self.checked_rem(rhs) {
-        Some(result) if result.const_eq(&Self::ZERO) => Some(self),
+        Some(result) if result.is_zero() => Some(self),
         Some(result) => self.checked_add(rhs.const_sub(result)),
         None => None,
       }
@@ -296,7 +296,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_div(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::ZERO) || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
+      if ::core::intrinsics::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
         None
       } else {
         // SAFETY: We just ensured that we are not dividing by zero or Self::MIN / -1.
@@ -309,7 +309,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_div_euclid(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::ZERO) || (self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE))) {
+      if ::core::intrinsics::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE))) {
         None
       } else {
         Some(self.div_euclid(rhs))
@@ -319,7 +319,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_rem(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::ZERO) || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
+      if ::core::intrinsics::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
         None
       } else {
         // SAFETY: We just ensured that we are not dividing by zero or Self::MIN / -1.
@@ -332,7 +332,7 @@ macro_rules! checked {
     #[must_use]
     #[inline]
     pub const fn checked_rem_euclid(self, rhs: Self) -> Option<Self> {
-      if ::core::intrinsics::unlikely(rhs.const_eq(&Self::ZERO) || (self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE))) {
+      if ::core::intrinsics::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) & rhs.const_eq(&Self::NEG_ONE))) {
         None
       } else {
         Some(self.rem_euclid(rhs))
@@ -394,7 +394,7 @@ macro_rules! checked {
         value = value.const_add(rhs);
       }
 
-      if value.const_eq(&Self::ZERO) {
+      if value.is_zero() {
         Some(self)
       } else {
         self.checked_add(rhs.const_sub(value))

@@ -34,7 +34,7 @@ macro_rules! internals {
     #[doc(hidden)]
     #[must_use]
     #[inline]
-    pub const fn internal_is_zero(&self) -> bool {
+    pub const fn is_zero(&self) -> bool {
       self.const_eq(&Self::ZERO)
     }
 

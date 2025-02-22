@@ -43,7 +43,7 @@ pub fn cttz(context: &mut Context) {
 pub fn ctlz_nonzero(context: &mut Context) {
   context.build("inspect_ctlz_nonzero", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> u32");
-    func = func.statement("unsafe { ::core::intrinsics::assume(!a.internal_is_zero()) }");
+    func = func.statement("unsafe { ::core::intrinsics::assume(!a.is_zero()) }");
     func = func.statement("a.leading_zeros()");
     func = func.filecheck("load %TYPE, ptr %REG",                  Condition::Gt(64));
     func = func.filecheck("@llvm.ctlz.%TYPE(%TYPE %REG, i1 true)", Condition::All);
@@ -57,7 +57,7 @@ pub fn ctlz_nonzero(context: &mut Context) {
 pub fn cttz_nonzero(context: &mut Context) {
   context.build("inspect_cttz_nonzero", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> u32");
-    func = func.statement("unsafe { ::core::intrinsics::assume(!a.internal_is_zero()) }");
+    func = func.statement("unsafe { ::core::intrinsics::assume(!a.is_zero()) }");
     func = func.statement("a.trailing_zeros()");
     func = func.filecheck("load %TYPE, ptr %REG",                  Condition::Gt(64));
     func = func.filecheck("@llvm.cttz.%TYPE(%TYPE %REG, i1 true)", Condition::All);

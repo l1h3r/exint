@@ -110,10 +110,10 @@ macro_rules! overflowing {
     #[must_use]
     #[inline]
     pub const fn overflowing_neg(self) -> (Self, bool) {
-      let out: Self = self.const_not().wrapping_add(Self::ONE);
-      let cmp: bool = !self.const_eq(&Self::ZERO);
-
-      (out, cmp)
+      (
+        self.const_not().wrapping_add(Self::ONE),
+        !self.is_zero(),
+      )
     }
   };
   (int) => {
