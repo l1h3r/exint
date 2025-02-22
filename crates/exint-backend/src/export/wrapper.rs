@@ -36,6 +36,7 @@ macro_rules! cast {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn cast<const T: usize, const U: usize, const UINT: bool>(integer: Int<T>) -> Int<U> {
   ::core::panic!("intrinsics::cast")
 }
@@ -46,6 +47,7 @@ pub const fn cast<const T: usize, const U: usize, const UINT: bool>(integer: Int
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn eq<T: Copy, const S: usize>(lhs: T, rhs: T) -> bool {
   assert_size_of!(T, S);
   SpecCompare::eq(cast!(int(S) from lhs), cast!(int(S) from rhs))
@@ -53,6 +55,7 @@ pub const fn eq<T: Copy, const S: usize>(lhs: T, rhs: T) -> bool {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn cmp<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> Ordering {
   assert_size_of!(T, S);
   if UINT {
@@ -68,6 +71,7 @@ pub const fn cmp<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> O
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn band<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   cast!(T from SpecBitwise::and(cast!(int(S) from lhs), cast!(int(S) from rhs)))
@@ -75,6 +79,7 @@ pub const fn band<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn bor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   cast!(T from SpecBitwise::or(cast!(int(S) from lhs), cast!(int(S) from rhs)))
@@ -82,6 +87,7 @@ pub const fn bor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn bxor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   cast!(T from SpecBitwise::xor(cast!(int(S) from lhs), cast!(int(S) from rhs)))
@@ -89,6 +95,7 @@ pub const fn bxor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn bnot<T: Copy, const S: usize>(integer: T) -> T {
   assert_size_of!(T, S);
   cast!(T from SpecBitwise::not(cast!(int(S) from integer)))
@@ -100,6 +107,7 @@ pub const fn bnot<T: Copy, const S: usize>(integer: T) -> T {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn swap1<T: Copy, const S: usize>(integer: T) -> T {
   assert_size_of!(T, S);
   cast!(T from SpecConvert::swap1(cast!(int(S) from integer)))
@@ -107,6 +115,7 @@ pub const fn swap1<T: Copy, const S: usize>(integer: T) -> T {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn swap8<T: Copy, const S: usize>(integer: T) -> T {
   assert_size_of!(T, S);
   cast!(T from SpecConvert::swap8(cast!(int(S) from integer)))
@@ -114,6 +123,7 @@ pub const fn swap8<T: Copy, const S: usize>(integer: T) -> T {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn rotl<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
   assert_size_of!(T, S);
   cast!(T from SpecConvert::rotl(cast!(int(S) from integer), bits))
@@ -121,6 +131,7 @@ pub const fn rotl<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn rotr<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
   assert_size_of!(T, S);
   cast!(T from SpecConvert::rotr(cast!(int(S) from integer), bits))
@@ -132,6 +143,7 @@ pub const fn rotr<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn ctpop<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
   SpecInspect::ctpop(cast!(int(S) from integer))
@@ -139,6 +151,7 @@ pub const fn ctpop<T: Copy, const S: usize>(integer: T) -> u32 {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn ctlz<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
   SpecInspect::ctlz(cast!(int(S) from integer))
@@ -146,6 +159,7 @@ pub const fn ctlz<T: Copy, const S: usize>(integer: T) -> u32 {
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn cttz<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
   SpecInspect::cttz(cast!(int(S) from integer))
@@ -157,21 +171,24 @@ pub const fn cttz<T: Copy, const S: usize>(integer: T) -> u32 {
 
 #[must_use]
 #[inline]
-pub const fn overflowing_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+#[track_caller]
+pub const fn overflowing_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> (T, bool) {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::overflowing_add")
 }
 
 #[must_use]
 #[inline]
-pub const fn overflowing_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+#[track_caller]
+pub const fn overflowing_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> (T, bool) {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::overflowing_sub")
 }
 
 #[must_use]
 #[inline]
-pub const fn overflowing_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+#[track_caller]
+pub const fn overflowing_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> (T, bool) {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::overflowing_mul")
 }
@@ -182,6 +199,7 @@ pub const fn overflowing_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, 
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn saturating_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::saturating_add")
@@ -189,6 +207,7 @@ pub const fn saturating_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, r
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn saturating_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::saturating_sub")
@@ -200,6 +219,7 @@ pub const fn saturating_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, r
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const unsafe fn unchecked_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::unchecked_add")
@@ -207,6 +227,7 @@ pub const unsafe fn unchecked_add<T: Copy, const S: usize, const UINT: bool>(lhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const unsafe fn unchecked_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::unchecked_sub")
@@ -214,6 +235,7 @@ pub const unsafe fn unchecked_sub<T: Copy, const S: usize, const UINT: bool>(lhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const unsafe fn unchecked_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::unchecked_mul")
@@ -221,6 +243,7 @@ pub const unsafe fn unchecked_mul<T: Copy, const S: usize, const UINT: bool>(lhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const unsafe fn unchecked_div<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::unchecked_div")
@@ -228,6 +251,7 @@ pub const unsafe fn unchecked_div<T: Copy, const S: usize, const UINT: bool>(lhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const unsafe fn unchecked_rem<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::unchecked_rem")
@@ -235,6 +259,7 @@ pub const unsafe fn unchecked_rem<T: Copy, const S: usize, const UINT: bool>(lhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const unsafe fn unchecked_shl<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: u32) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::unchecked_shl")
@@ -242,6 +267,7 @@ pub const unsafe fn unchecked_shl<T: Copy, const S: usize, const UINT: bool>(lhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const unsafe fn unchecked_shr<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: u32) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::unchecked_shr")
@@ -253,6 +279,7 @@ pub const unsafe fn unchecked_shr<T: Copy, const S: usize, const UINT: bool>(lhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn wrapping_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::wrapping_add")
@@ -260,6 +287,7 @@ pub const fn wrapping_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn wrapping_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::wrapping_sub")
@@ -267,6 +295,7 @@ pub const fn wrapping_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn wrapping_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::wrapping_mul")
@@ -278,6 +307,7 @@ pub const fn wrapping_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs
 
 #[must_use]
 #[inline]
+#[track_caller]
 pub const fn exact_div<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
   ::core::panic!("intrinsics::exact_div")
