@@ -1,10 +1,10 @@
 use ::core::option::Option;
 
 pub(crate) trait Value {
-  /// The number of bytes used to represent this value.
+  /// The number of bytes used to represent this type.
   const SIZE: usize;
 
-  /// True if the value is an unsigned integer.
+  /// True if the type is an unsigned integer.
   const UINT: bool;
 
   /// The representation of `0` for this type.
