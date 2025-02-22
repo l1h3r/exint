@@ -312,6 +312,24 @@ specialize! {
 specialize! {
   impl const SpecUintFuncs for Int<u8|u16|u32|u64|u128> {
     // -------------------------------------------------------------------------
+    // Bitwise Operations
+    // -------------------------------------------------------------------------
+
+    // LLVM generates `or disjoint $type` instruction
+    #[inline]
+    unsafe fn disjoint_bor(lhs: Self, rhs: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      maybe_intrinsic! {
+        @enabled => unsafe {
+          ::core::intrinsics::disjoint_bitor(lhs, rhs)
+        }
+        @default => unsafe {
+          lhs.unchecked_disjoint_bitor(rhs)
+        }
+      }
+    }
+
+    // -------------------------------------------------------------------------
     // Comparison Operations
     // -------------------------------------------------------------------------
 

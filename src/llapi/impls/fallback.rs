@@ -53,6 +53,15 @@ pub(crate) const fn bnot<const N: usize>(integer: [u8; N]) -> [u8; N] {
   bxor(integer, Consts::UMAX)
 }
 
+#[inline]
+pub(crate) const unsafe fn disjoint_bor<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
+  unsafe {
+    ::core::hint::assert_unchecked(eq(band(lhs, rhs), Consts::UMIN));
+  }
+
+  bor(lhs, rhs)
+}
+
 // -----------------------------------------------------------------------------
 // Comparison Operations
 // -----------------------------------------------------------------------------

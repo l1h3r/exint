@@ -165,6 +165,10 @@ define_traits! {
   @spec_name = SpecUintFuncs: SpecCoreFuncs;
   @functions = (
     // -------------------------------------------------------------------------
+    // Bitwise Operations
+    // -------------------------------------------------------------------------
+    disjoint_bor: unsafe |lhs: Self, rhs: Self| -> Self;
+    // -------------------------------------------------------------------------
     // Comparison Operations
     // -------------------------------------------------------------------------
     ucmp: |lhs: Self, rhs: Self| -> Ordering;

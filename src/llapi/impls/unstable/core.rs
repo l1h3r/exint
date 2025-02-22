@@ -246,6 +246,17 @@ specialize! {
 specialize! {
   impl const SpecUintFuncs for Int<1|2|4|8|16> {
     // -------------------------------------------------------------------------
+    // Bitwise Operations
+    // -------------------------------------------------------------------------
+
+    // LLVM generates `or disjoint $type` instruction
+    #[inline]
+    unsafe fn disjoint_bor(lhs: Self, rhs: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe { SpecUintFuncs::disjoint_bor(lhs.ucast(), rhs.ucast()).ucast() }
+    }
+
+    // -------------------------------------------------------------------------
     // Comparison Operations
     // -------------------------------------------------------------------------
 

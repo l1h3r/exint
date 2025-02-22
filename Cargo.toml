@@ -52,6 +52,11 @@ ascii_char = ["nightly"]
 # Tracking Issue: https://github.com/rust-lang/rust/issues/85532
 bigint_helper_methods = []
 
+# Enable support for `disjoint_bitor` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/135758
+disjoint_bitor = ["nightly"]
+
 # Enable support for `f16` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/116909

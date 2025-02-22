@@ -293,6 +293,15 @@ impl<const N: usize> uint<N> {
       self.const_rem(rhs).is_zero()
     }
   }
+
+  #[doc = include_doc!(uint, "disjoint_bitor")]
+  #[cfg(feature = "disjoint_bitor")]
+  #[must_use = must_use_doc!()]
+  #[inline]
+  pub const unsafe fn unchecked_disjoint_bitor(self, rhs: Self) -> Self {
+    // SAFETY: This is guaranteed to be safe by the caller.
+    unsafe { llapi::disjoint_bor::<Self, N>(self, rhs) }
+  }
 }
 
 impl<const N: usize> uint<N> {

@@ -4,6 +4,7 @@
 #![cfg_attr(feature = "ascii_char",           feature(ascii_char))]
 #![cfg_attr(feature = "const_trait_impl",     feature(const_trait_impl))]
 #![cfg_attr(feature = "core_intrinsics",      feature(core_intrinsics))]
+#![cfg_attr(feature = "disjoint_bitor",       feature(disjoint_bitor))]
 #![cfg_attr(feature = "docs",                 feature(doc_auto_cfg))]
 #![cfg_attr(feature = "docs",                 feature(doc_cfg_hide))]
 #![cfg_attr(feature = "f16",                  feature(f16))]

@@ -300,6 +300,19 @@ specialize! {
 specialize! {
   impl const SpecUintFuncs for Int<3|5|6|7|9|10|11|12|13|14|15> {
     // -------------------------------------------------------------------------
+    // Bitwise Operations
+    // -------------------------------------------------------------------------
+
+    // LLVM generates `or $type` instruction
+    //
+    // TODO: Figure out how to get `disjoint` keyword
+    #[inline]
+    unsafe fn disjoint_bor(lhs: Self, rhs: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe { SpecUintFuncs::disjoint_bor(lhs.zext(), rhs.zext()).trunc() }
+    }
+
+    // -------------------------------------------------------------------------
     // Comparison Operations
     // -------------------------------------------------------------------------
 
