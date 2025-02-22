@@ -8,6 +8,7 @@ readme = "README.md"
 [workspace]
 members = [
   "crates/exint-backend",
+  "crates/exint-compile",
   "crates/exint-filegen",
   "crates/exint-integer",
 ]
@@ -15,6 +16,9 @@ members = [
 [dependencies]
 exint-backend = { version = "=0.1", path = "crates/exint-backend", default-features = false }
 exint-integer = { version = "=0.1", path = "crates/exint-integer", default-features = false }
+
+[dev-dependencies]
+exint-compile = { version = "=0.1", path = "crates/exint-compile", default-features = false }
 
 [features]
 default = [
