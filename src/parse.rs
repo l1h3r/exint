@@ -136,31 +136,31 @@ macro_rules! implement {
 
       const fn __parse_char(input: &'static [u8]) -> Self {
         match input {
-          [b'b', b'\'', ch, b'\''] => {
+          [ch] => {
             Self::from_u8(*ch)
           }
-          [b'b', b'\'', b'\\', b't', b'\''] => {
+          [b'\\', b't'] => {
             Self::from_u8(b'\t')
           }
-          [b'b', b'\'', b'\\', b'r', b'\''] => {
+          [b'\\', b'r'] => {
             Self::from_u8(b'\r')
           }
-          [b'b', b'\'', b'\\', b'n', b'\''] => {
+          [b'\\', b'n'] => {
             Self::from_u8(b'\n')
           }
-          [b'b', b'\'', b'\\', b'\\', b'\''] => {
+          [b'\\', b'\\'] => {
             Self::from_u8(b'\\')
           }
-          [b'b', b'\'', b'\\', b'\'', b'\''] => {
+          [b'\\', b'\''] => {
             Self::from_u8(b'\'')
           }
-          [b'b', b'\'', b'\\', 0x00..=0x1F | 0x7F, b'\''] => {
+          [b'\\', 0x00..=0x1F | 0x7F] => {
             ::core::panic!("TODO - hex escape")
           }
-          [b'b', b'\'', b'\\', _byte, b'\''] => {
+          [b'\\', _byte] => {
             ::core::panic!("TODO - maybe verbatim")
           }
-          [b'b', b'\'', b'\\', b'x', body @ .., b'\''] => {
+          [b'\\', b'x', body @ ..] => {
             Self::__parse_text(body, 16)
           }
           _ => {
