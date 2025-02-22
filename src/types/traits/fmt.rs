@@ -3,7 +3,7 @@ macro_rules! implement {
     impl<const N: usize> ::core::fmt::$format for $crate::$name<N> {
       fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
         if Self::BITS > u128::BITS {
-          ::core::todo!("Format Bignum")
+          ::core::panic!("TODO - Format Bignum")
         } else {
           ::core::fmt::$format::fmt(&self.$conv(), f)
         }

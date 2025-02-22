@@ -373,7 +373,6 @@ specialize! {
     // Unchecked Operations
     // -------------------------------------------------------------------------
 
-
     // LLVM generates `add nuw $type` instruction
     #[inline]
     unsafe fn unchecked_uadd(lhs: Self, rhs: Self) -> Self {

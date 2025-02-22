@@ -75,6 +75,7 @@ impl<const N: usize> int<N> {
     }
   }
 
+  // TODO: Optimize with wide type
   #[doc = include_doc!(int, "midpoint")]
   #[cfg(feature = "num_midpoint_signed")]
   #[must_use = must_use_doc!()]

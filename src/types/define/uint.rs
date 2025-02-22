@@ -85,6 +85,7 @@ impl<const N: usize> uint<N> {
     }
   }
 
+  // TODO: Optimize with wide type
   #[doc = include_doc!(uint, "midpoint")]
   #[must_use = must_use_doc!()]
   #[inline]

@@ -96,7 +96,7 @@ impl ::core::convert::TryFrom<char> for uint<3> {
   /// Tries to convert a [`char`] into a [`uint<3>`].
   #[inline]
   fn try_from(_other: char) -> ::core::result::Result<Self, Self::Error> {
-    ::core::todo!("TryFrom<char> for u24")
+    ::core::panic!("TODO - TryFrom<char> for u24")
   }
 }
 
