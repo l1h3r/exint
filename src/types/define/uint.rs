@@ -454,7 +454,7 @@ impl<const N: usize> uint<N> {
   pub const fn checked_ilog(self, base: Self) -> Option<u32> {
     if self.const_le(&Self::ZERO) || base.const_le(&Self::ONE) {
       None
-    } else if self.const_le(&base) {
+    } else if self.const_lt(&base) {
       Some(0)
     } else {
       let mut ilog: u32 = 1;
