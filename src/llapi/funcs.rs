@@ -466,6 +466,7 @@ pub(crate) const fn wrapping_mul<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 // -----------------------------------------------------------------------------
 
 /// Performs full-width multiplication and addition with a carry: `lhs * rhs + add + carry`.
+#[cfg(feature = "bigint_helper_methods")]
 #[inline]
 #[track_caller]
 pub(crate) const fn carrying_mul_add<T: Uint, U: Uint, const N: usize>(

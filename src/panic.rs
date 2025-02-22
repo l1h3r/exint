@@ -1,3 +1,5 @@
+#![allow(dead_code, reason = "Crate might be configured to not panic")]
+
 use ::core::panic;
 
 #[cold]
