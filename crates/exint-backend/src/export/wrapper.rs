@@ -165,6 +165,22 @@ pub const fn cttz<T: Copy, const S: usize>(integer: T) -> u32 {
   SpecInspect::cttz(cast!(int(S) from integer))
 }
 
+#[must_use]
+#[inline]
+#[track_caller]
+pub const unsafe fn ctlz_nonzero<T: Copy, const S: usize>(integer: T) -> u32 {
+  assert_size_of!(T, S);
+  SpecInspect::ctlz_nonzero(cast!(int(S) from integer))
+}
+
+#[must_use]
+#[inline]
+#[track_caller]
+pub const unsafe fn cttz_nonzero<T: Copy, const S: usize>(integer: T) -> u32 {
+  assert_size_of!(T, S);
+  SpecInspect::cttz_nonzero(cast!(int(S) from integer))
+}
+
 // -----------------------------------------------------------------------------
 // Arithmetic - Overflowing
 // -----------------------------------------------------------------------------
