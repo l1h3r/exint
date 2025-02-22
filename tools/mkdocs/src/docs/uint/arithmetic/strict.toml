@@ -2,7 +2,7 @@
 overview = """
 Strict integer addition. Computes `self + rhs`, panicking if overflow occurred.
 
-%STRICT_OVERFLOW%
+$strict_overflow
 """
 examples = """
 assert_eq!((uint::MAX - uint!(2)).strict_add(uint!(1)), uint::MAX - uint!(1));
@@ -15,7 +15,7 @@ let _ = (uint::MAX - uint!(2)).strict_add(uint!(3));
 overview = """
 Strict addition with a signed integer. Computes `self + rhs`, panicking if overflow occurred.
 
-%STRICT_OVERFLOW%
+$strict_overflow
 """
 examples = """
 assert_eq!(uint!(1).strict_add_signed(int!(2)), uint!(3));
@@ -29,7 +29,7 @@ examples_overflow = [
 overview = """
 Strict integer subtraction. Computes `self - rhs`, panicking if overflow occurred.
 
-%STRICT_OVERFLOW%
+$strict_overflow
 """
 examples = """
 assert_eq!(uint!(1).strict_sub(uint!(1)), uint!(0));
@@ -42,7 +42,7 @@ let _ = uint!(0).strict_sub(uint!(1));
 overview = """
 Strict integer multiplication. Computes `self * rhs`, panicking if overflow occurred.
 
-%STRICT_OVERFLOW%
+$strict_overflow
 """
 examples = """
 assert_eq!(uint!(5).strict_mul(uint!(1)), uint!(5));
@@ -136,7 +136,7 @@ overview = """
 Strict shift left. Computes `self << rhs`,
 panicking if `rhs` is larger than or equal to the number of bits in `self`.
 
-%STRICT_OVERFLOW%
+$strict_overflow
 """
 examples = """
 assert_eq!(uint!(0x1).strict_shl(4), uint!(0x10));
@@ -150,7 +150,7 @@ overview = """
 Strict shift right. Computes `self >> rhs`,
 panicking if `rhs` is larger than or equal to the number of bits in `self`.
 
-%STRICT_OVERFLOW%
+$strict_overflow
 """
 examples = """
 assert_eq!(uint!(0x10).strict_shr(4), uint!(0x1));
@@ -165,7 +165,7 @@ Strict negation. Computes `-self`, panicking unless `self == 0`.
 
 Note that negating any positive integer will overflow.
 
-%STRICT_OVERFLOW%
+$strict_overflow
 """
 examples = """
 assert_eq!(uint!(0).strict_neg(), uint!(0));
@@ -178,7 +178,7 @@ let _ = uint!(1).strict_neg();
 overview = """
 Strict exponentiation. Computes `self.pow(exp)`, panicking if overflow occurred.
 
-%STRICT_OVERFLOW%
+$strict_overflow
 """
 examples = """
 assert_eq!(uint!(2).strict_pow(5), uint!(32));

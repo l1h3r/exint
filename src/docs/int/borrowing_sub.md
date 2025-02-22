@@ -28,10 +28,10 @@ Basic usage:
 # use exint::*;
 // Only the most significant word is signed.
 //
-//    6    8    (a = 6 × 2^$bits + 8)
-// - -5    9    (b = -5 × 2^$bits + 9)
+//    6    8    (a = 6 × 2^32 + 8)
+// - -5    9    (b = -5 × 2^32 + 9)
 // ---------
-//   10  MAX    (diff = 10 × 2^$bits + 2^$bits - 1)
+//   10  MAX    (diff = 10 × 2^32 + 2^32 - 1)
 
 let (a1, a0): (int, uint) = (int!(6), uint!(8));
 let (b1, b0): (int, uint) = (int!(-5), uint!(9));

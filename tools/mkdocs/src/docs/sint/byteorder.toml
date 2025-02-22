@@ -67,7 +67,7 @@ overview = """
 Creates a native endian integer value from its representation as a byte array in big endian.
 """
 examples = """
-assert_eq!(int::from_be_bytes(%SWAP_BE%), int!(%TO_SWAP%));
+assert_eq!(int::from_be_bytes($swap_be), int!($to_swap));
 """
 
 [from_le_bytes]
@@ -75,7 +75,7 @@ overview = """
 Creates a native endian integer value from its representation as a byte array in little endian.
 """
 examples = """
-assert_eq!(int::from_le_bytes(%SWAP_LE%), int!(%TO_SWAP%));
+assert_eq!(int::from_le_bytes($swap_le), int!($to_swap));
 """
 
 [from_ne_bytes]
@@ -91,9 +91,9 @@ to use [`from_be_bytes`] or [`from_le_bytes`], as appropriate instead.
 """
 examples = """
 if cfg!(target_endian = "big") {
-    assert_eq!(int::from_ne_bytes(%SWAP_BE%), int!(%TO_SWAP%));
+    assert_eq!(int::from_ne_bytes($swap_be), int!($to_swap));
 } else {
-    assert_eq!(int::from_ne_bytes(%SWAP_LE%), int!(%TO_SWAP%));
+    assert_eq!(int::from_ne_bytes($swap_le), int!($to_swap));
 }
 """
 
@@ -103,7 +103,7 @@ Returns the memory representation of this integer as a byte array in
 big-endian (network) byte order.
 """
 examples = """
-assert_eq!(int!(%TO_SWAP%).to_be_bytes(), %SWAP_BE%);
+assert_eq!(int!($to_swap).to_be_bytes(), $swap_be);
 """
 
 [to_le_bytes]
@@ -112,7 +112,7 @@ Returns the memory representation of this integer as a byte array in
 little-endian byte order.
 """
 examples = """
-assert_eq!(int!(%TO_SWAP%).to_le_bytes(), %SWAP_LE%);
+assert_eq!(int!($to_swap).to_le_bytes(), $swap_le);
 """
 
 [to_ne_bytes]
@@ -127,8 +127,8 @@ As the target platform's native endianness is used, portable code should use
 """
 examples = """
 if cfg!(target_endian = "big") {
-    assert_eq!(int!(%TO_SWAP%).to_ne_bytes(), %SWAP_BE%);
+    assert_eq!(int!($to_swap).to_ne_bytes(), $swap_be);
 } else {
-    assert_eq!(int!(%TO_SWAP%).to_ne_bytes(), %SWAP_LE%);
+    assert_eq!(int!($to_swap).to_ne_bytes(), $swap_le);
 }
 """

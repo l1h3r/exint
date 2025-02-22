@@ -15,10 +15,10 @@ Basic usage:
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 # use exint::*;
-//    9    6    (a = 9 × 2^$bits + 6)
-// -  5    7    (b = 5 × 2^$bits + 7)
+//    9    6    (a = 9 × 2^32 + 6)
+// -  5    7    (b = 5 × 2^32 + 7)
 // ---------
-//    3  MAX    (diff = 3 × 2^$bits + 2^$bits - 1)
+//    3  MAX    (diff = 3 × 2^32 + 2^32 - 1)
 
 let (a1, a0): (uint, uint) = (uint!(9), uint!(6));
 let (b1, b0): (uint, uint) = (uint!(5), uint!(7));

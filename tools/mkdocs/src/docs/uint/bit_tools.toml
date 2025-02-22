@@ -5,10 +5,10 @@ most significant bit, second least-significant bit becomes second
 most-significant bit, etc.
 """
 examples = """
-let n = uint!(%TO_SWAP%);
+let n = uint!($to_swap);
 let m = n.swap_bytes();
 
-assert_eq!(m, uint!(%SWAPPED%));
+assert_eq!(m, uint!($swapped));
 """
 
 [swap_bytes]
@@ -16,10 +16,10 @@ overview = """
 Reverses the byte order of the integer.
 """
 examples = """
-let n = uint!(%TO_SWAP%);
+let n = uint!($to_swap);
 let m = n.reverse_bits();
 
-assert_eq!(m, uint!(%REVERSE%));
+assert_eq!(m, uint!($reverse));
 assert_eq!(uint!(0), uint!(0).reverse_bits());
 """
 
@@ -31,10 +31,10 @@ wrapping the truncated bits to the end of the resulting integer.
 Please note this isn't the same operation as the `<<` shifting operator!
 """
 examples = """
-let n = uint!(%ROTATE_FROM%);
-let m = uint!(%ROTATE_INTO%);
+let n = uint!($rotate_from);
+let m = uint!($rotate_into);
 
-assert_eq!(n.rotate_left(%ROTATE_SIZE%), m);
+assert_eq!(n.rotate_left($rotate_size), m);
 """
 
 [rotate_right]
@@ -45,10 +45,10 @@ wrapping the truncated bits to the beginning of the resulting integer.
 Please note this isn't the same operation as the `>>` shifting operator!
 """
 examples = """
-let n = uint!(%ROTATE_INTO%);
-let m = uint!(%ROTATE_FROM%);
+let n = uint!($rotate_into);
+let m = uint!($rotate_from);
 
-assert_eq!(n.rotate_right(%ROTATE_SIZE%), m);
+assert_eq!(n.rotate_right($rotate_size), m);
 """
 
 [count_ones]
@@ -58,7 +58,7 @@ Returns the number of ones in the binary representation of `self`.
 examples = """
 assert_eq!(uint!(0b01001100).count_ones(), 3);
 assert_eq!(uint!(0).count_ones(), 0);
-assert_eq!(uint::MAX.count_ones(), %BITS%);
+assert_eq!(uint::MAX.count_ones(), $bits);
 """
 
 [count_zeros]
@@ -66,7 +66,7 @@ overview = """
 Returns the number of zeros in the binary representation of `self`.
 """
 examples = """
-assert_eq!(uint!(0).count_zeros(), %BITS%);
+assert_eq!(uint!(0).count_zeros(), $bits);
 assert_eq!(uint::MAX.count_zeros(), 0);
 """
 
@@ -77,7 +77,7 @@ Returns the number of leading ones in the binary representation of `self`.
 examples = """
 assert_eq!((!(uint::MAX >> 2u32)).leading_ones(), 2);
 assert_eq!(uint!(0).leading_ones(), 0);
-assert_eq!(uint::MAX.leading_ones(), %BITS%);
+assert_eq!(uint::MAX.leading_ones(), $bits);
 """
 
 [leading_zeros]
@@ -91,7 +91,7 @@ Depending on what you're doing with the value, you might also be interested in t
 """
 examples = """
 assert_eq!((uint::MAX >> 2u32).leading_zeros(), 2);
-assert_eq!(uint!(0).leading_zeros(), %BITS%);
+assert_eq!(uint!(0).leading_zeros(), $bits);
 assert_eq!(uint::MAX.leading_zeros(), 0);
 """
 
@@ -102,7 +102,7 @@ Returns the number of trailing ones in the binary representation of `self`.
 examples = """
 assert_eq!(uint!(0b1010111).trailing_ones(), 3);
 assert_eq!(uint!(0).trailing_ones(), 0);
-assert_eq!(uint::MAX.trailing_ones(), %BITS%);
+assert_eq!(uint::MAX.trailing_ones(), $bits);
 """
 
 [trailing_zeros]
@@ -111,6 +111,6 @@ Returns the number of trailing zeros in the binary representation of `self`.
 """
 examples = """
 assert_eq!(uint!(0b00101000).trailing_zeros(), 3);
-assert_eq!(uint!(0).trailing_zeros(), %BITS%);
+assert_eq!(uint!(0).trailing_zeros(), $bits);
 assert_eq!(uint::MAX.trailing_zeros(), 0);
 """

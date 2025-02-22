@@ -60,20 +60,20 @@ impl Variables {
   const SIZE: usize = 14;
 
   const KEYS: &'static [&'static str; Self::SIZE] = &[
-    "%BITS%",
-    "%UINT_MIN%",
-    "%UINT_MAX%",
-    "%INT_MIN%",
-    "%INT_MAX%",
-    "%TO_SWAP%",
-    "%SWAPPED%",
-    "%SWAP_BE%",
-    "%SWAP_LE%",
-    "%REVERSE%",
-    "%ROTATE_SIZE%",
-    "%ROTATE_FROM%",
-    "%ROTATE_INTO%",
-    "%STRICT_OVERFLOW%",
+    "$bits",
+    "$uint_min",
+    "$uint_max",
+    "$int_min",
+    "$int_max",
+    "$to_swap",
+    "$swapped",
+    "$swap_be",
+    "$swap_le",
+    "$reverse",
+    "$rotate_size",
+    "$rotate_from",
+    "$rotate_into",
+    "$strict_overflow",
   ];
 
   // Note: This *MUST* be in the same order as `KEYS`.

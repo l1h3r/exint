@@ -23,10 +23,10 @@ Basic usage:
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 # use exint::*;
-//    3  MAX    (a = 3 × 2^$bits + 2^$bits - 1)
-// +  5    7    (b = 5 × 2^$bits + 7)
+//    3  MAX    (a = 3 × 2^32 + 2^32 - 1)
+// +  5    7    (b = 5 × 2^32 + 7)
 // ---------
-//    9    6    (sum = 9 × 2^$bits + 6)
+//    9    6    (sum = 9 × 2^32 + 6)
 
 let (a1, a0): (uint, uint) = (uint!(3), uint::MAX);
 let (b1, b0): (uint, uint) = (uint!(5), uint!(7));

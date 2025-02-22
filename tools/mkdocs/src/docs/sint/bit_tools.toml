@@ -5,10 +5,10 @@ most significant bit, second least-significant bit becomes second
 most-significant bit, etc.
 """
 examples = """
-let n = int!(%TO_SWAP%);
+let n = int!($to_swap);
 let m = n.swap_bytes();
 
-assert_eq!(m, int!(%SWAPPED%));
+assert_eq!(m, int!($swapped));
 """
 
 [swap_bytes]
@@ -16,10 +16,10 @@ overview = """
 Reverses the byte order of the integer.
 """
 examples = """
-let n = int!(%TO_SWAP%);
+let n = int!($to_swap);
 let m = n.reverse_bits();
 
-assert_eq!(m, int!(%REVERSE%));
+assert_eq!(m, int!($reverse));
 assert_eq!(int!(0), int!(0).reverse_bits());
 """
 
@@ -31,10 +31,10 @@ wrapping the truncated bits to the end of the resulting integer.
 Please note this isn't the same operation as the `<<` shifting operator!
 """
 examples = """
-let n = int!(%ROTATE_FROM%);
-let m = int!(%ROTATE_INTO%);
+let n = int!($rotate_from);
+let m = int!($rotate_into);
 
-assert_eq!(n.rotate_left(%ROTATE_SIZE%), m);
+assert_eq!(n.rotate_left($rotate_size), m);
 """
 
 [rotate_right]
@@ -45,10 +45,10 @@ wrapping the truncated bits to the beginning of the resulting integer.
 Please note this isn't the same operation as the `>>` shifting operator!
 """
 examples = """
-let n = int!(%ROTATE_INTO%);
-let m = int!(%ROTATE_FROM%);
+let n = int!($rotate_into);
+let m = int!($rotate_from);
 
-assert_eq!(n.rotate_right(%ROTATE_SIZE%), m);
+assert_eq!(n.rotate_right($rotate_size), m);
 """
 
 [count_ones]
