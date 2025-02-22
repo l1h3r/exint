@@ -150,3 +150,135 @@ pub const fn cttz<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
   SpecInspect::cttz(cast!(int(S) from integer))
 }
+
+// -----------------------------------------------------------------------------
+// Arithmetic - Overflowing
+// -----------------------------------------------------------------------------
+
+#[must_use]
+#[inline]
+pub const fn overflowing_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::overflowing_add")
+}
+
+#[must_use]
+#[inline]
+pub const fn overflowing_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::overflowing_sub")
+}
+
+#[must_use]
+#[inline]
+pub const fn overflowing_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::overflowing_mul")
+}
+
+// -----------------------------------------------------------------------------
+// Arithmetic - Saturating
+// -----------------------------------------------------------------------------
+
+#[must_use]
+#[inline]
+pub const fn saturating_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::saturating_add")
+}
+
+#[must_use]
+#[inline]
+pub const fn saturating_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::saturating_sub")
+}
+
+// -----------------------------------------------------------------------------
+// Arithmetic - Unchecked
+// -----------------------------------------------------------------------------
+
+#[must_use]
+#[inline]
+pub const unsafe fn unchecked_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::unchecked_add")
+}
+
+#[must_use]
+#[inline]
+pub const unsafe fn unchecked_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::unchecked_sub")
+}
+
+#[must_use]
+#[inline]
+pub const unsafe fn unchecked_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::unchecked_mul")
+}
+
+#[must_use]
+#[inline]
+pub const unsafe fn unchecked_div<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::unchecked_div")
+}
+
+#[must_use]
+#[inline]
+pub const unsafe fn unchecked_rem<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::unchecked_rem")
+}
+
+#[must_use]
+#[inline]
+pub const unsafe fn unchecked_shl<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: u32) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::unchecked_shl")
+}
+
+#[must_use]
+#[inline]
+pub const unsafe fn unchecked_shr<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: u32) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::unchecked_shr")
+}
+
+// -----------------------------------------------------------------------------
+// Arithmetic - Wrapping
+// -----------------------------------------------------------------------------
+
+#[must_use]
+#[inline]
+pub const fn wrapping_add<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::wrapping_add")
+}
+
+#[must_use]
+#[inline]
+pub const fn wrapping_sub<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::wrapping_sub")
+}
+
+#[must_use]
+#[inline]
+pub const fn wrapping_mul<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::wrapping_mul")
+}
+
+// -----------------------------------------------------------------------------
+// Arithmetic - Misc.
+// -----------------------------------------------------------------------------
+
+#[must_use]
+#[inline]
+pub const fn exact_div<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> T {
+  assert_size_of!(T, S);
+  ::core::panic!("intrinsics::exact_div")
+}
