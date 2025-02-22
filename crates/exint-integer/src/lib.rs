@@ -13,15 +13,11 @@
 // Tracking Issue: https://github.com/rust-lang/rust/issues/85077
 #![feature(generic_arg_infer)]
 
+mod errors;
 mod macros;
 mod traits;
 mod types;
 mod value;
-
-// TODO
-pub mod errors {
-  pub type ParseIntError = ();
-}
 
 // TODO: Move to exint-backend
 pub mod intrinsics {
@@ -86,6 +82,8 @@ pub mod intrinsics {
   }
 }
 
+pub use self::errors::ParseIntError;
+pub use self::errors::TryFromIntError;
 pub use self::types::sint::int;
 pub use self::types::uint::uint;
 
