@@ -9,5 +9,7 @@ Basic usage:
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 # use exint::*;
+use exint::Wrapping;
+
 assert_eq!(Wrapping(uint!(0b01010111)).trailing_ones(), 3);
 ```

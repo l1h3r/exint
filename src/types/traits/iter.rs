@@ -78,7 +78,9 @@ implement!(crate::uint<N>);
 implement!(crate::Saturating<crate::int<N>>);
 implement!(crate::Saturating<crate::uint<N>>);
 
+#[cfg(feature = "strict_overflow_ops")]
 implement!(crate::Strict<crate::int<N>>);
+#[cfg(feature = "strict_overflow_ops")]
 implement!(crate::Strict<crate::uint<N>>);
 
 implement!(crate::Wrapping<crate::int<N>>);

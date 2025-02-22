@@ -236,7 +236,9 @@ implement_binary!(uint);
 implement_binary!(Saturating<int>);
 implement_binary!(Saturating<uint>);
 
+#[cfg(feature = "strict_overflow_ops")]
 implement_binary!(Strict<int>);
+#[cfg(feature = "strict_overflow_ops")]
 implement_binary!(Strict<uint>);
 
 implement_binary!(Wrapping<int>);
@@ -284,7 +286,9 @@ implement_unary!(uint);
 implement_unary!(Saturating<int>);
 implement_unary!(Saturating<uint>);
 
+#[cfg(feature = "strict_overflow_ops")]
 implement_unary!(Strict<int>);
+#[cfg(feature = "strict_overflow_ops")]
 implement_unary!(Strict<uint>);
 
 implement_unary!(Wrapping<int>);

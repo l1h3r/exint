@@ -60,7 +60,10 @@ impl<const N: usize> uint<N> {
 
 impl<const N: usize> uint<N> {
   #[doc = include_doc!(uint, "max_value")]
-  #[deprecated(since = "TBD", note = "replaced by the `MAX` associated constant on this type")]
+  #[deprecated(
+    since = "TBD",
+    note = "replaced by the `MAX` associated constant on this type"
+  )]
   #[must_use]
   #[inline]
   pub const fn max_value() -> Self {
@@ -68,7 +71,10 @@ impl<const N: usize> uint<N> {
   }
 
   #[doc = include_doc!(uint, "min_value")]
-  #[deprecated(since = "TBD", note = "replaced by the `MIN` associated constant on this type")]
+  #[deprecated(
+    since = "TBD",
+    note = "replaced by the `MIN` associated constant on this type"
+  )]
   #[must_use]
   #[inline]
   pub const fn min_value() -> Self {
@@ -1211,7 +1217,8 @@ impl uint<1> {
   #[must_use]
   #[inline]
   pub const fn is_ascii_octdigit(&self) -> bool {
-    self.into_u8().is_ascii_octdigit()
+    // TODO: Replace with u8::is_ascii_octdigit
+    ::core::matches!(self.into_u8(), b'0'..=b'7')
   }
 
   #[doc = include_doc!(uint, "is_ascii_punctuation")]
@@ -1300,6 +1307,7 @@ impl uint<2> {
   #[must_use]
   #[inline]
   pub const fn is_utf16_surrogate(self) -> bool {
-    self.into_u16().is_utf16_surrogate()
+    // TODO: Replace with u16::is_utf16_surrogate
+    ::core::matches!(self.into_u16(), 0xD800..=0xDFFF)
   }
 }

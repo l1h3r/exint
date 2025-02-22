@@ -1,3 +1,4 @@
+#[allow(unused_macro_rules)] // Strict type is not not always used
 macro_rules! internals {
   (uint) => {
     $crate::types::macros::internals!(@core);

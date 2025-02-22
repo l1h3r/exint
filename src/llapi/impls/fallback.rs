@@ -53,6 +53,7 @@ pub(crate) const fn bnot<const N: usize>(integer: [u8; N]) -> [u8; N] {
   bxor(integer, Consts::UMAX)
 }
 
+#[cfg(feature = "disjoint_bitor")]
 #[inline]
 pub(crate) const unsafe fn disjoint_bor<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   unsafe {

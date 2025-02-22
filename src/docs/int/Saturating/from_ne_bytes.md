@@ -16,6 +16,8 @@ Basic usage:
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 # use exint::*;
+use exint::Saturating;
+
 if cfg!(target_endian = "big") {
     assert_eq!(<Saturating<int>>::from_ne_bytes([0x12, 0x34, 0x56, 0x78]), Saturating(int!(0x12345678)));
 } else {

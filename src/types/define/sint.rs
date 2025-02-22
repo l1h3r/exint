@@ -50,7 +50,10 @@ impl<const N: usize> int<N> {
 
 impl<const N: usize> int<N> {
   #[doc = include_doc!(int, "max_value")]
-  #[deprecated(note = "replaced by the `MAX` associated constant on this type")]
+  #[deprecated(
+    since = "TBD",
+    note = "replaced by the `MAX` associated constant on this type"
+  )]
   #[must_use]
   #[inline]
   pub const fn max_value() -> Self {
@@ -58,7 +61,10 @@ impl<const N: usize> int<N> {
   }
 
   #[doc = include_doc!(int, "min_value")]
-  #[deprecated(note = "replaced by the `MIN` associated constant on this type")]
+  #[deprecated(
+    since = "TBD",
+    note = "replaced by the `MIN` associated constant on this type"
+  )]
   #[must_use]
   #[inline]
   pub const fn min_value() -> Self {

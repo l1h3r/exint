@@ -3,6 +3,7 @@ mod macros;
 mod traits;
 
 pub use self::define::exts::Saturating;
+#[cfg(feature = "strict_overflow_ops")]
 pub use self::define::exts::Strict;
 pub use self::define::exts::ToAtomic;
 pub use self::define::exts::ToNonZero;

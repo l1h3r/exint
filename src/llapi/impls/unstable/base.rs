@@ -45,6 +45,7 @@ macro_rules! define_traits {
       $(
         #[allow(unsafe_op_in_unsafe_fn)]
         #[inline]
+        $(#[$meta])*
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           $crate::llapi::impls::fallback::$function($($name),+)
         }
@@ -56,6 +57,7 @@ macro_rules! define_traits {
       $(
         #[allow(unsafe_op_in_unsafe_fn)]
         #[inline]
+        $(#[$meta])*
         default $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           <T as $base_name>::$function($($name),+)
         }
@@ -67,6 +69,7 @@ macro_rules! define_traits {
       $(
         #[allow(unsafe_op_in_unsafe_fn)]
         #[inline]
+        $(#[$meta])*
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           <T as $base_name>::$function($($name),+)
         }
@@ -76,6 +79,7 @@ macro_rules! define_traits {
     $(
       #[allow(unsafe_op_in_unsafe_fn)]
       #[inline]
+      $(#[$meta])*
       pub(crate) const $($safety)? fn $function<const N: usize>($($name: arg!($type)),+) $(-> arg!($return))? {
         <[u8; N] as $spec_name>::$function($($name),+)
       }
@@ -167,6 +171,7 @@ define_traits! {
     // -------------------------------------------------------------------------
     // Bitwise Operations
     // -------------------------------------------------------------------------
+    #[cfg(feature = "disjoint_bitor")]
     disjoint_bor: unsafe |lhs: Self, rhs: Self| -> Self;
     // -------------------------------------------------------------------------
     // Comparison Operations

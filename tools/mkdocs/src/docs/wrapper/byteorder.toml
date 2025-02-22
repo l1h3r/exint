@@ -102,6 +102,8 @@ to use [`from_be_bytes`] or [`from_le_bytes`], as appropriate instead.
 [`from_le_bytes`]: Self::from_le_bytes
 """
 examples = """
+use exint::$outer;
+
 if cfg!(target_endian = "big") {
     assert_eq!(<$outer<$inner>>::from_ne_bytes($swap_be), $outer($inner!($to_swap)));
 } else {
@@ -142,6 +144,8 @@ As the target platform's native endianness is used, portable code should use
 [`to_le_bytes`]: Self::to_le_bytes
 """
 examples = """
+use exint::$outer;
+
 if cfg!(target_endian = "big") {
     assert_eq!($outer($inner!($to_swap)).to_ne_bytes(), $swap_be);
 } else {

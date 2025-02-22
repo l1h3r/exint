@@ -25,5 +25,6 @@ implement!(int);
 implement!(uint);
 
 implement!(Saturating<T>);
+#[cfg(feature = "strict_overflow_ops")]
 implement!(Strict<T>);
 implement!(Wrapping<T>);

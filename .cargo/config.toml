@@ -2,6 +2,9 @@
 mkdocs = "run --release --manifest-path tools/mkdocs/Cargo.toml"
 
 [build]
+rustdocflags = [
+  "--cfg", "docsrs",
+]
 rustflags = [
   "-C", "llvm-args=--unroll-threshold=1024",
 ]

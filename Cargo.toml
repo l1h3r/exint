@@ -8,34 +8,96 @@ readme = "README.md"
 [features]
 default = []
 
-# Marker trait for features that require a nightly compiler.
+# ------------------------------------------------------------------------------
+# Groups
+# ------------------------------------------------------------------------------
+
+all_backend = [
+  "const_trait_impl",
+  "core_intrinsics",
+  "generic_const_exprs",
+  "min_specialization",
+]
+
+all_nightly = [
+  "adt_const_params",
+  "ascii_char",
+  "bigint_helper_methods",
+  "disjoint_bitor",
+  "f16",
+  "f128",
+  "integer_atomics",
+  "never_type",
+  "random",
+  "step_trait",
+  "structural_match",
+  "trusted_step",
+  "unsized_const_params",
+]
+
+all_unstable = [
+  "int_from_ascii",
+  "int_roundings",
+  "is_ascii_octdigit",
+  "mixed_integer_ops_unsigned_sub",
+  "strict_overflow_ops",
+  "unbounded_shifts",
+  "unchecked_neg",
+  "unchecked_shifts",
+  "unsigned_is_multiple_of",
+  "unsigned_signed_diff",
+  "utf16_extra",
+  "wrapping_next_power_of_two",
+]
+
+# ------------------------------------------------------------------------------
+# Markers
+# ------------------------------------------------------------------------------
+
+# Marker indicating features that require a nightly compiler
 nightly = []
 
-# Enable support for documentation features.
-docs = ["nightly"]
-
-# Marker trait for features that require libstd.
+# Marker indicating features that require the rust standard library
 std = []
 
-# Marker trait for specialization-based features.
+# Marker indicating features that require the `min_specialization` specialization
 specialization = ["nightly"]
 
-# Enable optimizations requiring `const_trait_impl`.
+# Marker indicating features that require internal rust features
+internal_features = ["nightly"]
+
+# Marker indicating features that require incomplete rust features
+incomplete_features = ["nightly"]
+
+# ------------------------------------------------------------------------------
+# Backend
+# ------------------------------------------------------------------------------
+
+# Enable backend functionality that requires the `const_trait_impl` feature
 #
 # Note: This is not useful without `min_specialization`.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/67792
 const_trait_impl = ["nightly"]
 
-# Enable optimizations requiring `core::intrinsics`.
+# Enable backend functionality that requires the `core_intrinsics` feature
 #
 # Note: This is perma-unstable in Rust.
-core_intrinsics = ["nightly"]
+core_intrinsics = ["internal_features"]
 
-# Enable optimizations requiring `min_specialization`.
+# Enable backend functionality that requires the `generic_const_exprs` feature
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/76560
+generic_const_exprs = ["incomplete_features"]
+
+# Enable backend functionality that requires the `min_specialization` feature
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/31844
 min_specialization = ["const_trait_impl", "specialization"]
+
+# ------------------------------------------------------------------------------
+# Nightly
+# ------------------------------------------------------------------------------
 
 # Enable support for `adt_const_params` core functionality.
 #
@@ -50,7 +112,7 @@ ascii_char = ["nightly"]
 # Enable support for `bigint_helper_methods` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/85532
-bigint_helper_methods = []
+bigint_helper_methods = ["generic_const_exprs"]
 
 # Enable support for `disjoint_bitor` core functionality.
 #
@@ -67,30 +129,10 @@ f16 = ["nightly"]
 # Tracking Issue: https://github.com/rust-lang/rust/issues/116909
 f128 = ["nightly"]
 
-# Enable support for `int_from_ascii` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/134821
-int_from_ascii = []
-
-# Enable support for `int_roundings` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/88581
-int_roundings = []
-
 # Enable support for `integer_atomics` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/99069
 integer_atomics = ["nightly"]
-
-# Enable support for `is_ascii_octdigit` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/101288
-is_ascii_octdigit = ["nightly"]
-
-# Enable support for `mixed_integer_ops_unsigned_sub` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/126043
-mixed_integer_ops_unsigned_sub = []
 
 # Enable support for `never_type` core functionality.
 #
@@ -107,11 +149,6 @@ random = ["nightly"]
 # Tracking Issue: https://github.com/rust-lang/rust/issues/42168
 step_trait = ["nightly"]
 
-# Enable support for `strict_overflow_ops` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/118260
-strict_overflow_ops = []
-
 # Enable support for `structural_match` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/31434
@@ -120,7 +157,41 @@ structural_match = ["nightly"]
 # Enable support for `trusted_step` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/85731
-trusted_step = ["step_trait", "specialization"]
+trusted_step = ["specialization", "step_trait"]
+
+# Enable support for `unsized_const_params` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/95174
+unsized_const_params = ["incomplete_features", "structural_match"]
+
+# ------------------------------------------------------------------------------
+# Unstable
+# ------------------------------------------------------------------------------
+
+# Enable support for `int_from_ascii` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/134821
+int_from_ascii = []
+
+# Enable support for `int_roundings` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/88581
+int_roundings = []
+
+# Enable support for `is_ascii_octdigit` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/101288
+is_ascii_octdigit = []
+
+# Enable support for `mixed_integer_ops_unsigned_sub` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/126043
+mixed_integer_ops_unsigned_sub = []
+
+# Enable support for `strict_overflow_ops` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/118260
+strict_overflow_ops = []
 
 # Enable support for `unbounded_shifts` core functionality.
 #
@@ -147,15 +218,10 @@ unsigned_is_multiple_of = []
 # Tracking Issue: https://github.com/rust-lang/rust/issues/126041
 unsigned_signed_diff = []
 
-# Enable support for `unsized_const_params` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/95174
-unsized_const_params = ["structural_match"]
-
 # Enable support for `utf16_extra` core functionality.
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/94919
-utf16_extra = ["nightly"]
+utf16_extra = []
 
 # Enable support for `wrapping_next_power_of_two` core functionality.
 #
@@ -232,13 +298,13 @@ unreadable_literal = "allow"
 unused_self = "allow"
 
 [lints.rustdoc] # https://doc.rust-lang.org/rustdoc/lints.html
+bare_urls = "deny"
 broken_intra_doc_links = "deny"
-private_intra_doc_links = "deny"
-missing_crate_level_docs = "deny"
-private_doc_tests = "deny"
 invalid_codeblock_attributes = "deny"
 invalid_html_tags = "deny"
 invalid_rust_codeblocks = "deny"
-bare_urls = "deny"
-unescaped_backticks = "deny"
+missing_crate_level_docs = "deny"
+private_doc_tests = "deny"
+private_intra_doc_links = "deny"
 redundant_explicit_links = "deny"
+unescaped_backticks = "deny"

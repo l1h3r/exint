@@ -250,6 +250,7 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `or disjoint $type` instruction
+    #[cfg(feature = "disjoint_bitor")]
     #[inline]
     unsafe fn disjoint_bor(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.

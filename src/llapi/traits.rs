@@ -1,6 +1,6 @@
 use crate::llapi::macros::const_trait_impl;
-use crate::llapi::utils::msb_index;
 use crate::llapi::utils::SIGN;
+use crate::llapi::utils::msb_index;
 
 // -----------------------------------------------------------------------------
 // Generic Constants

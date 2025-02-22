@@ -176,6 +176,7 @@ implement! {
   }
 }
 
+#[cfg(feature = "strict_overflow_ops")]
 implement! {
   /// Provides intentionally-strict arithmetic on `T`.
   ///

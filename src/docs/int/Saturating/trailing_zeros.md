@@ -9,5 +9,7 @@ Basic usage:
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 # use exint::*;
+use exint::Saturating;
+
 assert_eq!(Saturating(int!(0b00101000)).trailing_zeros(), 3);
 ```

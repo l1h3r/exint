@@ -94,6 +94,7 @@ pub(crate) const fn bnot<T: Uint, const N: usize>(integer: T) -> T {
 /// # Safety
 ///
 /// This results in undefined behavior when `(lhs & rhs) != 0`.
+#[cfg(feature = "disjoint_bitor")]
 #[inline]
 #[track_caller]
 pub(crate) const unsafe fn disjoint_bor<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
