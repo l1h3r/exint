@@ -5,10 +5,13 @@ most significant bit, second least-significant bit becomes second
 most-significant bit, etc.
 """
 examples = """
-let n = uint!($to_swap);
-let m = n.swap_bytes();
+use exint::$outer;
 
-assert_eq!(m, uint!($swapped));
+let n = $outer($inner!($to_swap));
+let m = n.reverse_bits();
+
+assert_eq!(m, $outer($inner!($reverse)));
+assert_eq!($outer($inner!(0)), $outer($inner!(0).reverse_bits()));
 """
 
 [swap_bytes]
@@ -16,11 +19,12 @@ overview = """
 Reverses the byte order of the integer.
 """
 examples = """
-let n = uint!($to_swap);
-let m = n.reverse_bits();
+use exint::$outer;
 
-assert_eq!(m, uint!($reverse));
-assert_eq!(uint!(0), uint!(0).reverse_bits());
+let n = $outer($inner!($to_swap));
+let m = n.swap_bytes();
+
+assert_eq!(m, $outer($inner!($swapped)));
 """
 
 [rotate_left]
@@ -31,8 +35,10 @@ wrapping the truncated bits to the end of the resulting integer.
 Please note this isn't the same operation as the `<<` shifting operator!
 """
 examples = """
-let n = uint!($rotate_from);
-let m = uint!($rotate_into);
+use exint::$outer;
+
+let n: $outer<$inner> = $outer($inner!($rotate_from));
+let m: $outer<$inner> = $outer($inner!($rotate_into));
 
 assert_eq!(n.rotate_left($rotate_size), m);
 """
@@ -45,8 +51,10 @@ wrapping the truncated bits to the beginning of the resulting integer.
 Please note this isn't the same operation as the `>>` shifting operator!
 """
 examples = """
-let n = uint!($rotate_into);
-let m = uint!($rotate_from);
+use exint::$outer;
+
+let n: $outer<$inner> = $outer($inner!($rotate_into));
+let m: $outer<$inner> = $outer($inner!($rotate_from));
 
 assert_eq!(n.rotate_right($rotate_size), m);
 """
@@ -56,9 +64,9 @@ overview = """
 Returns the number of ones in the binary representation of `self`.
 """
 examples = """
-assert_eq!(uint!(0b01001100).count_ones(), 3);
-assert_eq!(uint!(0).count_ones(), 0);
-assert_eq!(uint::MAX.count_ones(), $bits);
+use exint::$outer;
+
+assert_eq!($outer($inner!(0b01001100)).count_ones(), 3);
 """
 
 [count_zeros]
@@ -66,33 +74,23 @@ overview = """
 Returns the number of zeros in the binary representation of `self`.
 """
 examples = """
-assert_eq!(uint!(0).count_zeros(), $bits);
-assert_eq!(uint::MAX.count_zeros(), 0);
+use exint::$outer;
+
+assert_eq!($outer(!$inner!(0)).count_zeros(), 0);
 """
 
 [leading_ones]
 overview = """
-Returns the number of leading ones in the binary representation of `self`.
 """
 examples = """
-assert_eq!((!(uint::MAX >> 2u32)).leading_ones(), 2);
-assert_eq!(uint!(0).leading_ones(), 0);
-assert_eq!(uint::MAX.leading_ones(), $bits);
+assert_eq!($outer($inner!(0)).leading_ones(), 0);
 """
 
 [leading_zeros]
 overview = """
-Returns the number of leading zeros in the binary representation of `self`.
-
-Depending on what you're doing with the value, you might also be interested in the
-[`ilog2`] function which returns a consistent number, even if the type widens.
-
-[`ilog2`]: Self::ilog2
 """
 examples = """
-assert_eq!((uint::MAX >> 2u32).leading_zeros(), 2);
-assert_eq!(uint!(0).leading_zeros(), $bits);
-assert_eq!(uint::MAX.leading_zeros(), 0);
+assert_eq!($outer($inner!(0)).leading_zeros(), $bits);
 """
 
 [trailing_ones]
@@ -100,9 +98,7 @@ overview = """
 Returns the number of trailing ones in the binary representation of `self`.
 """
 examples = """
-assert_eq!(uint!(0b01010111).trailing_ones(), 3);
-assert_eq!(uint!(0).trailing_ones(), 0);
-assert_eq!(uint::MAX.trailing_ones(), $bits);
+assert_eq!($outer($inner!(0b01010111)).trailing_ones(), 3);
 """
 
 [trailing_zeros]
@@ -110,7 +106,5 @@ overview = """
 Returns the number of trailing zeros in the binary representation of `self`.
 """
 examples = """
-assert_eq!(uint!(0b00101000).trailing_zeros(), 3);
-assert_eq!(uint!(0).trailing_zeros(), $bits);
-assert_eq!(uint::MAX.trailing_zeros(), 0);
+assert_eq!($outer($inner!(0b00101000)).trailing_zeros(), 3);
 """

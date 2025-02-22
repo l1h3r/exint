@@ -1,338 +1,206 @@
-use aho_corasick::AhoCorasick;
-use basic_toml::from_str;
-use serde::Deserialize;
-use std::collections::HashMap;
+use std::fs;
+use std::fs::File;
+use std::io::BufWriter;
 use std::io::Error;
 use std::io::Write;
-use std::iter;
-use std::str;
-use std::sync::LazyLock;
+use std::path::Path;
+use std::path::PathBuf;
 
-// -----------------------------------------------------------------------------
-// Variables
-// -----------------------------------------------------------------------------
+use crate::format::StringFmt;
+use crate::format::EXAMPLE_PRELUDE;
+use crate::parse::DocMap;
+use crate::parse::DocStr;
+use crate::parse::Value;
 
-const EXAMPLE_PRELUDE: &str = "
-# #![allow(non_camel_case_types)]
-# type uint = exint::uint<4>;
-# type int  = exint::int<4>;
-# use exint::*;
-";
-
-const STRICT_OVERFLOW: &str = "
-# Panics
-
-## Overflow behavior
-
-This function will always panic on overflow, regardless of whether overflow checks are enabled.
-";
-
-mod vars {
-  pub const BITS: &str = "32";
-
-  pub const UINT_MIN: &str = "0";
-  pub const UINT_MAX: &str = "4294967295";
-
-  pub const INT_MIN: &str = "-2147483648";
-  pub const INT_MAX: &str = "2147483647";
-
-  pub const TO_SWAP: &str = "0x12345678";
-  pub const SWAPPED: &str = "0x78563412";
-
-  pub const SWAP_BE: &str = "[0x12, 0x34, 0x56, 0x78]";
-  pub const SWAP_LE: &str = "[0x78, 0x56, 0x34, 0x12]";
-
-  pub const REVERSE: &str = "0x1E6A2C48";
-
-  pub const ROTATE_SIZE: &str = "16";
-  pub const ROTATE_FROM: &str = "0x12003400";
-  pub const ROTATE_INTO: &str = "0x34001200";
-
-  pub const STRICT_OVERFLOW: &str = super::trim(super::STRICT_OVERFLOW);
-}
-
-static AHO: LazyLock<AhoCorasick> =
-  LazyLock::new(|| AhoCorasick::builder().build(Variables::KEYS).unwrap());
-
-struct Variables;
-
-impl Variables {
-  const SIZE: usize = 14;
-
-  const KEYS: &'static [&'static str; Self::SIZE] = &[
-    "$bits",
-    "$uint_min",
-    "$uint_max",
-    "$int_min",
-    "$int_max",
-    "$to_swap",
-    "$swapped",
-    "$swap_be",
-    "$swap_le",
-    "$reverse",
-    "$rotate_size",
-    "$rotate_from",
-    "$rotate_into",
-    "$strict_overflow",
-  ];
-
-  // Note: This *MUST* be in the same order as `KEYS`.
-  const VARS: &'static [&'static str; Self::SIZE] = &[
-    self::vars::BITS,
-    self::vars::UINT_MIN,
-    self::vars::UINT_MAX,
-    self::vars::INT_MIN,
-    self::vars::INT_MAX,
-    self::vars::TO_SWAP,
-    self::vars::SWAPPED,
-    self::vars::SWAP_BE,
-    self::vars::SWAP_LE,
-    self::vars::REVERSE,
-    self::vars::ROTATE_SIZE,
-    self::vars::ROTATE_FROM,
-    self::vars::ROTATE_INTO,
-    self::vars::STRICT_OVERFLOW,
-  ];
-
-  fn replace(string: &str) -> String {
-    AHO.replace_all(string, Self::VARS)
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Source
-// -----------------------------------------------------------------------------
-
-pub struct Source {
-  uint: bool,
-  data: &'static str,
-}
-
-impl Source {
-  const fn new(uint: bool, data: &'static str) -> Self {
-    Self { uint, data }
-  }
-
-  pub const fn uint(&self) -> bool {
-    self.uint
-  }
-
-  pub const fn data(&self) -> &'static str {
-    self.data
-  }
-}
+mod format;
+mod parse;
+mod utils;
 
 // -----------------------------------------------------------------------------
 // Source List
 // -----------------------------------------------------------------------------
 
 pub struct SourceList {
-  data: &'static [Source],
+  data: &'static [&'static str],
 }
 
 impl SourceList {
-  const UINT: Self = Self {
+  pub const SINT_TY: Self = Self {
     data: &[
-      Source::new(true, include_str!("docs/uint/arithmetic/bigint.toml")),
-      Source::new(true, include_str!("docs/uint/arithmetic/checked.toml")),
-      Source::new(true, include_str!("docs/uint/arithmetic/general.toml")),
-      Source::new(true, include_str!("docs/uint/arithmetic/overflowing.toml")),
-      Source::new(true, include_str!("docs/uint/arithmetic/saturating.toml")),
-      Source::new(true, include_str!("docs/uint/arithmetic/strict.toml")),
-      Source::new(true, include_str!("docs/uint/arithmetic/unbounded.toml")),
-      Source::new(true, include_str!("docs/uint/arithmetic/unchecked.toml")),
-      Source::new(true, include_str!("docs/uint/arithmetic/wrapping.toml")),
-      Source::new(true, include_str!("docs/uint/bit_tools.toml")),
-      Source::new(true, include_str!("docs/uint/byteorder.toml")),
-      Source::new(true, include_str!("docs/uint/constants.toml")),
-      Source::new(true, include_str!("docs/uint/conversion.toml")),
-      Source::new(true, include_str!("docs/uint/parse_str.toml")),
+      include_str!("docs/sint/arithmetic/bigint.toml"),
+      include_str!("docs/sint/arithmetic/checked.toml"),
+      include_str!("docs/sint/arithmetic/general.toml"),
+      include_str!("docs/sint/arithmetic/overflowing.toml"),
+      include_str!("docs/sint/arithmetic/saturating.toml"),
+      include_str!("docs/sint/arithmetic/strict.toml"),
+      include_str!("docs/sint/arithmetic/unbounded.toml"),
+      include_str!("docs/sint/arithmetic/unchecked.toml"),
+      include_str!("docs/sint/arithmetic/wrapping.toml"),
+      include_str!("docs/sint/bit_tools.toml"),
+      include_str!("docs/sint/byteorder.toml"),
+      include_str!("docs/sint/constants.toml"),
+      include_str!("docs/sint/conversion.toml"),
+      include_str!("docs/sint/parse_str.toml"),
     ],
   };
 
-  const SINT: Self = Self {
+  pub const UINT_TY: Self = Self {
     data: &[
-      Source::new(false, include_str!("docs/sint/arithmetic/bigint.toml")),
-      Source::new(false, include_str!("docs/sint/arithmetic/checked.toml")),
-      Source::new(false, include_str!("docs/sint/arithmetic/general.toml")),
-      Source::new(false, include_str!("docs/sint/arithmetic/overflowing.toml")),
-      Source::new(false, include_str!("docs/sint/arithmetic/saturating.toml")),
-      Source::new(false, include_str!("docs/sint/arithmetic/strict.toml")),
-      Source::new(false, include_str!("docs/sint/arithmetic/unbounded.toml")),
-      Source::new(false, include_str!("docs/sint/arithmetic/unchecked.toml")),
-      Source::new(false, include_str!("docs/sint/arithmetic/wrapping.toml")),
-      Source::new(false, include_str!("docs/sint/bit_tools.toml")),
-      Source::new(false, include_str!("docs/sint/byteorder.toml")),
-      Source::new(false, include_str!("docs/sint/constants.toml")),
-      Source::new(false, include_str!("docs/sint/conversion.toml")),
-      Source::new(false, include_str!("docs/sint/parse_str.toml")),
+      include_str!("docs/uint/arithmetic/bigint.toml"),
+      include_str!("docs/uint/arithmetic/checked.toml"),
+      include_str!("docs/uint/arithmetic/general.toml"),
+      include_str!("docs/uint/arithmetic/overflowing.toml"),
+      include_str!("docs/uint/arithmetic/saturating.toml"),
+      include_str!("docs/uint/arithmetic/strict.toml"),
+      include_str!("docs/uint/arithmetic/unbounded.toml"),
+      include_str!("docs/uint/arithmetic/unchecked.toml"),
+      include_str!("docs/uint/arithmetic/wrapping.toml"),
+      include_str!("docs/uint/bit_tools.toml"),
+      include_str!("docs/uint/byteorder.toml"),
+      include_str!("docs/uint/constants.toml"),
+      include_str!("docs/uint/conversion.toml"),
+      include_str!("docs/uint/parse_str.toml"),
     ],
   };
 
-  pub fn iter() -> impl Iterator<Item = &'static Source> {
-    Self::UINT.data.iter().chain(Self::SINT.data)
-  }
-}
+  pub const WRAPPER: Self = Self {
+    data: &[
+      include_str!("docs/wrapper/bit_tools.toml"),
+      include_str!("docs/wrapper/byteorder.toml"),
+      include_str!("docs/wrapper/constants.toml"),
+    ],
+  };
 
-// -----------------------------------------------------------------------------
-// Maybe List
-// -----------------------------------------------------------------------------
-
-#[derive(Debug, Deserialize)]
-#[serde(untagged)]
-enum MaybeList<T> {
-  Item(T),
-  List(Vec<T>),
-}
-
-impl<T> MaybeList<T> {
-  fn iter(&self) -> Box<dyn Iterator<Item = &T> + '_> {
-    match self {
-      Self::Item(item) => Box::new(iter::once(item)),
-      Self::List(list) => Box::new(list.iter()),
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Docs
-// -----------------------------------------------------------------------------
-
-#[derive(Debug, Deserialize)]
-pub struct Docs {
-  overview: &'static str,
-  examples: Option<MaybeList<&'static str>>,
-  examples_overflow: Option<MaybeList<&'static str>>,
-  examples_div_zero: Option<MaybeList<&'static str>>,
-  examples_panicking: Option<MaybeList<&'static str>>,
-}
-
-impl Docs {
-  pub fn write_docstring<W>(&self, mut writer: W) -> Result<(), Error>
+  pub fn build_base_ty<P>(&self, path: P) -> Result<(), Error>
   where
-    W: Write,
+    P: AsRef<Path>,
   {
-    writeln!(writer, "{}", Variables::replace(self.overview.trim()))?;
-
-    if !self.has_examples() {
-      return Ok(());
-    }
-
-    writeln!(writer)?;
-    writeln!(writer, "# Examples")?;
-
-    if let Some(ref examples) = self.examples {
-      static HEADER: &str = "Basic usage:";
-      self.write_examples(&mut writer, HEADER, examples)?;
-    }
-
-    if let Some(ref examples) = self.examples_overflow {
-      static HEADER: &str = "The following panics because of overflow:";
-      self.write_examples_panicking(&mut writer, HEADER, examples)?;
-    }
-
-    if let Some(ref examples) = self.examples_div_zero {
-      static HEADER: &str = "The following panics because of division by zero:";
-      self.write_examples_panicking(&mut writer, HEADER, examples)?;
-    }
-
-    if let Some(ref examples) = self.examples_panicking {
-      static HEADER: &str = "This will panic:";
-      self.write_examples_panicking(&mut writer, HEADER, examples)?;
-    }
-
-    Ok(())
+    self.compile_docstring(path.as_ref(), &[], &[])
   }
 
-  fn write_examples<W>(
+  pub fn build_wrapper<P>(
     &self,
-    writer: &mut W,
-    header: &'static str,
-    examples: &MaybeList<&'static str>,
+    path: P,
+    outer: &'static str,
+    inner: &'static str,
   ) -> Result<(), Error>
   where
-    W: Write,
+    P: AsRef<Path>,
   {
-    writeln!(writer)?;
-    writeln!(writer, "{}", header)?;
-
-    for example in examples.iter() {
-      writeln!(writer)?;
-      writeln!(writer, "```")?;
-      writeln!(writer, "{}", EXAMPLE_PRELUDE.trim())?;
-      writeln!(writer, "{}", Variables::replace(example.trim()))?;
-      writeln!(writer, "```")?;
-    }
-
-    Ok(())
+    self.compile_docstring(path.as_ref(), &["$outer", "$inner"], &[outer, inner])
   }
 
-  fn write_examples_panicking<W>(
+  fn compile_docstring(
     &self,
-    writer: &mut W,
-    header: &'static str,
-    examples: &MaybeList<&'static str>,
-  ) -> Result<(), Error>
-  where
-    W: Write,
-  {
-    writeln!(writer)?;
-    writeln!(writer, "{}", header)?;
+    path: &Path,
+    extra_keys: &[&'static str],
+    extra_vars: &[&'static str],
+  ) -> Result<(), Error> {
+    fs::create_dir_all(path)?;
 
-    for example in examples.iter() {
-      writeln!(writer)?;
-      writeln!(writer, "```should_panic")?;
-      writeln!(writer, "{}", EXAMPLE_PRELUDE.trim())?;
-      writeln!(writer, "{}", Variables::replace(example.trim()))?;
-      writeln!(writer, "```")?;
+    for source in self.data {
+      let docs: DocMap = DocMap::parse(source)?;
+
+      for (name, data) in docs.iter() {
+        let output: PathBuf = path.join(name).with_extension("md");
+        let writer: File = File::create(output)?;
+        let writer: BufWriter<File> = BufWriter::new(writer);
+
+        write_docstring(writer, data, extra_keys, extra_vars)?;
+      }
     }
 
     Ok(())
   }
-
-  fn has_examples(&self) -> bool {
-    self.examples.is_some()
-      || self.examples_overflow.is_some()
-      || self.examples_div_zero.is_some()
-      || self.examples_panicking.is_some()
-  }
 }
 
-// -----------------------------------------------------------------------------
-// Doc Map
-// -----------------------------------------------------------------------------
+fn write_docstring<W>(
+  mut writer: W,
+  doc_str: &DocStr,
+  extra_keys: &[&'static str],
+  extra_vars: &[&'static str],
+) -> Result<(), Error>
+where
+  W: Write,
+{
+  let mut formatter: StringFmt<'_> = StringFmt::new(doc_str.overview(), extra_keys, extra_vars);
 
-#[derive(Debug, Deserialize)]
-#[serde(transparent)]
-pub struct DocMap {
-  #[serde(borrow)]
-  data: HashMap<&'static str, Docs>,
+  writeln!(writer, "{}", formatter)?;
+
+  if !doc_str.has_examples() {
+    return Ok(());
+  }
+
+  writeln!(writer)?;
+  writeln!(writer, "# Examples")?;
+
+  if let Some(examples) = doc_str.examples() {
+    static HEADER: &str = "Basic usage:";
+    write_examples(&mut writer, HEADER, examples, &mut formatter)?;
+  }
+
+  if let Some(examples) = doc_str.examples_overflow() {
+    static HEADER: &str = "The following panics because of overflow:";
+    write_examples_panicking(&mut writer, HEADER, examples, &mut formatter)?;
+  }
+
+  if let Some(examples) = doc_str.examples_div_zero() {
+    static HEADER: &str = "The following panics because of division by zero:";
+    write_examples_panicking(&mut writer, HEADER, examples, &mut formatter)?;
+  }
+
+  if let Some(examples) = doc_str.examples_panicking() {
+    static HEADER: &str = "This will panic:";
+    write_examples_panicking(&mut writer, HEADER, examples, &mut formatter)?;
+  }
+
+  Ok(())
 }
 
-impl DocMap {
-  pub fn parse(source: &'static Source) -> Result<Self, Error> {
-    from_str(source.data).map_err(Error::other)
+fn write_examples<W>(
+  writer: &mut W,
+  header: &'static str,
+  examples: &Value,
+  formatter: &mut StringFmt<'_>,
+) -> Result<(), Error>
+where
+  W: Write,
+{
+  writeln!(writer)?;
+  writeln!(writer, "{}", header)?;
+
+  for example in examples.iter() {
+    formatter.set_value(example);
+    writeln!(writer)?;
+    writeln!(writer, "```")?;
+    writeln!(writer, "{}", EXAMPLE_PRELUDE.trim())?;
+    writeln!(writer, "{}", formatter)?;
+    writeln!(writer, "```")?;
   }
 
-  pub fn iter(&self) -> impl Iterator<Item = (&'static str, &Docs)> {
-    self.data.iter().map(|(key, value)| (*key, value))
-  }
+  Ok(())
 }
 
-// -----------------------------------------------------------------------------
-// Misc. Utilities
-// -----------------------------------------------------------------------------
+fn write_examples_panicking<W>(
+  writer: &mut W,
+  header: &'static str,
+  examples: &Value,
+  formatter: &mut StringFmt<'_>,
+) -> Result<(), Error>
+where
+  W: Write,
+{
+  writeln!(writer)?;
+  writeln!(writer, "{}", header)?;
 
-const fn trim(string: &'static str) -> &'static str {
-  let mut bytes: &[u8] = string.as_bytes();
-
-  while let [b' ' | b'\t' | b'\n', tail @ ..] = bytes {
-    bytes = tail;
+  for example in examples.iter() {
+    formatter.set_value(example);
+    writeln!(writer)?;
+    writeln!(writer, "```should_panic")?;
+    writeln!(writer, "{}", EXAMPLE_PRELUDE.trim())?;
+    writeln!(writer, "{}", formatter)?;
+    writeln!(writer, "```")?;
   }
 
-  while let [head @ .., b' ' | b'\t' | b'\n'] = bytes {
-    bytes = head;
-  }
-
-  unsafe { str::from_utf8_unchecked(bytes) }
+  Ok(())
 }
