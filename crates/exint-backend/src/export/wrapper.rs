@@ -1,6 +1,10 @@
 use ::core::cmp::Ordering;
 use ::core::marker::Copy;
 
+use crate::export::bitwise::SpecBitwise;
+use crate::export::compare::SpecCompare;
+use crate::export::convert::SpecConvert;
+use crate::export::inspect::SpecInspect;
 use crate::types::Int;
 
 macro_rules! assert_size_of {
@@ -9,6 +13,20 @@ macro_rules! assert_size_of {
       ::core::mem::size_of::<$type>() == $size,
       "unexpected size_of(T)",
     );
+  };
+}
+
+macro_rules! cast {
+  (int($size:ident) from $expr:expr) => {
+    cast!($expr => Int<$size>)
+  };
+  ($type:ident from $expr:expr) => {
+    cast!($expr => $type)
+  };
+  ($expr:expr => $type:ty) => {
+    #[allow(unused_unsafe)]
+    // SAFETY: This is guaranteed to be safe by the caller.
+    unsafe { $crate::utils::transmute::<_, $type>($expr) }
   };
 }
 
@@ -30,14 +48,18 @@ pub const fn cast<const T: usize, const U: usize, const UINT: bool>(integer: Int
 #[inline]
 pub const fn eq<T: Copy, const S: usize>(lhs: T, rhs: T) -> bool {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::eq")
+  SpecCompare::eq(cast!(int(S) from lhs), cast!(int(S) from rhs))
 }
 
 #[must_use]
 #[inline]
 pub const fn cmp<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> Ordering {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::cmp")
+  if UINT {
+    SpecCompare::ucmp(cast!(int(S) from lhs), cast!(int(S) from rhs))
+  } else {
+    SpecCompare::scmp(cast!(int(S) from lhs), cast!(int(S) from rhs))
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -48,28 +70,28 @@ pub const fn cmp<T: Copy, const S: usize, const UINT: bool>(lhs: T, rhs: T) -> O
 #[inline]
 pub const fn band<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::band")
+  cast!(T from SpecBitwise::and(cast!(int(S) from lhs), cast!(int(S) from rhs)))
 }
 
 #[must_use]
 #[inline]
 pub const fn bor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::bor")
+  cast!(T from SpecBitwise::or(cast!(int(S) from lhs), cast!(int(S) from rhs)))
 }
 
 #[must_use]
 #[inline]
 pub const fn bxor<T: Copy, const S: usize>(lhs: T, rhs: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::bxor")
+  cast!(T from SpecBitwise::xor(cast!(int(S) from lhs), cast!(int(S) from rhs)))
 }
 
 #[must_use]
 #[inline]
 pub const fn bnot<T: Copy, const S: usize>(integer: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::bnot")
+  cast!(T from SpecBitwise::not(cast!(int(S) from integer)))
 }
 
 // -----------------------------------------------------------------------------
@@ -80,28 +102,28 @@ pub const fn bnot<T: Copy, const S: usize>(integer: T) -> T {
 #[inline]
 pub const fn swap1<T: Copy, const S: usize>(integer: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::swap1")
+  cast!(T from SpecConvert::swap1(cast!(int(S) from integer)))
 }
 
 #[must_use]
 #[inline]
 pub const fn swap8<T: Copy, const S: usize>(integer: T) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::swap8")
+  cast!(T from SpecConvert::swap8(cast!(int(S) from integer)))
 }
 
 #[must_use]
 #[inline]
 pub const fn rotl<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::rotl")
+  cast!(T from SpecConvert::rotl(cast!(int(S) from integer), bits))
 }
 
 #[must_use]
 #[inline]
 pub const fn rotr<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::rotr")
+  cast!(T from SpecConvert::rotr(cast!(int(S) from integer), bits))
 }
 
 // -----------------------------------------------------------------------------
@@ -112,19 +134,19 @@ pub const fn rotr<T: Copy, const S: usize>(integer: T, bits: u32) -> T {
 #[inline]
 pub const fn ctpop<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::ctpop")
+  SpecInspect::ctpop(cast!(int(S) from integer))
 }
 
 #[must_use]
 #[inline]
 pub const fn ctlz<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::ctlz")
+  SpecInspect::ctlz(cast!(int(S) from integer))
 }
 
 #[must_use]
 #[inline]
 pub const fn cttz<T: Copy, const S: usize>(integer: T) -> u32 {
   assert_size_of!(T, S);
-  ::core::panic!("intrinsics::cttz")
+  SpecInspect::cttz(cast!(int(S) from integer))
 }
