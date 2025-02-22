@@ -78,28 +78,15 @@ specialize! {
 // -----------------------------------------------------------------------------
 
 specialize! {
-  impl SpecConvert for Int<3|5|6|7> {
-    // LLVM generates `@llvm.bswap.$type` intrinsic
-    //
-    // Note: LLVM only generates this intrinsic when the integer type has an
-    //       even number of bytes (positive multiple of 16 bits).
-    #[inline]
-    fn swap8(self) -> Self {
-      (::core::intrinsics::bswap(self.zext()) >> Self::UDIFF).trunc()
-    }
-  }
-}
-
-specialize! {
-  impl SpecConvert for Int<9|10|11|12|13|14|15> {
+  impl SpecConvert for Int<3|5|6|7|9|10|11|12|13|14|15> {
     // LLVM generates `@llvm.bitreverse.$type` intrinsic
     //
     // Note: LLVM only recognizes this pattern when increasing the loop unroll
     //       threshold with the following: `-C llvm-args=-unroll-threshold=n`
     #[inline]
     fn swap1(self) -> Self {
-      let mut input: u128 = self.zext();
-      let mut value: u128 = 0;
+      let mut input: <Self as Exts>::Uint = self.zext();
+      let mut value: <Self as Exts>::Uint = 0;
 
       cfor! {
         @for index in 0..(Self::BITS as usize) {
