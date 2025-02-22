@@ -187,7 +187,7 @@ macro_rules! __int {
     $crate::__int!(@parse int<32>::__parse(stringify!($input)))
   };
   ($input:literal i512) => {
-    $crate::__int!(@parse int<64> stringify!($input))
+    $crate::__int!(@parse int<64>::__parse(stringify!($input)))
   };
   (@parse int<$size:literal>::$parse:ident($input:expr_2021)) => {
     const { $crate::int::<$size>::$parse($input) }
