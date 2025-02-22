@@ -1,6 +1,8 @@
 use crate::condition::Condition;
 use crate::context::Context;
 
+static STD: &[usize] = &[1, 2, 4, 8, 16];
+
 pub fn swap1(context: &mut Context) {
   context.build("convert_swap1", |mut func| {
     func = func.signature("fn %NAME(a: %TYPE) -> %TYPE");
@@ -30,6 +32,7 @@ pub fn swap8(context: &mut Context) {
 
 pub fn rotl(context: &mut Context) {
   context.build("convert_rotl", |mut func| {
+    func = func.skip_emit(Condition::Func(|kind| !STD.contains(&kind.bytes()))); // TODO: FIXME
     func = func.signature("fn %NAME(a: %TYPE, b: u32) -> %TYPE");
     func = func.statement("a.rotate_left(b)");
     func = func.filecheck("load %TYPE, ptr %REG",                                 Condition::Gt(64));
@@ -45,6 +48,7 @@ pub fn rotl(context: &mut Context) {
 
 pub fn rotr(context: &mut Context) {
   context.build("convert_rotr", |mut func| {
+    func = func.skip_emit(Condition::Func(|kind| !STD.contains(&kind.bytes()))); // TODO: FIXME
     func = func.signature("fn %NAME(a: %TYPE, b: u32) -> %TYPE");
     func = func.statement("a.rotate_right(b)");
     func = func.filecheck("load %TYPE, ptr %REG",                                 Condition::Gt(64));
