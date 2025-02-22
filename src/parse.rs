@@ -34,26 +34,66 @@ macro_rules! uint {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __uint {
-  ($input:literal)      => { $crate::__uint!($input u32) }; // Default to u32 if no suffix
-  ($input:literal u8)   => { $crate::__uint!(@parse uint<1> stringify!($input)) };
-  ($input:literal u16)  => { $crate::__uint!(@parse uint<2> stringify!($input)) };
-  ($input:literal u24)  => { $crate::__uint!(@parse uint<3> stringify!($input)) };
-  ($input:literal u32)  => { $crate::__uint!(@parse uint<4> stringify!($input)) };
-  ($input:literal u40)  => { $crate::__uint!(@parse uint<5> stringify!($input)) };
-  ($input:literal u48)  => { $crate::__uint!(@parse uint<6> stringify!($input)) };
-  ($input:literal u56)  => { $crate::__uint!(@parse uint<7> stringify!($input)) };
-  ($input:literal u64)  => { $crate::__uint!(@parse uint<8> stringify!($input)) };
-  ($input:literal u72)  => { $crate::__uint!(@parse uint<9> stringify!($input)) };
-  ($input:literal u80)  => { $crate::__uint!(@parse uint<10> stringify!($input)) };
-  ($input:literal u88)  => { $crate::__uint!(@parse uint<11> stringify!($input)) };
-  ($input:literal u96)  => { $crate::__uint!(@parse uint<12> stringify!($input)) };
-  ($input:literal u104) => { $crate::__uint!(@parse uint<13> stringify!($input)) };
-  ($input:literal u112) => { $crate::__uint!(@parse uint<14> stringify!($input)) };
-  ($input:literal u120) => { $crate::__uint!(@parse uint<15> stringify!($input)) };
-  ($input:literal u128) => { $crate::__uint!(@parse uint<16> stringify!($input)) };
-  ($input:literal u256) => { $crate::__uint!(@parse uint<32> stringify!($input)) };
-  ($input:literal u512) => { $crate::__uint!(@parse uint<64> stringify!($input)) };
-  (@parse uint<$size:literal> $input:expr_2021) => { const { $crate::uint::<$size>::__parse($input) } };
+  ($input:literal) => {
+    $crate::__uint!($input u32) // Default to u32 if no suffix
+  };
+  ($input:literal u8) => {
+    $crate::__uint!(@parse uint<1>::from_u8($input))
+  };
+  ($input:literal u16) => {
+    $crate::__uint!(@parse uint<2>::from_u16($input))
+  };
+  ($input:literal u24) => {
+    $crate::__uint!(@parse uint<3>::__parse(stringify!($input)))
+  };
+  ($input:literal u32) => {
+    $crate::__uint!(@parse uint<4>::from_u32($input))
+  };
+  ($input:literal u40) => {
+    $crate::__uint!(@parse uint<5>::__parse(stringify!($input)))
+  };
+  ($input:literal u48) => {
+    $crate::__uint!(@parse uint<6>::__parse(stringify!($input)))
+  };
+  ($input:literal u56) => {
+    $crate::__uint!(@parse uint<7>::__parse(stringify!($input)))
+  };
+  ($input:literal u64) => {
+    $crate::__uint!(@parse uint<8>::from_u64($input))
+  };
+  ($input:literal u72) => {
+    $crate::__uint!(@parse uint<9>::__parse(stringify!($input)))
+  };
+  ($input:literal u80) => {
+    $crate::__uint!(@parse uint<10>::__parse(stringify!($input)))
+  };
+  ($input:literal u88) => {
+    $crate::__uint!(@parse uint<11>::__parse(stringify!($input)))
+  };
+  ($input:literal u96) => {
+    $crate::__uint!(@parse uint<12>::__parse(stringify!($input)))
+  };
+  ($input:literal u104) => {
+    $crate::__uint!(@parse uint<13>::__parse(stringify!($input)))
+  };
+  ($input:literal u112) => {
+    $crate::__uint!(@parse uint<14>::__parse(stringify!($input)))
+  };
+  ($input:literal u120) => {
+    $crate::__uint!(@parse uint<15>::__parse(stringify!($input)))
+  };
+  ($input:literal u128) => {
+    $crate::__uint!(@parse uint<16>::from_u128($input))
+  };
+  ($input:literal u256) => {
+    $crate::__uint!(@parse uint<32>::__parse(stringify!($input)))
+  };
+  ($input:literal u512) => {
+    $crate::__uint!(@parse uint<64>::__parse(stringify!($input)))
+  };
+  (@parse uint<$size:literal>::$parse:ident($input:expr_2021)) => {
+    const { $crate::uint::<$size>::$parse($input) }
+  };
 }
 
 /// Create a generic signed integer from a literal expression.
@@ -92,26 +132,66 @@ macro_rules! int {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __int {
-  ($input:literal)      => { $crate::__int!($input i32) }; // Default to i32 if no suffix
-  ($input:literal i8)   => { $crate::__int!(@parse int<1> stringify!($input)) };
-  ($input:literal i16)  => { $crate::__int!(@parse int<2> stringify!($input)) };
-  ($input:literal i24)  => { $crate::__int!(@parse int<3> stringify!($input)) };
-  ($input:literal i32)  => { $crate::__int!(@parse int<4> stringify!($input)) };
-  ($input:literal i40)  => { $crate::__int!(@parse int<5> stringify!($input)) };
-  ($input:literal i48)  => { $crate::__int!(@parse int<6> stringify!($input)) };
-  ($input:literal i56)  => { $crate::__int!(@parse int<7> stringify!($input)) };
-  ($input:literal i64)  => { $crate::__int!(@parse int<8> stringify!($input)) };
-  ($input:literal i72)  => { $crate::__int!(@parse int<9> stringify!($input)) };
-  ($input:literal i80)  => { $crate::__int!(@parse int<10> stringify!($input)) };
-  ($input:literal i88)  => { $crate::__int!(@parse int<11> stringify!($input)) };
-  ($input:literal i96)  => { $crate::__int!(@parse int<12> stringify!($input)) };
-  ($input:literal i104) => { $crate::__int!(@parse int<13> stringify!($input)) };
-  ($input:literal i112) => { $crate::__int!(@parse int<14> stringify!($input)) };
-  ($input:literal i120) => { $crate::__int!(@parse int<15> stringify!($input)) };
-  ($input:literal i128) => { $crate::__int!(@parse int<16> stringify!($input)) };
-  ($input:literal i256) => { $crate::__int!(@parse int<32> stringify!($input)) };
-  ($input:literal i512) => { $crate::__int!(@parse int<64> stringify!($input)) };
-  (@parse int<$size:literal> $input:expr_2021) => { const { $crate::int::<$size>::__parse($input) } };
+  ($input:literal) => {
+    $crate::__int!($input i32) // Default to i32 if no suffix
+  };
+  ($input:literal i8) => {
+    $crate::__int!(@parse int<1>::from_i8($input))
+  };
+  ($input:literal i16) => {
+    $crate::__int!(@parse int<2>::from_i16($input))
+  };
+  ($input:literal i24) => {
+    $crate::__int!(@parse int<3>::__parse(stringify!($input)))
+  };
+  ($input:literal i32) => {
+    $crate::__int!(@parse int<4>::from_i32($input))
+  };
+  ($input:literal i40) => {
+    $crate::__int!(@parse int<5>::__parse(stringify!($input)))
+  };
+  ($input:literal i48) => {
+    $crate::__int!(@parse int<6>::__parse(stringify!($input)))
+  };
+  ($input:literal i56) => {
+    $crate::__int!(@parse int<7>::__parse(stringify!($input)))
+  };
+  ($input:literal i64) => {
+    $crate::__int!(@parse int<8>::from_i64($input))
+  };
+  ($input:literal i72) => {
+    $crate::__int!(@parse int<9>::__parse(stringify!($input)))
+  };
+  ($input:literal i80) => {
+    $crate::__int!(@parse int<10>::__parse(stringify!($input)))
+  };
+  ($input:literal i88) => {
+    $crate::__int!(@parse int<11>::__parse(stringify!($input)))
+  };
+  ($input:literal i96) => {
+    $crate::__int!(@parse int<12>::__parse(stringify!($input)))
+  };
+  ($input:literal i104) => {
+    $crate::__int!(@parse int<13>::__parse(stringify!($input)))
+  };
+  ($input:literal i112) => {
+    $crate::__int!(@parse int<14>::__parse(stringify!($input)))
+  };
+  ($input:literal i120) => {
+    $crate::__int!(@parse int<15>::__parse(stringify!($input)))
+  };
+  ($input:literal i128) => {
+    $crate::__int!(@parse int<16>::from_i128($input))
+  };
+  ($input:literal i256) => {
+    $crate::__int!(@parse int<32>::__parse(stringify!($input)))
+  };
+  ($input:literal i512) => {
+    $crate::__int!(@parse int<64> stringify!($input))
+  };
+  (@parse int<$size:literal>::$parse:ident($input:expr_2021)) => {
+    const { $crate::int::<$size>::$parse($input) }
+  };
 }
 
 macro_rules! implement {
@@ -119,58 +199,17 @@ macro_rules! implement {
     impl<const N: usize> crate::$name<N> {
       // TODO: Improve this mess and handle same syntax as builtin literals
       // - support underscores
-      // - fully support b'<char>'
       #[doc(hidden)]
       #[must_use]
       pub const fn __parse(input: &'static str) -> Self {
         let (bytes, radix): (&'static [u8], u32) = match input.as_bytes() {
-          [b'b', b'\'', body @ .., b'\''] => return Self::__parse_char(body),
           [b'0', b'b', tail @ ..] => (tail, 2),
           [b'0', b'o', tail @ ..] => (tail, 8),
           [b'0', b'x', tail @ ..] => (tail, 16),
           bytes => (bytes, 10),
         };
 
-        Self::__parse_text(bytes, radix)
-      }
-
-      const fn __parse_char(input: &'static [u8]) -> Self {
-        match input {
-          [ch] => {
-            Self::from_u8(*ch)
-          }
-          [b'\\', b't'] => {
-            Self::from_u8(b'\t')
-          }
-          [b'\\', b'r'] => {
-            Self::from_u8(b'\r')
-          }
-          [b'\\', b'n'] => {
-            Self::from_u8(b'\n')
-          }
-          [b'\\', b'\\'] => {
-            Self::from_u8(b'\\')
-          }
-          [b'\\', b'\''] => {
-            Self::from_u8(b'\'')
-          }
-          [b'\\', 0x00..=0x1F | 0x7F] => {
-            ::core::panic!("TODO - hex escape")
-          }
-          [b'\\', _byte] => {
-            ::core::panic!("TODO - maybe verbatim")
-          }
-          [b'\\', b'x', body @ ..] => {
-            Self::__parse_text(body, 16)
-          }
-          _ => {
-            ::core::unreachable!()
-          }
-        }
-      }
-
-      const fn __parse_text(input: &'static [u8], radix: u32) -> Self {
-        match Self::from_ascii_radix(input, radix) {
+        match Self::from_ascii_radix(bytes, radix) {
           ::core::result::Result::Ok(value) => value,
           ::core::result::Result::Err(error) => ::core::panic!("{}", error.as_str()),
         }
