@@ -1,6 +1,12 @@
 use crate::types::int;
 use crate::types::uint;
 
+/// A marker trait for integer types.
+///
+/// # Safety
+///
+/// Types implementing this trait must ensure they are valid representations of
+/// integers with no padding or uninitialized bytes.
 pub(crate) unsafe trait Uint: ::core::marker::Copy {
   const UINT: bool;
 }
