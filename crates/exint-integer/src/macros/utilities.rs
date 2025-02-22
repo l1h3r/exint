@@ -1,4 +1,4 @@
-// An attempt to match the default semantics of overflow behaviour.
+// An attempt to match the default semantics of overflow behavior.
 //
 // Ref: https://doc.rust-lang.org/reference/expressions/operator-expr.html#overflow
 //
