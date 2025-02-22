@@ -1,0 +1,972 @@
+use ::core::option::Option;
+use ::core::option::Option::None;
+use ::core::option::Option::Some;
+
+use crate::llapi;
+use crate::panic;
+use crate::types::int;
+use crate::types::macros;
+use crate::types::macros::tri;
+
+/// The generic unsigned integer type.
+///
+/// ## Examples
+///
+/// Note that the examples here use [`uint<4>`] for simplicity and rely on
+/// the [`uint`] macro for constructing literals.
+///
+/// [`uint<4>`]: Self
+/// [`uint`]: crate::uint!
+#[allow(non_camel_case_types)]
+#[repr(transparent)]
+pub struct uint<const N: usize = 4> {
+  bytes: [u8; N],
+}
+
+impl<const N: usize> uint<N> {
+  macros::internals!(uint);
+
+  #[inline]
+  const fn one_less_than_next_power_of_two(self) -> Self {
+    if self.const_le(&Self::ONE) {
+      return Self::ZERO;
+    }
+
+    // SAFETY: `self - 1` is at *least* 2.
+    Self::MAX.const_shr(unsafe { llapi::ctlz_nonzero::<Self, N>(self.const_sub(Self::ONE)) })
+  }
+}
+
+impl<const N: usize> uint<N> {
+  pub const BITS: u32 = Self::MAX.count_ones();
+
+  pub const MAX: Self = Self::MIN.const_not();
+
+  pub const MIN: Self = Self::ZERO;
+}
+
+impl<const N: usize> uint<N> {
+  macros::byteorder!(uint);
+}
+
+impl<const N: usize> uint<N> {
+  macros::bin_tools!(uint);
+}
+
+impl<const N: usize> uint<N> {
+  #[deprecated(since = "TBD", note = "replaced by the `MAX` associated constant on this type")]
+  #[must_use]
+  #[inline]
+  pub const fn max_value() -> Self {
+    Self::MAX
+  }
+
+  #[deprecated(since = "TBD", note = "replaced by the `MIN` associated constant on this type")]
+  #[must_use]
+  #[inline]
+  pub const fn min_value() -> Self {
+    Self::MIN
+  }
+
+  macros::stability! {
+    #[unstable(feature = "integer_sign_cast")]
+    #[must_use = crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn cast_signed(self) -> int<N> {
+      int::from_ne_bytes(self.to_ne_bytes())
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn midpoint(self, _rhs: Self) -> Self {
+    ::core::panic!("uint::midpoint")
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn div_euclid(self, rhs: Self) -> Self {
+    self.const_div(rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn rem_euclid(self, rhs: Self) -> Self {
+    self.const_rem(rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn div_ceil(self, rhs: Self) -> Self {
+    let div: Self = self.const_div(rhs);
+    let rem: Self = self.const_rem(rhs);
+
+    if rem.const_gt(&Self::ZERO) {
+      div.const_add(Self::ONE)
+    } else {
+      div
+    }
+  }
+
+  #[cfg(feature = "int_roundings")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn div_floor(self, rhs: Self) -> Self {
+    self.const_div(rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn next_multiple_of(self, rhs: Self) -> Self {
+    let rem: Self = self.const_rem(rhs);
+
+    if rem.is_zero() {
+      self
+    } else {
+      self.const_add(rhs.const_sub(rem))
+    }
+  }
+
+  // TODO: Optimize with is_val_statically_known
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn pow(self, mut exp: u32) -> Self {
+    if exp == 0 {
+      return Self::ONE;
+    }
+
+    let mut base: Self = self;
+    let mut acc: Self = Self::ONE;
+
+    loop {
+      if (exp & 1) == 1 {
+        acc = acc.const_mul(base);
+
+        if exp == 1 {
+          return acc;
+        }
+      }
+
+      exp /= 2;
+      base = base.const_mul(base);
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn ilog(self, base: Self) -> u32 {
+    assert!(
+      base.const_ge(&Self::TWO),
+      "base of integer logarithm must be at least 2",
+    );
+
+    match self.checked_ilog(base) {
+      Some(log) => log,
+      None => panic::ilog(),
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn ilog2(self) -> u32 {
+    match self.checked_ilog2() {
+      Some(log) => log,
+      None => panic::ilog(),
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn ilog10(self) -> u32 {
+    match self.checked_ilog10() {
+      Some(log) => log,
+      None => panic::ilog(),
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn isqrt(self) -> Self {
+    ::core::panic!("uint::isqrt")
+  }
+
+  // TODO: Optimize for u8
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn abs_diff(self, other: Self) -> Self {
+    if self.const_lt(&other) {
+      other.const_sub(self)
+    } else {
+      self.const_sub(other)
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn next_power_of_two(self) -> Self {
+    self.one_less_than_next_power_of_two().const_add(Self::ONE)
+  }
+
+  #[must_use]
+  #[inline]
+  pub const fn is_power_of_two(self) -> bool {
+    self.count_ones() == 1
+  }
+
+  #[cfg(feature = "unsigned_is_multiple_of")]
+  #[must_use]
+  #[inline]
+  pub const fn is_multiple_of(self, rhs: Self) -> bool {
+    if rhs.is_zero() {
+      self.is_zero()
+    } else {
+      self.const_rem(rhs).is_zero()
+    }
+  }
+}
+
+impl<const N: usize> uint<N> {
+  #[cfg(feature = "bigint_helper_methods")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn carrying_add(self, rhs: Self, carry: bool) -> (Self, bool) {
+    let (a, b): (Self, bool) = self.overflowing_add(rhs);
+    let (c, d): (Self, bool) = a.overflowing_add(Self::from_bool(carry));
+
+    (c, b | d)
+  }
+
+  #[cfg(feature = "bigint_helper_methods")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn borrowing_sub(self, rhs: Self, borrow: bool) -> (Self, bool) {
+    let (a, b): (Self, bool) = self.overflowing_sub(rhs);
+    let (c, d): (Self, bool) = a.overflowing_sub(Self::from_bool(borrow));
+
+    (c, b | d)
+  }
+
+  #[cfg(feature = "bigint_helper_methods")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn carrying_mul(self, rhs: Self, carry: Self) -> (Self, Self) {
+    Self::carrying_mul_add(self, rhs, carry, Self::ZERO)
+  }
+
+  #[cfg(feature = "bigint_helper_methods")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn carrying_mul_add(self, rhs: Self, carry: Self, add: Self) -> (Self, Self) {
+    llapi::carrying_mul_add::<Self, Self, N>(self, rhs, carry, add)
+  }
+
+  #[cfg(feature = "bigint_helper_methods")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn widening_mul(self, rhs: Self) -> (Self, Self) {
+    Self::carrying_mul_add(self, rhs, Self::ZERO, Self::ZERO)
+  }
+}
+
+impl<const N: usize> uint<N> {
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_add(self, rhs: Self) -> Option<Self> {
+    if llapi::unlikely(llapi::overflowing_uadd::<Self, N>(self, rhs).1) {
+      None
+    } else {
+      // SAFETY: We just ensured that this does not overflow.
+      Some(unsafe { llapi::unchecked_uadd::<Self, N>(self, rhs) })
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_add_signed(self, rhs: int<N>) -> Option<Self> {
+    let (result, overflow): (Self, bool) = self.overflowing_add_signed(rhs);
+
+    if llapi::unlikely(overflow) {
+      None
+    } else {
+      Some(result)
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_sub(self, rhs: Self) -> Option<Self> {
+    if self.const_lt(&rhs) {
+      None
+    } else {
+      // SAFETY: We just ensured that this does not overflow.
+      Some(unsafe { llapi::unchecked_usub::<Self, N>(self, rhs) })
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_sub_signed(self, rhs: int<N>) -> Option<Self> {
+    let (result, overflow): (Self, bool) = self.overflowing_sub_signed(rhs);
+
+    if llapi::unlikely(overflow) {
+      None
+    } else {
+      Some(result)
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_mul(self, rhs: Self) -> Option<Self> {
+    let (result, overflow): (Self, bool) = self.overflowing_mul(rhs);
+
+    if llapi::unlikely(overflow) {
+      None
+    } else {
+      Some(result)
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_div(self, rhs: Self) -> Option<Self> {
+    if llapi::unlikely(rhs.is_zero()) {
+      None
+    } else {
+      // SAFETY: We just ensured that we are not dividing by zero.
+      Some(unsafe { llapi::unchecked_udiv::<Self, N>(self, rhs) })
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_div_euclid(self, rhs: Self) -> Option<Self> {
+    if llapi::unlikely(rhs.is_zero()) {
+      None
+    } else {
+      Some(self.div_euclid(rhs))
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_rem(self, rhs: Self) -> Option<Self> {
+    if llapi::unlikely(rhs.is_zero()) {
+      None
+    } else {
+      // SAFETY: We just ensured that we are not dividing by zero.
+      Some(unsafe { llapi::unchecked_urem::<Self, N>(self, rhs) })
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_rem_euclid(self, rhs: Self) -> Option<Self> {
+    if llapi::unlikely(rhs.is_zero()) {
+      None
+    } else {
+      Some(self.rem_euclid(rhs))
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_shl(self, rhs: u32) -> Option<Self> {
+    if rhs < Self::BITS {
+      // SAFETY: We just ensured that `rhs` is in-range.
+      Some(unsafe { self.unchecked_shl(rhs) })
+    } else {
+      None
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_shr(self, rhs: u32) -> Option<Self> {
+    if rhs < Self::BITS {
+      // SAFETY: We just ensured that `rhs` is in-range.
+      Some(unsafe { self.unchecked_shr(rhs) })
+    } else {
+      None
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_neg(self) -> Option<Self> {
+    let (result, overflow): (Self, bool) = self.overflowing_neg();
+
+    if llapi::unlikely(overflow) {
+      None
+    } else {
+      Some(result)
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_pow(self, mut exp: u32) -> Option<Self> {
+    if exp == 0 {
+      return Some(Self::ONE);
+    }
+
+    let mut base: Self = self;
+    let mut acc: Self = Self::ONE;
+
+    loop {
+      if (exp & 1) == 1 {
+        acc = tri!(acc.checked_mul(base));
+
+        if exp == 1 {
+          return Some(acc);
+        }
+      }
+
+      exp /= 2;
+      base = tri!(base.checked_mul(base));
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_next_power_of_two(self) -> Option<Self> {
+    self
+      .one_less_than_next_power_of_two()
+      .checked_add(Self::ONE)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_next_multiple_of(self, rhs: Self) -> Option<Self> {
+    match self.checked_rem(rhs) {
+      Some(result) if result.is_zero() => Some(self),
+      Some(result) => self.checked_add(rhs.const_sub(result)),
+      None => None,
+    }
+  }
+
+  // TODO: Optimize for u128
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_ilog(self, base: Self) -> Option<u32> {
+    if self.const_le(&Self::ZERO) || base.const_le(&Self::ONE) {
+      None
+    } else if self.const_le(&base) {
+      Some(0)
+    } else {
+      let mut ilog: u32 = 1;
+      let mut data: Self = base;
+
+      while data.const_le(&self.const_div(base)) {
+        ilog += 1;
+        data = data.const_mul(base);
+      }
+
+      Some(ilog)
+    }
+  }
+
+  // TODO: Optimize with NonZero
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_ilog2(self) -> Option<u32> {
+    if !self.is_zero() {
+      // SAFETY: We just ensured that `self` is not zero.
+      Some(Self::BITS - 1 - unsafe { llapi::ctlz_nonzero::<Self, N>(self) })
+    } else {
+      None
+    }
+  }
+
+  // TODO: Optimize with Specialization
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_ilog10(self) -> Option<u32> {
+    self.checked_ilog(Self::from_u8(10))
+  }
+
+  #[cfg(feature = "unsigned_signed_diff")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn checked_signed_diff(self, rhs: Self) -> Option<int<N>> {
+    let out: int<N> = self.wrapping_sub(rhs).cast_signed();
+    let cmp: bool = self.const_ge(&rhs) == out.is_negative();
+
+    if llapi::unlikely(cmp) {
+      None
+    } else {
+      Some(out)
+    }
+  }
+}
+
+impl<const N: usize> uint<N> {
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_add(self, rhs: Self) -> (Self, bool) {
+    llapi::overflowing_uadd::<Self, N>(self, rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_add_signed(self, rhs: int<N>) -> (Self, bool) {
+    let out: (Self, bool) = self.overflowing_add(rhs.cast_unsigned());
+    let cmp: bool = out.1 ^ rhs.is_negative();
+
+    (out.0, cmp)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_sub(self, rhs: Self) -> (Self, bool) {
+    llapi::overflowing_usub::<Self, N>(self, rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_sub_signed(self, rhs: int<N>) -> (Self, bool) {
+    let out: (Self, bool) = self.overflowing_sub(rhs.cast_unsigned());
+    let cmp: bool = out.1 ^ rhs.is_negative();
+
+    (out.0, cmp)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_mul(self, rhs: Self) -> (Self, bool) {
+    llapi::overflowing_umul::<Self, N>(self, rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_div(self, rhs: Self) -> (Self, bool) {
+    (self.const_div(rhs), false)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_div_euclid(self, rhs: Self) -> (Self, bool) {
+    (self.const_div(rhs), false)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_rem(self, rhs: Self) -> (Self, bool) {
+    (self.const_rem(rhs), false)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_rem_euclid(self, rhs: Self) -> (Self, bool) {
+    (self.const_rem(rhs), false)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_shl(self, rhs: u32) -> (Self, bool) {
+    (self.wrapping_shl(rhs), rhs >= Self::BITS)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_shr(self, rhs: u32) -> (Self, bool) {
+    (self.wrapping_shr(rhs), rhs >= Self::BITS)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_neg(self) -> (Self, bool) {
+    (self.const_not().wrapping_add(Self::ONE), !self.is_zero())
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn overflowing_pow(self, mut exp: u32) -> (Self, bool) {
+    if exp == 0 {
+      return (Self::ONE, false);
+    }
+
+    let mut base: Self = self;
+    let mut acc: Self = Self::ONE;
+    let mut overflow: bool = false;
+    let mut result: (Self, bool);
+
+    loop {
+      if (exp & 1) == 1 {
+        result = acc.overflowing_mul(base);
+
+        if exp == 1 {
+          result.1 |= overflow;
+          return result;
+        }
+
+        acc = result.0;
+        overflow |= result.1;
+      }
+
+      exp /= 2;
+      result = base.overflowing_mul(base);
+      base = result.0;
+      overflow |= result.1;
+    }
+  }
+}
+
+impl<const N: usize> uint<N> {
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn saturating_add(self, rhs: Self) -> Self {
+    llapi::saturating_uadd::<Self, N>(self, rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn saturating_add_signed(self, rhs: int<N>) -> Self {
+    let (result, overflow): (Self, bool) = self.overflowing_add(rhs.cast_unsigned());
+
+    if overflow == rhs.is_negative() {
+      result
+    } else if overflow {
+      Self::MAX
+    } else {
+      Self::ZERO
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn saturating_sub(self, rhs: Self) -> Self {
+    llapi::saturating_usub::<Self, N>(self, rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn saturating_sub_signed(self, rhs: int<N>) -> Self {
+    let (result, overflow): (Self, bool) = self.overflowing_sub_signed(rhs);
+
+    if !overflow {
+      result
+    } else if rhs.is_negative() {
+      Self::MAX
+    } else {
+      Self::ZERO
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn saturating_mul(self, rhs: Self) -> Self {
+    match self.checked_mul(rhs) {
+      Some(result) => result,
+      None => Self::MAX,
+    }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn saturating_div(self, rhs: Self) -> Self {
+    self.wrapping_div(rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn saturating_pow(self, exp: u32) -> Self {
+    match self.checked_pow(exp) {
+      Some(result) => result,
+      None => Self::MAX,
+    }
+  }
+}
+
+impl<const N: usize> uint<N> {
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_add(self, rhs: Self) -> Self {
+    match self.checked_add(rhs) {
+      Some(result) => result,
+      None => panic::add(),
+    }
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_add_signed(self, rhs: int<N>) -> Self {
+    match self.checked_add_signed(rhs) {
+      Some(result) => result,
+      None => panic::add(),
+    }
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_sub(self, rhs: Self) -> Self {
+    match self.checked_sub(rhs) {
+      Some(result) => result,
+      None => panic::sub(),
+    }
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_mul(self, rhs: Self) -> Self {
+    match self.checked_mul(rhs) {
+      Some(result) => result,
+      None => panic::mul(),
+    }
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_div(self, rhs: Self) -> Self {
+    self.const_div(rhs)
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_div_euclid(self, rhs: Self) -> Self {
+    self.const_div(rhs)
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_rem(self, rhs: Self) -> Self {
+    self.const_rem(rhs)
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_rem_euclid(self, rhs: Self) -> Self {
+    self.const_rem(rhs)
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_shl(self, rhs: u32) -> Self {
+    match self.checked_shl(rhs) {
+      Some(result) => result,
+      None => panic::shl(),
+    }
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_shr(self, rhs: u32) -> Self {
+    match self.checked_shr(rhs) {
+      Some(result) => result,
+      None => panic::shr(),
+    }
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_neg(self) -> Self {
+    match self.checked_neg() {
+      Some(result) => result,
+      None => panic::neg(),
+    }
+  }
+
+  #[cfg(feature = "strict_overflow_ops")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn strict_pow(self, exp: u32) -> Self {
+    match self.checked_pow(exp) {
+      Some(result) => result,
+      None => panic::mul(),
+    }
+  }
+}
+
+impl<const N: usize> uint<N> {
+  #[cfg(feature = "unbounded_shifts")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn unbounded_shl(self, rhs: u32) -> Self {
+    if rhs < Self::BITS {
+      // SAFETY: We just ensured that `rhs` is in-range.
+      unsafe { self.unchecked_shl(rhs) }
+    } else {
+      Self::ZERO
+    }
+  }
+
+  #[cfg(feature = "unbounded_shifts")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn unbounded_shr(self, rhs: u32) -> Self {
+    if rhs < Self::BITS {
+      // SAFETY: We just ensured that `rhs` is in-range.
+      unsafe { self.unchecked_shr(rhs) }
+    } else {
+      Self::ZERO
+    }
+  }
+}
+
+impl<const N: usize> uint<N> {
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const unsafe fn unchecked_add(self, rhs: Self) -> Self {
+    // SAFETY: This is guaranteed to be safe by the caller.
+    unsafe { llapi::unchecked_uadd::<Self, N>(self, rhs) }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const unsafe fn unchecked_sub(self, rhs: Self) -> Self {
+    // SAFETY: This is guaranteed to be safe by the caller.
+    unsafe { llapi::unchecked_usub::<Self, N>(self, rhs) }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const unsafe fn unchecked_mul(self, rhs: Self) -> Self {
+    // SAFETY: This is guaranteed to be safe by the caller.
+    unsafe { llapi::unchecked_umul::<Self, N>(self, rhs) }
+  }
+
+  macros::stability! {
+    #[unstable(feature = "unchecked_shifts")]
+    #[must_use = crate::utils::must_use_doc!()]
+    #[inline]
+    pub const unsafe fn unchecked_shl(self, rhs: u32) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe { llapi::unchecked_shl::<Self, N>(self, rhs) }
+    }
+  }
+
+  macros::stability! {
+    #[unstable(feature = "unchecked_shifts")]
+    #[must_use = crate::utils::must_use_doc!()]
+    #[inline]
+    pub const unsafe fn unchecked_shr(self, rhs: u32) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe { llapi::unchecked_lshr::<Self, N>(self, rhs) }
+    }
+  }
+}
+
+impl<const N: usize> uint<N> {
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_add(self, rhs: Self) -> Self {
+    llapi::wrapping_add::<Self, N>(self, rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_add_signed(self, rhs: int<N>) -> Self {
+    self.wrapping_add(rhs.cast_unsigned())
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_sub(self, rhs: Self) -> Self {
+    llapi::wrapping_sub::<Self, N>(self, rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_sub_signed(self, rhs: int<N>) -> Self {
+    self.wrapping_sub(rhs.cast_unsigned())
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_mul(self, rhs: Self) -> Self {
+    llapi::wrapping_mul::<Self, N>(self, rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_div(self, rhs: Self) -> Self {
+    self.const_div(rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_div_euclid(self, rhs: Self) -> Self {
+    self.const_div(rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_rem(self, rhs: Self) -> Self {
+    self.const_rem(rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_rem_euclid(self, rhs: Self) -> Self {
+    self.const_rem(rhs)
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_shl(self, rhs: u32) -> Self {
+    // SAFETY: We mask `rhs` by `Self::BITS` which ensures we stay in-bounds.
+    unsafe { self.unchecked_shl(rhs & (Self::BITS - 1)) }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_shr(self, rhs: u32) -> Self {
+    // SAFETY: We mask `rhs` by `Self::BITS` which ensures we stay in-bounds.
+    unsafe { self.unchecked_shr(rhs & (Self::BITS - 1)) }
+  }
+
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_neg(self) -> Self {
+    Self::ZERO.wrapping_sub(self)
+  }
+
+  // TODO: Optimize with is_val_statically_known
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_pow(self, mut exp: u32) -> Self {
+    if exp == 0 {
+      return Self::ONE;
+    }
+
+    let mut base: Self = self;
+    let mut acc: Self = Self::ONE;
+
+    loop {
+      if (exp & 1) == 1 {
+        acc = acc.wrapping_mul(base);
+
+        if exp == 1 {
+          return acc;
+        }
+      }
+
+      exp /= 2;
+      base = base.wrapping_mul(base);
+    }
+  }
+
+  #[cfg(feature = "wrapping_next_power_of_two")]
+  #[must_use = crate::utils::must_use_doc!()]
+  #[inline]
+  pub const fn wrapping_next_power_of_two(self) -> Self {
+    self
+      .one_less_than_next_power_of_two()
+      .wrapping_add(Self::ONE)
+  }
+}
+
+impl<const N: usize> uint<N> {
+  macros::parse_str!(uint);
+}

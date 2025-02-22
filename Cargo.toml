@@ -1,66 +1,120 @@
 [package]
 name = "exint"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 
-[workspace]
-members = [
-  "crates/exint-backend",
-  "crates/exint-compile",
-  "crates/exint-filegen",
-  "crates/exint-integer",
-]
-
-[dependencies]
-exint-backend = { version = "=0.1", path = "crates/exint-backend", default-features = false }
-exint-integer = { version = "=0.1", path = "crates/exint-integer", default-features = false }
-
-[dev-dependencies]
-exint-compile = { version = "=0.1", path = "crates/exint-compile", default-features = false }
-
 [features]
-default = [
-  "bigint_helper_methods",
-  "int_roundings",
-  "integer_sign_cast",
-  "num_midpoint",
-  "random",
-  "step_trait",
-  "strict_overflow_ops",
-  "trusted_step",
-  "unbounded_shifts",
-  "unchecked_neg",
-  "unchecked_shifts",
-  "unsigned_is_multiple_of",
-  "unsigned_signed_diff",
-  "wrapping_next_power_of_two",
-]
+default = []
 
-# Unstable Features.
+# Marker trait for features that require a nightly compiler.
+nightly = []
+
+# Marker trait for specialization-based features.
+specialization = ["nightly"]
+
+# Enable support for documentation features.
+docs = ["nightly"]
+
+# Enable optimizations requiring `const_trait_impl`.
 #
-# See crates/exint-integer/Cargo.toml for more info.
-bigint_helper_methods      = ["exint-integer/bigint_helper_methods"]
-int_roundings              = ["exint-integer/int_roundings"]
-integer_sign_cast          = ["exint-integer/integer_sign_cast"]
-num_midpoint               = ["exint-integer/num_midpoint"]
-random                     = ["exint-integer/random"]
-step_trait                 = ["exint-integer/step_trait"]
-strict_overflow_ops        = ["exint-integer/strict_overflow_ops"]
-trusted_step               = ["exint-integer/trusted_step"]
-unbounded_shifts           = ["exint-integer/unbounded_shifts"]
-unchecked_neg              = ["exint-integer/unchecked_neg"]
-unchecked_shifts           = ["exint-integer/unchecked_shifts"]
-unsigned_is_multiple_of    = ["exint-integer/unsigned_is_multiple_of"]
-unsigned_signed_diff       = ["exint-integer/unsigned_signed_diff"]
-wrapping_next_power_of_two = ["exint-integer/wrapping_next_power_of_two"]
+# Note: This is not useful without `min_specialization`.
+const_trait_impl = ["nightly"]
 
-[workspace.lints.rust]
+# Enable optimizations requiring `core::intrinsics`.
+#
+# Note: This is perma-unstable in Rust.
+core_intrinsics = ["nightly"]
 
-[workspace.lints.clippy]
+# Enable optimizations requiring `min_specialization`.
+min_specialization = ["const_trait_impl", "specialization"]
 
-[workspace.lints.rustdoc] # https://doc.rust-lang.org/rustdoc/lints.html
+# Enable support for `bigint_helper_methods` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85532
+bigint_helper_methods = []
+
+# Enable support for `int_from_ascii` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/134821
+int_from_ascii = []
+
+# Enable support for `int_roundings` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/88581
+int_roundings = []
+
+# Enable support for `integer_sign_cast` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/125882
+integer_sign_cast = []
+
+# Enable support for `never_type` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/35121
+never_type = ["nightly"]
+
+# Enable support for `num_midpoint_signed` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/110840
+num_midpoint_signed = []
+
+# Enable support for `random` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/130703
+random = ["nightly"]
+
+# Enable support for `step_trait` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/42168
+step_trait = ["nightly"]
+
+# Enable support for `strict_overflow_ops` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/118260
+strict_overflow_ops = []
+
+# Enable support for `trusted_step` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85731
+trusted_step = ["step_trait", "specialization"]
+
+# Enable support for `unbounded_shifts` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/129375
+unbounded_shifts = []
+
+# Enable support for `unchecked_neg` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85122
+unchecked_neg = []
+
+# Enable support for `unchecked_shifts` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85122
+unchecked_shifts = []
+
+# Enable support for `unsigned_is_multiple_of` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/128101
+unsigned_is_multiple_of = []
+
+# Enable support for `unsigned_signed_diff` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/126041
+unsigned_signed_diff = []
+
+# Enable support for `wrapping_next_power_of_two` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/32463
+wrapping_next_power_of_two = []
+
+[lints.rust]
+
+[lints.clippy]
+
+[lints.rustdoc] # https://doc.rust-lang.org/rustdoc/lints.html
 broken_intra_doc_links = "deny"
 private_intra_doc_links = "deny"
 missing_crate_level_docs = "deny"
