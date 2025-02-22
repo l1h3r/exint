@@ -1,6 +1,6 @@
 macro_rules! include_doc {
   ($type:ident, $name:literal) => {
-    include_str!(concat!(env!("OUT_DIR"), "/docs/", stringify!($type), "/", $name, ".md"))
+    include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/docs/", stringify!($type), "/", $name, ".md"))
   };
 }
 
