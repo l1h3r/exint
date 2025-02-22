@@ -16,7 +16,36 @@ exint-backend = { version = "=0.1", path = "crates/exint-backend", default-featu
 exint-integer = { version = "=0.1", path = "crates/exint-integer", default-features = false }
 
 [features]
-default = []
+default = [
+  "bigint_helper_methods",
+  "int_roundings",
+  "integer_sign_cast",
+  "isqrt",
+  "num_midpoint",
+  "strict_overflow_ops",
+  "unbounded_shifts",
+  "unchecked_neg",
+  "unchecked_shifts",
+  "unsigned_is_multiple_of",
+  "unsigned_signed_diff",
+  "wrapping_next_power_of_two",
+]
+
+# Unstable Features.
+#
+# See crates/exint-integer/Cargo.toml for more info.
+bigint_helper_methods      = ["exint-integer/bigint_helper_methods"]
+int_roundings              = ["exint-integer/int_roundings"]
+integer_sign_cast          = ["exint-integer/integer_sign_cast"]
+isqrt                      = ["exint-integer/isqrt"]
+num_midpoint               = ["exint-integer/num_midpoint"]
+strict_overflow_ops        = ["exint-integer/strict_overflow_ops"]
+unbounded_shifts           = ["exint-integer/unbounded_shifts"]
+unchecked_neg              = ["exint-integer/unchecked_neg"]
+unchecked_shifts           = ["exint-integer/unchecked_shifts"]
+unsigned_is_multiple_of    = ["exint-integer/unsigned_is_multiple_of"]
+unsigned_signed_diff       = ["exint-integer/unsigned_signed_diff"]
+wrapping_next_power_of_two = ["exint-integer/wrapping_next_power_of_two"]
 
 [workspace.lints.rust]
 

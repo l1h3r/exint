@@ -7,3 +7,79 @@ readme = "README.md"
 
 [lints]
 workspace = true
+
+[features]
+default = [
+  "bigint_helper_methods",
+  "int_roundings",
+  "integer_sign_cast",
+  "isqrt",
+  "num_midpoint",
+  "strict_overflow_ops",
+  "unbounded_shifts",
+  "unchecked_neg",
+  "unchecked_shifts",
+  "unsigned_is_multiple_of",
+  "unsigned_signed_diff",
+  "wrapping_next_power_of_two",
+]
+
+# Enables support for `bigint_helper_methods` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85532
+bigint_helper_methods = []
+
+# Enables support for `int_roundings` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/88581
+int_roundings = []
+
+# Enables support for `integer_sign_cast` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/125882
+integer_sign_cast = []
+
+# Enables support for `isqrt` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/116226
+isqrt = []
+
+# Enables support for `num_midpoint` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/110840
+num_midpoint = []
+
+# Enables support for `strict_overflow_ops` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/118260
+strict_overflow_ops = []
+
+# Enables support for `unbounded_shifts` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/129375
+unbounded_shifts = []
+
+# Enables support for `unchecked_neg` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85122
+unchecked_neg = []
+
+# Enables support for `unchecked_shifts` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85122
+unchecked_shifts = []
+
+# Enables support for `unsigned_is_multiple_of` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/128101
+unsigned_is_multiple_of = []
+
+# Enables support for `unsigned_signed_diff` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/126041
+unsigned_signed_diff = []
+
+# Enables support for `wrapping_next_power_of_two` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/32463
+wrapping_next_power_of_two = []

@@ -3,6 +3,7 @@ mod binary;
 mod byteorder;
 mod constants;
 mod internals;
+mod parse_str;
 
 pub(crate) use self::arithmetic::bigint;
 pub(crate) use self::arithmetic::checked;
@@ -18,3 +19,4 @@ pub(crate) use self::binary::inspect;
 pub(crate) use self::byteorder::byteorder;
 pub(crate) use self::constants::constants;
 pub(crate) use self::internals::internals;
+pub(crate) use self::parse_str::parse_str;

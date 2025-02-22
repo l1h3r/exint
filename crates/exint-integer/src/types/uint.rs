@@ -12,6 +12,7 @@ impl<const S: usize> uint<S> {
 impl<const S: usize> uint<S> {
   crate::macros::byteorder!(uint);
   crate::macros::constants!(uint);
+  crate::macros::parse_str!(uint);
 
   crate::macros::convert!(uint);
   crate::macros::inspect!(uint);
