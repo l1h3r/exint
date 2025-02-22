@@ -1,19 +1,27 @@
 macro_rules! convert {
-  (core, $name:ident, $uint:expr) => {
+  (core, $_name:ident, $_uint:expr) => {
+    #[must_use]
+    #[inline]
     pub const fn reverse_bits(self) -> Self {
-      panic!("reverse_bits")
+      $crate::intrinsics::swap1::<Self, S>(self)
     }
 
+    #[must_use]
+    #[inline]
     pub const fn rotate_left(self, n: u32) -> Self {
-      panic!("rotate_left")
+      $crate::intrinsics::rotl::<Self, S>(self, n)
     }
 
+    #[must_use]
+    #[inline]
     pub const fn rotate_right(self, n: u32) -> Self {
-      panic!("rotate_right")
+      $crate::intrinsics::rotr::<Self, S>(self, n)
     }
 
+    #[must_use]
+    #[inline]
     pub const fn swap_bytes(self) -> Self {
-      panic!("swap_bytes")
+      $crate::intrinsics::swap8::<Self, S>(self)
     }
   };
   (uint) => {
