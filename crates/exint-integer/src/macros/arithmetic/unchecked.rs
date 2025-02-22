@@ -11,6 +11,15 @@ macro_rules! unchecked {
 
     #[must_use]
     #[inline]
+    pub const unsafe fn unchecked_sub(self, rhs: Self) -> Self {
+      // SAFETY: This is guaranteed to be safe by the caller.
+      unsafe {
+        $crate::intrinsics::unchecked_sub::<Self, S, $uint>(self, rhs)
+      }
+    }
+
+    #[must_use]
+    #[inline]
     pub const unsafe fn unchecked_mul(self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe {
@@ -37,15 +46,6 @@ macro_rules! unchecked {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe {
         $crate::intrinsics::unchecked_shr::<Self, S, $uint>(self, rhs)
-      }
-    }
-
-    #[must_use]
-    #[inline]
-    pub const unsafe fn unchecked_sub(self, rhs: Self) -> Self {
-      // SAFETY: This is guaranteed to be safe by the caller.
-      unsafe {
-        $crate::intrinsics::unchecked_sub::<Self, S, $uint>(self, rhs)
       }
     }
   };
