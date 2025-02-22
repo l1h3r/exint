@@ -153,7 +153,7 @@ macro_rules! internals {
       }
     }
 
-    #[allow(dead_code)] // Not used by uint
+    #[allow(dead_code)] // TODO: Not used by uint
     #[inline]
     pub(crate) const fn const_neg(self) -> Self {
       $crate::types::macros::arithmetic_select! {
