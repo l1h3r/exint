@@ -185,7 +185,6 @@ impl<const N: usize> int<N> {
     }
   }
 
-  // TODO: Optimize with is_val_statically_known
   #[doc = include_doc!(int, "pow")]
   #[must_use = must_use_doc!()]
   #[inline]
@@ -196,6 +195,20 @@ impl<const N: usize> int<N> {
 
     let mut base: Self = self;
     let mut acc: Self = Self::ONE;
+
+    #[cfg(feature = "core_intrinsics")]
+    if ::core::intrinsics::is_val_statically_known(exp) {
+      while exp > 1 {
+        if (exp & 1) == 1 {
+          acc = acc.const_mul(base);
+        }
+
+        exp /= 2;
+        base = base.const_mul(base);
+      }
+
+      return acc.const_mul(base);
+    }
 
     loop {
       if (exp & 1) == 1 {
@@ -1183,7 +1196,6 @@ impl<const N: usize> int<N> {
     Self::ZERO.wrapping_sub(self)
   }
 
-  // TODO: Optimize with is_val_statically_known
   #[doc = include_doc!(int, "wrapping_pow")]
   #[must_use = must_use_doc!()]
   #[inline]
@@ -1194,6 +1206,20 @@ impl<const N: usize> int<N> {
 
     let mut base: Self = self;
     let mut acc: Self = Self::ONE;
+
+    #[cfg(feature = "core_intrinsics")]
+    if ::core::intrinsics::is_val_statically_known(exp) {
+      while exp > 1 {
+        if (exp & 1) == 1 {
+          acc = acc.wrapping_mul(base);
+        }
+
+        exp /= 2;
+        base = base.wrapping_mul(base);
+      }
+
+      return acc.wrapping_mul(base);
+    }
 
     loop {
       if (exp & 1) == 1 {
