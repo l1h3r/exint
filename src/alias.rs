@@ -1,7 +1,7 @@
 macro_rules! define {
   ($export:ident as $name:ident<$size:literal>, $doc:literal) => {
     #[doc = $doc]
-    #[allow(non_camel_case_types)]
+    #[expect(non_camel_case_types)]
     pub type $export = $crate::$name<$size>;
   };
 }

@@ -4,9 +4,9 @@ use crate::llapi::impls::unstable::SpecCoreFuncs;
 use crate::llapi::impls::unstable::SpecSintFuncs;
 use crate::llapi::impls::unstable::SpecUintFuncs;
 use crate::llapi::macros::specialize;
-use crate::llapi::traits::Consts;
+use crate::llapi::traits::Consts as _;
 use crate::llapi::traits::Exts;
-use crate::llapi::traits::Trunc;
+use crate::llapi::traits::Trunc as _;
 
 specialize! {
   impl const SpecCoreFuncs for Int<3|5|6|7|9|10|11|12|13|14|15> {

@@ -1,5 +1,5 @@
 mod private {
-  #[allow(unnameable_types)]
+  #[expect(unnameable_types)]
   pub trait Sealed {}
 }
 

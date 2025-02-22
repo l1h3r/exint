@@ -224,6 +224,17 @@ suspicious = { level = "deny", priority = -1 }
 complexity = { level = "deny", priority = -1 }
 perf = { level = "deny", priority = -1 }
 style = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+
+# pedantic noise
+cast_possible_truncation = "allow"
+doc_markdown = "allow"
+if_not_else = "allow"
+items_after_statements = "allow"
+missing_errors_doc = "allow"
+must_use_candidate = "allow"
+unreadable_literal = "allow"
+unused_self = "allow"
 
 [lints.rustdoc] # https://doc.rust-lang.org/rustdoc/lints.html
 broken_intra_doc_links = "deny"

@@ -4,7 +4,7 @@ use crate::llapi::impls::unstable::SpecCoreFuncs;
 use crate::llapi::impls::unstable::SpecSintFuncs;
 use crate::llapi::impls::unstable::SpecUintFuncs;
 use crate::llapi::macros::specialize;
-use crate::llapi::traits::Cast;
+use crate::llapi::traits::Cast as _;
 
 specialize! {
   impl const SpecCoreFuncs for Int<1|2|4|8|16> {
