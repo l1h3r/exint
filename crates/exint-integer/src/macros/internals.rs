@@ -1,4 +1,18 @@
 macro_rules! internals {
+  (conv, $name:ident, $from_fn:ident, $into_fn:ident) => {
+    #[must_use]
+    #[inline]
+    pub(crate) const fn $from_fn(other: $name) -> Self {
+      panic!(stringify!($from_fn))
+    }
+
+    #[must_use]
+    #[inline]
+    pub(crate) const fn $into_fn(self) -> $name {
+      panic!(stringify!($into_fn))
+    }
+  };
+
   (core, $name:ident, $uint:expr) => {
     // -------------------------------------------------------------------------
     // Constants
@@ -162,6 +176,30 @@ macro_rules! internals {
         wrapped: self.wrapping_neg(),
       }
     }
+
+    // -------------------------------------------------------------------------
+    // Constant Conversion
+    // -------------------------------------------------------------------------
+
+    #[must_use]
+    #[inline]
+    pub(crate) const fn from_bool(other: bool) -> Self {
+      Self::from_u8(other as u8)
+    }
+
+    $crate::macros::internals!(conv, u8,    from_u8,    into_u8);
+    $crate::macros::internals!(conv, u16,   from_u16,   into_u16);
+    $crate::macros::internals!(conv, u32,   from_u32,   into_u32);
+    $crate::macros::internals!(conv, u64,   from_u64,   into_u64);
+    $crate::macros::internals!(conv, u128,  from_u128,  into_u128);
+    $crate::macros::internals!(conv, usize, from_usize, into_usize);
+
+    $crate::macros::internals!(conv, i8,    from_i8,    into_i8);
+    $crate::macros::internals!(conv, i16,   from_i16,   into_i16);
+    $crate::macros::internals!(conv, i32,   from_i32,   into_i32);
+    $crate::macros::internals!(conv, i64,   from_i64,   into_i64);
+    $crate::macros::internals!(conv, i128,  from_i128,  into_i128);
+    $crate::macros::internals!(conv, isize, from_isize, into_isize);
   };
   (uint) => {
     $crate::macros::internals!(core, uint, true);
