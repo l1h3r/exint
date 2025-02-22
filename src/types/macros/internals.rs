@@ -339,6 +339,7 @@ macro_rules! internals {
       ::core::panic!("const_shr")
     }
 
+    #[inline]
     pub(crate) const fn const_neg(self) -> Self {
       Self(self.0.wrapping_neg())
     }
