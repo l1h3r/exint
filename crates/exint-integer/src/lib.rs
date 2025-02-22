@@ -4,6 +4,7 @@
 #![no_std]
 
 mod macros;
+mod traits;
 mod types;
 
 // TODO
