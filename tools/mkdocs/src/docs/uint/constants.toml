@@ -3,15 +3,15 @@ overview = """
 The size of this integer type in bits.
 """
 examples = """
-assert_eq!(uint::BITS, %SIZE_BITS%);
+assert_eq!(uint::BITS, %BITS%);
 """
 
 [MAX]
 overview = """
-The largest value that can be represented by this integer type. (2<sup>%SIZE_BITS%</sup> &minus; 1).
+The largest value that can be represented by this integer type. (2<sup>%BITS%</sup> &minus; 1).
 """
 examples = """
-assert_eq!(uint::MAX, uint!(%MAX_VALUE%));
+assert_eq!(uint::MAX, uint!(%UINT_MAX%));
 """
 
 [MIN]
@@ -19,5 +19,5 @@ overview = """
 The smallest value that can be represented by this integer type.
 """
 examples = """
-assert_eq!(uint::MIN, uint!(%MIN_VALUE%));
+assert_eq!(uint::MIN, uint!(%UINT_MIN%));
 """

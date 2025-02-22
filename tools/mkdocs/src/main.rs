@@ -33,7 +33,7 @@ fn main() -> Result<(), Box<dyn Error>> {
       let writer: File = File::create(output)?;
       let writer: BufWriter<File> = BufWriter::new(writer);
 
-      data.write_docstring(writer, uint)?;
+      data.write_docstring(writer)?;
     }
   }
 

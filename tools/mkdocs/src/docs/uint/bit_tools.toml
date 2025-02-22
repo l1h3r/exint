@@ -58,7 +58,7 @@ Returns the number of ones in the binary representation of `self`.
 examples = """
 assert_eq!(uint!(0b01001100).count_ones(), 3);
 assert_eq!(uint!(0).count_ones(), 0);
-assert_eq!(uint::MAX.count_ones(), %SIZE_BITS%);
+assert_eq!(uint::MAX.count_ones(), %BITS%);
 """
 
 [count_zeros]
@@ -66,7 +66,7 @@ overview = """
 Returns the number of zeros in the binary representation of `self`.
 """
 examples = """
-assert_eq!(uint!(0).count_zeros(), %SIZE_BITS%);
+assert_eq!(uint!(0).count_zeros(), %BITS%);
 assert_eq!(uint::MAX.count_zeros(), 0);
 """
 
@@ -77,7 +77,7 @@ Returns the number of leading ones in the binary representation of `self`.
 examples = """
 assert_eq!((!(uint::MAX >> 2u32)).leading_ones(), 2);
 assert_eq!(uint!(0).leading_ones(), 0);
-assert_eq!(uint::MAX.leading_ones(), %SIZE_BITS%);
+assert_eq!(uint::MAX.leading_ones(), %BITS%);
 """
 
 [leading_zeros]
@@ -91,7 +91,7 @@ Depending on what you're doing with the value, you might also be interested in t
 """
 examples = """
 assert_eq!((uint::MAX >> 2u32).leading_zeros(), 2);
-assert_eq!(uint!(0).leading_zeros(), %SIZE_BITS%);
+assert_eq!(uint!(0).leading_zeros(), %BITS%);
 assert_eq!(uint::MAX.leading_zeros(), 0);
 """
 
@@ -102,7 +102,7 @@ Returns the number of trailing ones in the binary representation of `self`.
 examples = """
 assert_eq!(uint!(0b1010111).trailing_ones(), 3);
 assert_eq!(uint!(0).trailing_ones(), 0);
-assert_eq!(uint::MAX.trailing_ones(), %SIZE_BITS%);
+assert_eq!(uint::MAX.trailing_ones(), %BITS%);
 """
 
 [trailing_zeros]
@@ -111,6 +111,6 @@ Returns the number of trailing zeros in the binary representation of `self`.
 """
 examples = """
 assert_eq!(uint!(0b00101000).trailing_zeros(), 3);
-assert_eq!(uint!(0).trailing_zeros(), %SIZE_BITS%);
+assert_eq!(uint!(0).trailing_zeros(), %BITS%);
 assert_eq!(uint::MAX.trailing_zeros(), 0);
 """

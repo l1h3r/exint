@@ -28,15 +28,26 @@ This function will always panic on overflow, regardless of whether overflow chec
 ";
 
 mod vars {
-  pub const SIZE_BITS: &str = "32";
+  pub const BITS: &str = "32";
+
+  pub const UINT_MIN: &str = "0";
+  pub const UINT_MAX: &str = "4294967295";
+
+  pub const INT_MIN: &str = "-2147483648";
+  pub const INT_MAX: &str = "2147483647";
+
   pub const TO_SWAP: &str = "0x12345678";
   pub const SWAPPED: &str = "0x78563412";
+
   pub const SWAP_BE: &str = "[0x12, 0x34, 0x56, 0x78]";
   pub const SWAP_LE: &str = "[0x78, 0x56, 0x34, 0x12]";
+
   pub const REVERSE: &str = "0x1E6A2C48";
+
   pub const ROTATE_SIZE: &str = "16";
   pub const ROTATE_FROM: &str = "0x12003400";
   pub const ROTATE_INTO: &str = "0x34001200";
+
   pub const STRICT_OVERFLOW: &str = super::trim(super::STRICT_OVERFLOW);
 }
 
@@ -46,12 +57,14 @@ static AHO: LazyLock<AhoCorasick> =
 struct Variables;
 
 impl Variables {
-  const SIZE: usize = 12;
+  const SIZE: usize = 14;
 
   const KEYS: &'static [&'static str; Self::SIZE] = &[
-    "%MIN_VALUE%",
-    "%MAX_VALUE%",
-    "%SIZE_BITS%",
+    "%BITS%",
+    "%UINT_MIN%",
+    "%UINT_MAX%",
+    "%INT_MIN%",
+    "%INT_MAX%",
     "%TO_SWAP%",
     "%SWAPPED%",
     "%SWAP_BE%",
@@ -64,10 +77,12 @@ impl Variables {
   ];
 
   // Note: This *MUST* be in the same order as `KEYS`.
-  const UINT: &'static [&'static str; Self::SIZE] = &[
-    "0",
-    "4294967295",
-    self::vars::SIZE_BITS,
+  const VARS: &'static [&'static str; Self::SIZE] = &[
+    self::vars::BITS,
+    self::vars::UINT_MIN,
+    self::vars::UINT_MAX,
+    self::vars::INT_MIN,
+    self::vars::INT_MAX,
     self::vars::TO_SWAP,
     self::vars::SWAPPED,
     self::vars::SWAP_BE,
@@ -79,26 +94,8 @@ impl Variables {
     self::vars::STRICT_OVERFLOW,
   ];
 
-  // Note: This *MUST* be in the same order as `KEYS`.
-  const SINT: &'static [&'static str; Self::SIZE] = &[
-    "-2147483648",
-    "2147483647",
-    self::vars::SIZE_BITS,
-    self::vars::TO_SWAP,
-    self::vars::SWAPPED,
-    self::vars::SWAP_BE,
-    self::vars::SWAP_LE,
-    self::vars::REVERSE,
-    self::vars::ROTATE_SIZE,
-    self::vars::ROTATE_FROM,
-    self::vars::ROTATE_INTO,
-    self::vars::STRICT_OVERFLOW,
-  ];
-
-  const VARS: &'static [&'static [&'static str; Self::SIZE]] = &[Self::SINT, Self::UINT];
-
-  fn replace(string: &str, uint: bool) -> String {
-    AHO.replace_all(string, Self::VARS[uint as usize])
+  fn replace(string: &str) -> String {
+    AHO.replace_all(string, Self::VARS)
   }
 }
 
@@ -211,11 +208,11 @@ pub struct Docs {
 }
 
 impl Docs {
-  pub fn write_docstring<W>(&self, mut writer: W, uint: bool) -> Result<(), Error>
+  pub fn write_docstring<W>(&self, mut writer: W) -> Result<(), Error>
   where
     W: Write,
   {
-    writeln!(writer, "{}", Variables::replace(self.overview.trim(), uint))?;
+    writeln!(writer, "{}", Variables::replace(self.overview.trim()))?;
 
     if !self.has_examples() {
       return Ok(());
@@ -226,22 +223,22 @@ impl Docs {
 
     if let Some(ref examples) = self.examples {
       static HEADER: &str = "Basic usage:";
-      self.write_examples(&mut writer, HEADER, examples, uint)?;
+      self.write_examples(&mut writer, HEADER, examples)?;
     }
 
     if let Some(ref examples) = self.examples_overflow {
       static HEADER: &str = "The following panics because of overflow:";
-      self.write_examples_panicking(&mut writer, HEADER, examples, uint)?;
+      self.write_examples_panicking(&mut writer, HEADER, examples)?;
     }
 
     if let Some(ref examples) = self.examples_div_zero {
       static HEADER: &str = "The following panics because of division by zero:";
-      self.write_examples_panicking(&mut writer, HEADER, examples, uint)?;
+      self.write_examples_panicking(&mut writer, HEADER, examples)?;
     }
 
     if let Some(ref examples) = self.examples_panicking {
       static HEADER: &str = "This will panic:";
-      self.write_examples_panicking(&mut writer, HEADER, examples, uint)?;
+      self.write_examples_panicking(&mut writer, HEADER, examples)?;
     }
 
     Ok(())
@@ -252,7 +249,6 @@ impl Docs {
     writer: &mut W,
     header: &'static str,
     examples: &MaybeList<&'static str>,
-    uint: bool,
   ) -> Result<(), Error>
   where
     W: Write,
@@ -264,7 +260,7 @@ impl Docs {
       writeln!(writer)?;
       writeln!(writer, "```")?;
       writeln!(writer, "{}", EXAMPLE_PRELUDE.trim())?;
-      writeln!(writer, "{}", Variables::replace(example.trim(), uint))?;
+      writeln!(writer, "{}", Variables::replace(example.trim()))?;
       writeln!(writer, "```")?;
     }
 
@@ -276,7 +272,6 @@ impl Docs {
     writer: &mut W,
     header: &'static str,
     examples: &MaybeList<&'static str>,
-    uint: bool,
   ) -> Result<(), Error>
   where
     W: Write,
@@ -288,7 +283,7 @@ impl Docs {
       writeln!(writer)?;
       writeln!(writer, "```should_panic")?;
       writeln!(writer, "{}", EXAMPLE_PRELUDE.trim())?;
-      writeln!(writer, "{}", Variables::replace(example.trim(), uint))?;
+      writeln!(writer, "{}", Variables::replace(example.trim()))?;
       writeln!(writer, "```")?;
     }
 
