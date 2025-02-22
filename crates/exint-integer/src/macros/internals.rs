@@ -235,6 +235,8 @@ macro_rules! internals {
     }
   };
   (int) => {
+    pub(crate) const NEG_ONE: Self = Self::from_i8(-1);
+
     $crate::macros::internals!(core, int, false);
 
     #[must_use]
