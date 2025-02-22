@@ -70,7 +70,7 @@ pub(crate) trait Trunc<Output> {
   fn trunc(self) -> Output;
 }
 
-/// Supporting trait for SIMD-enhanced operations.
+/// Supporting trait for SIMD-accelerated operations.
 #[const_trait]
 pub(crate) trait SimdExt {
   type Simd;
@@ -228,8 +228,8 @@ macro_rules! implement {
     }
   };
   (@simd => from: Int<$size:literal>, repr: [$type:ty; $lanes:literal]) => {
-    const _: () = ::core::assert!($size % ::core::mem::size_of::<$type>() == 0);
-    const _: () = ::core::assert!($lanes * ::core::mem::size_of::<$type>() == $size);
+    const _: () = assert!($size % ::core::mem::size_of::<$type>() == 0);
+    const _: () = assert!($lanes * ::core::mem::size_of::<$type>() == $size);
 
     impl const SimdExt for Integer<$size> {
       type Simd = ::core::simd::Simd<$type, $lanes>;

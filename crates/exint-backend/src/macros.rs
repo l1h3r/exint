@@ -70,9 +70,14 @@ macro_rules! crev {
 /// with identical implementations.
 macro_rules! specialize {
   (impl const $trait:ident for Integer<$size:literal> { $($tt:tt)* }) => {
-    impl const $crate::bridge::traits::$trait for $crate::types::Integer<$size> {
-      $($tt)*
-    }
+    const _: () = {
+      // Inject integer size as `S` for use with generic code.
+      const S: usize = $size;
+
+      impl const $crate::bridge::traits::$trait for $crate::types::Integer<$size> {
+        $($tt)*
+      }
+    };
   };
   (impl const $trait:ident for Integer<$head:literal $(| $tail:literal)*> { $($tt:tt)* }) => {
     $crate::macros::specialize!(impl const $trait for Integer<$head> { $($tt)* });

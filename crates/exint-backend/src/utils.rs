@@ -71,9 +71,8 @@ pub(crate) const fn resize<const T: usize, const U: usize, const UINT: bool>(
 
     // In BE, we need to shift the dst pointer to a higher memory address and
     // leave the less-significant bytes zeroed.
-    //
-    // SAFETY: Reads are safe since `dst == [u8; U]` and `(U - T) + T == U`
     if cfg!(target_endian = "big") {
+      // SAFETY: Writes are safe since `dst == [u8; U]` and `(U - T) + T == U`.
       dst = unsafe { dst.add(U - T) };
     }
 
@@ -87,9 +86,8 @@ pub(crate) const fn resize<const T: usize, const U: usize, const UINT: bool>(
   } else {
     // In BE, we need to shift the src pointer to a higher memory address and
     // copy the less-significant bytes.
-    //
-    // SAFETY: Reads are safe since `src == [u8; T]` and `(T - U) + U == T`.
     if cfg!(target_endian = "big") {
+      // SAFETY: Reads are safe since `src == [u8; T]` and `(T - U) + U == T`.
       src = unsafe { src.add(T - U) };
     }
 

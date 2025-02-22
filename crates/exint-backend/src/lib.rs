@@ -1,5 +1,6 @@
 //! Exint Backend
 
+#![feature(const_eval_select)]
 #![feature(const_trait_impl)]
 #![feature(core_intrinsics)]
 #![feature(min_specialization)]
