@@ -12,7 +12,6 @@ macro_rules! internals {
       $crate::macros::cast!(Self as $name, self)
     }
   };
-
   (core, $name:ident, $uint:expr) => {
     // -------------------------------------------------------------------------
     // Constants
@@ -29,6 +28,14 @@ macro_rules! internals {
     #[inline]
     pub(crate) const fn const_eq(&self, other: &Self) -> bool {
       $crate::intrinsics::eq::<Self, S>(*self, *other)
+    }
+
+    // Only exposed for codegen test :_(
+    #[doc(hidden)]
+    #[must_use]
+    #[inline]
+    pub const fn internal_is_zero(&self) -> bool {
+      self.const_eq(&Self::ZERO)
     }
 
     // -------------------------------------------------------------------------

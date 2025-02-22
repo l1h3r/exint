@@ -1,3 +1,6 @@
+[alias]
+filegen = "run --bin codegen --package exint-filegen"
+
 [build]
 rustflags = [
   "-C", "llvm-args=--unroll-threshold=1024",
