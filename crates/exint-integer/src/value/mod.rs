@@ -4,6 +4,9 @@ pub(crate) trait Value {
 
   /// True if the value is an unsigned integer.
   const UINT: bool;
+
+  /// The representation of `0` for this type.
+  const ZERO: Self;
 }
 
 macro_rules! value {
@@ -11,6 +14,7 @@ macro_rules! value {
     impl Value for $primitive {
       const SIZE: usize = ::core::mem::size_of::<$primitive>();
       const UINT: bool = $uint;
+      const ZERO: Self = 0;
     }
   };
 }
@@ -32,9 +36,11 @@ value!(isize, false);
 impl<const S: usize> Value for crate::int<S> {
   const SIZE: usize = S;
   const UINT: bool = false;
+  const ZERO: Self = Self::from_u8(0);
 }
 
 impl<const S: usize> Value for crate::uint<S> {
   const SIZE: usize = S;
   const UINT: bool = true;
+  const ZERO: Self = Self::from_u8(0);
 }

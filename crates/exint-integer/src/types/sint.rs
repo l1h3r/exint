@@ -1,8 +1,10 @@
 use ::core::panic;
 use ::core::marker::Sized;
-use ::core::option::Option;
 use ::core::option::Option::None;
 use ::core::option::Option::Some;
+use ::core::option::Option;
+use ::core::result::Result::Err;
+use ::core::result::Result::Ok;
 use ::core::result::Result;
 
 /// The generic signed integer type.
