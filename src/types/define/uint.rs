@@ -289,7 +289,6 @@ impl<const N: usize> uint<N> {
   }
 
   #[doc = include_doc!(uint, "is_multiple_of")]
-  #[cfg(feature = "unsigned_is_multiple_of")]
   #[must_use]
   #[inline]
   pub const fn is_multiple_of(self, rhs: Self) -> bool {

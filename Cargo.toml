@@ -44,7 +44,6 @@ all_unstable = [
   "unbounded_shifts",
   "unchecked_neg",
   "unchecked_shifts",
-  "unsigned_is_multiple_of",
   "unsigned_signed_diff",
   "utf16_extra",
   "wrapping_next_power_of_two",
@@ -207,11 +206,6 @@ unchecked_neg = []
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/85122
 unchecked_shifts = []
-
-# Enable support for `unsigned_is_multiple_of` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/128101
-unsigned_is_multiple_of = []
 
 # Enable support for `unsigned_signed_diff` core functionality.
 #
