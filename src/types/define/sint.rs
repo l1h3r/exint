@@ -1180,7 +1180,7 @@ impl<const N: usize> int<N> {
   #[inline]
   pub const fn wrapping_shl(self, rhs: u32) -> Self {
     // SAFETY: We mask `rhs` by `Self::BITS` which ensures we stay in-bounds.
-    unsafe { self.unchecked_shl(rhs & (Self::BITS - 1)) }
+    unsafe { self.unchecked_shl(Self::mask(rhs)) }
   }
 
   #[doc = include_doc!(int, "wrapping_shr")]
@@ -1188,7 +1188,7 @@ impl<const N: usize> int<N> {
   #[inline]
   pub const fn wrapping_shr(self, rhs: u32) -> Self {
     // SAFETY: We mask `rhs` by `Self::BITS` which ensures we stay in-bounds.
-    unsafe { self.unchecked_shr(rhs & (Self::BITS - 1)) }
+    unsafe { self.unchecked_shr(Self::mask(rhs)) }
   }
 
   #[doc = include_doc!(int, "wrapping_neg")]

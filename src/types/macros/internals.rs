@@ -27,6 +27,15 @@ macro_rules! internals {
     pub(crate) const ONE:  Self = Self::from_u8(1);
     pub(crate) const TWO:  Self = Self::from_u8(2);
 
+    #[inline]
+    const fn mask(bits: u32) -> u32 {
+      if Self::BITS.is_power_of_two() {
+        bits & (Self::BITS - 1)
+      } else {
+        bits % Self::BITS
+      }
+    }
+
     // -------------------------------------------------------------------------
     // Constant Eq
     // -------------------------------------------------------------------------
