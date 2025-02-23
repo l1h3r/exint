@@ -36,7 +36,7 @@ impl SourceList {
       include_str!("docs/sint/arithmetic/unbounded.toml"),
       include_str!("docs/sint/arithmetic/unchecked.toml"),
       include_str!("docs/sint/arithmetic/wrapping.toml"),
-      include_str!("docs/sint/bit_tools.toml"),
+      include_str!("docs/sint/bin_tools.toml"),
       include_str!("docs/sint/byteorder.toml"),
       include_str!("docs/sint/constants.toml"),
       include_str!("docs/sint/conversion.toml"),
@@ -55,7 +55,7 @@ impl SourceList {
       include_str!("docs/uint/arithmetic/unbounded.toml"),
       include_str!("docs/uint/arithmetic/unchecked.toml"),
       include_str!("docs/uint/arithmetic/wrapping.toml"),
-      include_str!("docs/uint/bit_tools.toml"),
+      include_str!("docs/uint/bin_tools.toml"),
       include_str!("docs/uint/byteorder.toml"),
       include_str!("docs/uint/constants.toml"),
       include_str!("docs/uint/conversion.toml"),
@@ -66,7 +66,7 @@ impl SourceList {
 
   pub const WRAPPER: Self = Self {
     data: &[
-      include_str!("docs/wrapper/bit_tools.toml"),
+      include_str!("docs/wrapper/bin_tools.toml"),
       include_str!("docs/wrapper/byteorder.toml"),
       include_str!("docs/wrapper/constants.toml"),
     ],
