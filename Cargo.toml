@@ -39,6 +39,7 @@ all_unstable = [
   "int_from_ascii",
   "int_roundings",
   "is_ascii_octdigit",
+  "isolate_most_least_significant_one",
   "mixed_integer_ops_unsigned_sub",
   "strict_overflow_ops",
   "unbounded_shifts",
@@ -181,6 +182,11 @@ int_roundings = []
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/101288
 is_ascii_octdigit = []
+
+# Enable support for `isolate_most_least_significant_one` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/136909
+isolate_most_least_significant_one = []
 
 # Enable support for `mixed_integer_ops_unsigned_sub` core functionality.
 #

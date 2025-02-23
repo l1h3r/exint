@@ -71,6 +71,25 @@ macro_rules! bin_tools {
     pub const fn trailing_zeros(self) -> u32 {
       $crate::llapi::cttz::<Self, N>(self)
     }
+
+    #[doc = $crate::utils::include_doc!($name, "isolate_most_significant_one")]
+    #[cfg(feature = "isolate_most_least_significant_one")]
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn isolate_most_significant_one(self) -> Self {
+      Self::ONE
+        .const_shl(Self::BITS - 1)
+        .wrapping_shr(self.leading_zeros())
+        .const_band(self)
+    }
+
+    #[doc = $crate::utils::include_doc!($name, "isolate_least_significant_one")]
+    #[cfg(feature = "isolate_most_least_significant_one")]
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn isolate_least_significant_one(self) -> Self {
+      self.const_band(self.wrapping_neg())
+    }
   };
   ($outer:ident<$inner:ident>) => {
     #[doc = $crate::utils::include_doc!($outer, $inner, "reverse_bits")]
@@ -143,6 +162,22 @@ macro_rules! bin_tools {
     #[inline]
     pub const fn trailing_zeros(self) -> u32 {
       self.0.trailing_zeros()
+    }
+
+    #[doc = $crate::utils::include_doc!($outer, $inner, "isolate_most_significant_one")]
+    #[cfg(feature = "isolate_most_least_significant_one")]
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn isolate_most_significant_one(self) -> Self {
+      Self(self.0.isolate_most_significant_one())
+    }
+
+    #[doc = $crate::utils::include_doc!($outer, $inner, "isolate_least_significant_one")]
+    #[cfg(feature = "isolate_most_least_significant_one")]
+    #[must_use = $crate::utils::must_use_doc!()]
+    #[inline]
+    pub const fn isolate_least_significant_one(self) -> Self {
+      Self(self.0.isolate_least_significant_one())
     }
   };
 }
