@@ -12,9 +12,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 let uppercase_a = uint!(65 u8);
 let lowercase_a = uint!(97 u8);
 

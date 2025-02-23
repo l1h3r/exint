@@ -10,9 +10,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert!(uint!(6).is_multiple_of(uint!(2)));
 assert!(!uint!(5).is_multiple_of(uint!(2)));
 

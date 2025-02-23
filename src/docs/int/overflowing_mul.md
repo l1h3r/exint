@@ -10,9 +10,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(int!(5).overflowing_mul(int!(2)), (int!(10), false));
 assert_eq!(int!(1000000000).overflowing_mul(int!(10)), (int!(1410065408), true));
 ```

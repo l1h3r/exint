@@ -17,9 +17,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(int!(5).carrying_mul(int!(-2), int!(0)), (uint!(4294967286), int!(-1)));
 assert_eq!(int!(5).carrying_mul(int!(-2), int!(10)), (uint!(0), int!(0)));
 assert_eq!(int!(1000000000).carrying_mul(int!(-10), int!(0)), (uint!(2884901888), int!(-3)));

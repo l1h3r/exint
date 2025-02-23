@@ -11,9 +11,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!((uint::MAX >> 2u32).leading_zeros(), 2);
 assert_eq!(uint!(0).leading_zeros(), 32);
 assert_eq!(uint::MAX.leading_zeros(), 0);

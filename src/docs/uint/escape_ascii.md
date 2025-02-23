@@ -11,9 +11,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!("0", uint!(b'0' u8).escape_ascii().to_string());
 assert_eq!("\\t", uint!(b'\t' u8).escape_ascii().to_string());
 assert_eq!("\\r", uint!(b'\r' u8).escape_ascii().to_string());

@@ -11,9 +11,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(int!(0x1).overflowing_shl(4), (int!(0x10), false));
 assert_eq!(int!(0x1).overflowing_shl(36), (int!(0x10), true));
 assert_eq!(int!(0x10).overflowing_shl(int::BITS - 1), (int!(0), false));

@@ -10,9 +10,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(uint!(1).overflowing_add_signed(int!(2)), (uint!(3), false));
 assert_eq!(uint!(1).overflowing_add_signed(int!(-2)), (uint::MAX, true));
 assert_eq!((uint::MAX - uint!(2)).overflowing_add_signed(int!(4)), (uint!(1), true));

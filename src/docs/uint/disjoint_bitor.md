@@ -18,9 +18,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 // SAFETY: `1` and `4` have no bits in common.
 unsafe {
     assert_eq!(uint!(1).unchecked_disjoint_bitor(uint!(4)), uint!(5));

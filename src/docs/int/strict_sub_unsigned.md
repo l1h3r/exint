@@ -12,9 +12,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(int!(1).strict_sub_unsigned(uint!(2)), int!(-1));
 ```
 
@@ -22,8 +22,8 @@ The following panics because of overflow:
 
 ```should_panic
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 let _ = (int::MIN + int!(2)).strict_sub_unsigned(uint!(3));
 ```

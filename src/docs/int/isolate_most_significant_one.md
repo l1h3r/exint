@@ -6,9 +6,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(int!(0b01100100).isolate_most_significant_one(), int!(0b01000000));
 assert_eq!(int!(0).isolate_most_significant_one(), int!(0));
 ```

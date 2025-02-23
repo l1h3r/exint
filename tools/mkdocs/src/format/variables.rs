@@ -2,9 +2,9 @@ use crate::utils;
 
 pub const EXAMPLE_PRELUDE: &str = "
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 ";
 
 // Note: This *MUST* be in the same order as `VARS`.

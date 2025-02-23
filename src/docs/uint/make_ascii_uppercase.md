@@ -13,9 +13,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 let mut lowercase_a = uint!(b'a' u8);
 let uppercase_a = uint!(b'A' u8);
 

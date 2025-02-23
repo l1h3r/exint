@@ -22,9 +22,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 // Only the most significant word is signed.
 //
 //   10  MAX    (a = 10 × 2^32 + 2^32 - 1)

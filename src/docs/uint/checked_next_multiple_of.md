@@ -8,9 +8,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(uint!(16).checked_next_multiple_of(uint!(8)), Some(uint!(16)));
 assert_eq!(uint!(23).checked_next_multiple_of(uint!(8)), Some(uint!(24)));
 assert_eq!(uint!(1).checked_next_multiple_of(uint!(0)), None);

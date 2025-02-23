@@ -7,9 +7,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 let low_non_surrogate = uint!(0xA000 u16);
 let low_surrogate = uint!(0xD800 u16);
 let high_surrogate = uint!(0xDC00 u16);

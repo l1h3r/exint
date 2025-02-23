@@ -12,9 +12,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 //    9    6    (a = 9 × 2^32 + 6)
 // -  5    7    (b = 5 × 2^32 + 7)
 // ---------

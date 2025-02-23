@@ -7,9 +7,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(uint!(10).checked_signed_diff(uint!(2)), Some(int!(8)));
 assert_eq!(uint!(2).checked_signed_diff(uint!(10)), Some(int!(-8)));
 assert_eq!(uint::MAX.checked_signed_diff(int::MAX.cast_unsigned()), None);

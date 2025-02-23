@@ -13,9 +13,9 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
+# #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
-# use exint::*;
 assert_eq!(int!(10).abs(), int!(10));
 assert_eq!(int!(-10).abs(), int!(10));
 ```
