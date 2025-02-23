@@ -9,6 +9,8 @@ Basic usage:
 # #[macro_use] extern crate exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
+use exint::Strict;
+
 assert_eq!(Strict(int!(0b01100100)).isolate_least_significant_one(), Strict(int!(0b00000100)));
 assert_eq!(Strict(int!(0)).isolate_least_significant_one(), Strict(int!(0)));
 ```
