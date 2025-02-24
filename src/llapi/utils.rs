@@ -11,7 +11,7 @@ pub(crate) const SIGN: u8 = 0b10000000;
 ///
 /// [`Integer`]: crate::types::Integer
 #[expect(dead_code, reason = "Not currently used")]
-#[inline]
+#[inline(always)]
 pub(crate) const fn lsb_index<const N: usize>() -> usize {
   #[cfg(target_endian = "big")]
   { N - 1 }
@@ -23,7 +23,7 @@ pub(crate) const fn lsb_index<const N: usize>() -> usize {
 /// Get the index of the most-significant byte from an [`Integer`] of size `N`.
 ///
 /// [`Integer`]: crate::types::Integer
-#[inline]
+#[inline(always)]
 pub(crate) const fn msb_index<const N: usize>() -> usize {
   #[cfg(target_endian = "big")]
   { 0 }
@@ -33,7 +33,7 @@ pub(crate) const fn msb_index<const N: usize>() -> usize {
 }
 
 /// Resize an integer type to another of a different size.
-#[inline]
+#[inline(always)]
 pub(crate) const fn resize_bytes<T, const N: usize, const M: usize>(bytes: [u8; N]) -> [u8; M]
 where
   T: Uint,
@@ -108,7 +108,7 @@ where
 /// This results in undefined behaviour when `size_of::<T>() != size_of::<U>()`.
 ///
 /// [`transmute`]: ::core::mem::transmute
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn transmute<T, U>(src: T) -> U {
   // TODO: Consider `core::assert_unsafe_precondition`
   ::core::debug_assert!(
@@ -117,7 +117,7 @@ pub(crate) const unsafe fn transmute<T, U>(src: T) -> U {
   );
 
   #[cfg(feature = "core_intrinsics")]
-  #[inline]
+  #[inline(always)]
   const fn __impl<T, U>(src: T) -> U {
     // SAFETY: This is guaranteed to be safe by the caller.
     unsafe { ::core::intrinsics::transmute_unchecked(src) }
@@ -125,7 +125,7 @@ pub(crate) const unsafe fn transmute<T, U>(src: T) -> U {
 
   // Borrowed from: https://github.com/rust-lang/project-safe-transmute
   #[cfg(not(feature = "core_intrinsics"))]
-  #[inline]
+  #[inline(always)]
   const fn __impl<T, U>(src: T) -> U {
     #[repr(C)]
     union Transmute<T, U> {

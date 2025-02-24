@@ -9,7 +9,7 @@ use crate::llapi::traits::Consts;
 // Bitwise Operations
 // -----------------------------------------------------------------------------
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn band<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   let mut value: [u8; N] = Consts::UMIN;
   let mut index: usize = 0;
@@ -22,7 +22,7 @@ pub(crate) const fn band<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] 
   value
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn bor<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   let mut value: [u8; N] = Consts::UMIN;
   let mut index: usize = 0;
@@ -35,7 +35,7 @@ pub(crate) const fn bor<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   value
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn bxor<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   let mut value: [u8; N] = Consts::UMIN;
   let mut index: usize = 0;
@@ -48,13 +48,13 @@ pub(crate) const fn bxor<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] 
   value
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn bnot<const N: usize>(integer: [u8; N]) -> [u8; N] {
   bxor(integer, Consts::UMAX)
 }
 
 #[cfg(feature = "disjoint_bitor")]
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn disjoint_bor<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   unsafe {
     ::core::hint::assert_unchecked(eq(band(lhs, rhs), Consts::UMIN));
@@ -67,7 +67,7 @@ pub(crate) const unsafe fn disjoint_bor<const N: usize>(lhs: [u8; N], rhs: [u8; 
 // Comparison Operations
 // -----------------------------------------------------------------------------
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn eq<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> bool {
   // SAFETY: byte arrays do not have padding or uninitialized memory.
   maybe_intrinsic! {
@@ -89,7 +89,7 @@ pub(crate) const fn eq<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> bool {
   }
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn ucmp<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> Ordering {
   let mut index: usize = 0;
 
@@ -109,7 +109,7 @@ pub(crate) const fn ucmp<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> Ordering
   Ordering::Equal
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn scmp<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> Ordering {
   ::core::panic!("scmp")
 }
@@ -118,7 +118,7 @@ pub(crate) const fn scmp<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> Orderi
 // Bit Conversion Operation
 // -----------------------------------------------------------------------------
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn swap1<const N: usize>(integer: [u8; N]) -> [u8; N] {
   let mut value: [u8; N] = Consts::UMIN;
   let mut index: usize = 0;
@@ -131,7 +131,7 @@ pub(crate) const fn swap1<const N: usize>(integer: [u8; N]) -> [u8; N] {
   value
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn swap8<const N: usize>(integer: [u8; N]) -> [u8; N] {
   let mut value: [u8; N] = Consts::UMIN;
   let mut index: usize = 0;
@@ -144,12 +144,12 @@ pub(crate) const fn swap8<const N: usize>(integer: [u8; N]) -> [u8; N] {
   value
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn rotl<const N: usize>(_integer: [u8; N], _bits: u32) -> [u8; N] {
   ::core::panic!("rotl")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn rotr<const N: usize>(_integer: [u8; N], _bits: u32) -> [u8; N] {
   ::core::panic!("rotr")
 }
@@ -158,7 +158,7 @@ pub(crate) const fn rotr<const N: usize>(_integer: [u8; N], _bits: u32) -> [u8; 
 // Bit Inspection Operations
 // -----------------------------------------------------------------------------
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn ctpop<const N: usize>(integer: [u8; N]) -> u32 {
   let mut value: u32 = 0;
   let mut index: usize = 0;
@@ -171,7 +171,7 @@ pub(crate) const fn ctpop<const N: usize>(integer: [u8; N]) -> u32 {
   value
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn ctlz<const N: usize>(integer: [u8; N]) -> u32 {
   let mut value: u32 = 0;
   let mut index: usize = 0;
@@ -188,7 +188,7 @@ pub(crate) const fn ctlz<const N: usize>(integer: [u8; N]) -> u32 {
   value
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn cttz<const N: usize>(integer: [u8; N]) -> u32 {
   let mut value: u32 = 0;
   let mut index: usize = 0;
@@ -205,7 +205,7 @@ pub(crate) const fn cttz<const N: usize>(integer: [u8; N]) -> u32 {
   value
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn ctlz_nonzero<const N: usize>(integer: [u8; N]) -> u32 {
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe {
@@ -215,7 +215,7 @@ pub(crate) const unsafe fn ctlz_nonzero<const N: usize>(integer: [u8; N]) -> u32
   ctlz(integer)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn cttz_nonzero<const N: usize>(integer: [u8; N]) -> u32 {
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe {
@@ -229,7 +229,7 @@ pub(crate) const unsafe fn cttz_nonzero<const N: usize>(integer: [u8; N]) -> u32
 // Overflowing Operations
 // -----------------------------------------------------------------------------
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn overflowing_uadd<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> ([u8; N], bool) {
   let out: [u8; N] = wrapping_add(lhs, rhs);
   let cmp: bool = ucmp(out, lhs).is_lt();
@@ -237,7 +237,7 @@ pub(crate) const fn overflowing_uadd<const N: usize>(lhs: [u8; N], rhs: [u8; N])
   (out, cmp)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn overflowing_usub<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> ([u8; N], bool) {
   let out: [u8; N] = wrapping_sub(lhs, rhs);
   let cmp: bool = ucmp(lhs, rhs).is_lt();
@@ -245,22 +245,22 @@ pub(crate) const fn overflowing_usub<const N: usize>(lhs: [u8; N], rhs: [u8; N])
   (out, cmp)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn overflowing_umul<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> ([u8; N], bool) {
   ::core::panic!("overflowing_umul")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn overflowing_sadd<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> ([u8; N], bool) {
   ::core::panic!("overflowing_sadd")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn overflowing_ssub<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> ([u8; N], bool) {
   ::core::panic!("overflowing_ssub")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn overflowing_smul<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> ([u8; N], bool) {
   ::core::panic!("overflowing_smul")
 }
@@ -269,7 +269,7 @@ pub(crate) const fn overflowing_smul<const N: usize>(_lhs: [u8; N], _rhs: [u8; N
 // Saturating Operations
 // -----------------------------------------------------------------------------
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn saturating_uadd<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   match overflowing_uadd(lhs, rhs) {
     (_value, true) => Consts::UMAX,
@@ -277,7 +277,7 @@ pub(crate) const fn saturating_uadd<const N: usize>(lhs: [u8; N], rhs: [u8; N]) 
   }
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn saturating_usub<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   match overflowing_usub(lhs, rhs) {
     (_value, true) => Consts::UMIN,
@@ -285,12 +285,12 @@ pub(crate) const fn saturating_usub<const N: usize>(lhs: [u8; N], rhs: [u8; N]) 
   }
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn saturating_sadd<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("saturating_sadd")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn saturating_ssub<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("saturating_ssub")
 }
@@ -299,67 +299,67 @@ pub(crate) const fn saturating_ssub<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]
 // Unchecked Operations
 // -----------------------------------------------------------------------------
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_uadd<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   wrapping_add(lhs, rhs)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_usub<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   wrapping_sub(lhs, rhs)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_umul<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   wrapping_mul(lhs, rhs)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_udiv<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("unchecked_udiv")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_urem<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("unchecked_urem")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_sadd<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   wrapping_add(lhs, rhs)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_ssub<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   wrapping_sub(lhs, rhs)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_smul<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> [u8; N] {
   wrapping_mul(lhs, rhs)
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_sdiv<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("unchecked_sdiv")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_srem<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("unchecked_srem")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_shl<const N: usize>(_integer: [u8; N], _bits: u32) -> [u8; N] {
   ::core::panic!("unchecked_shl")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_lshr<const N: usize>(_integer: [u8; N], _bits: u32) -> [u8; N] {
   ::core::panic!("unchecked_lshr")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const unsafe fn unchecked_ashr<const N: usize>(_integer: [u8; N], _bits: u32) -> [u8; N] {
   ::core::panic!("unchecked_ashr")
 }
@@ -368,17 +368,17 @@ pub(crate) const unsafe fn unchecked_ashr<const N: usize>(_integer: [u8; N], _bi
 // Wrapping Operations
 // -----------------------------------------------------------------------------
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn wrapping_add<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("wrapping_add")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn wrapping_sub<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("wrapping_sub")
 }
 
-#[inline]
+#[inline(always)]
 pub(crate) const fn wrapping_mul<const N: usize>(_lhs: [u8; N], _rhs: [u8; N]) -> [u8; N] {
   ::core::panic!("wrapping_mul")
 }

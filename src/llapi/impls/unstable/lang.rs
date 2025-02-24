@@ -26,25 +26,25 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `and $type` instruction
-    #[inline]
+    #[inline(always)]
     fn band(lhs: Self, rhs: Self) -> Self {
       lhs & rhs
     }
 
     // LLVM generates `or $type` instruction
-    #[inline]
+    #[inline(always)]
     fn bor(lhs: Self, rhs: Self) -> Self {
       lhs | rhs
     }
 
     // LLVM generates `xor $type` instruction
-    #[inline]
+    #[inline(always)]
     fn bxor(lhs: Self, rhs: Self) -> Self {
       lhs ^ rhs
     }
 
     // LLVM generates `xor $type .. -1` instruction
-    #[inline]
+    #[inline(always)]
     fn bnot(integer: Self) -> Self {
       !integer
     }
@@ -54,7 +54,7 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `icmp eq $type` instruction
-    #[inline]
+    #[inline(always)]
     fn eq(lhs: Self, rhs: Self) -> bool {
       lhs == rhs
     }
@@ -64,25 +64,25 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `@llvm.bitreverse.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn swap1(integer: Self) -> Self {
       integer.reverse_bits()
     }
 
     // LLVM generates `@llvm.bswap.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn swap8(integer: Self) -> Self {
       integer.swap_bytes()
     }
 
     // LLVM generates `@llvm.fshl.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn rotl(integer: Self, bits: u32) -> Self {
       integer.rotate_left(bits)
     }
 
     // LLVM generates `@llvm.fshr.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn rotr(integer: Self, bits: u32) -> Self {
       integer.rotate_right(bits)
     }
@@ -92,25 +92,25 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `@llvm.ctpop.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn ctpop(integer: Self) -> u32 {
       integer.count_ones()
     }
 
     // LLVM generates `@llvm.ctlz.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn ctlz(integer: Self) -> u32 {
       integer.leading_zeros()
     }
 
     // LLVM generates `@llvm.cttz.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn cttz(integer: Self) -> u32 {
       integer.trailing_zeros()
     }
 
     // LLVM generates `@llvm.ctlz.$type` intrinsic with `nonzero` flag
-    #[inline]
+    #[inline(always)]
     unsafe fn ctlz_nonzero(integer: Self) -> u32 {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -124,7 +124,7 @@ specialize! {
     }
 
     // LLVM generates `@llvm.cttz.$type` intrinsic with `nonzero` flag
-    #[inline]
+    #[inline(always)]
     unsafe fn cttz_nonzero(integer: Self) -> u32 {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -142,7 +142,7 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `shl $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_shl(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -161,19 +161,19 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `add $type` instruction
-    #[inline]
+    #[inline(always)]
     fn wrapping_add(lhs: Self, rhs: Self) -> Self {
       lhs.wrapping_add(rhs)
     }
 
     // LLVM generates `sub $type` instruction
-    #[inline]
+    #[inline(always)]
     fn wrapping_sub(lhs: Self, rhs: Self) -> Self {
       lhs.wrapping_sub(rhs)
     }
 
     // LLVM generates `mul $type` instruction
-    #[inline]
+    #[inline(always)]
     fn wrapping_mul(lhs: Self, rhs: Self) -> Self {
       lhs.wrapping_mul(rhs)
     }
@@ -187,7 +187,7 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `@llvm.scmp.i8.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn scmp(lhs: Self, rhs: Self) -> Ordering {
       maybe_intrinsic! {
         @enabled => {
@@ -204,19 +204,19 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `@llvm.sadd.with.overflow.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn overflowing_sadd(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_add(rhs)
     }
 
     // LLVM generates `@llvm.ssub.with.overflow.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn overflowing_ssub(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_sub(rhs)
     }
 
     // LLVM generates `@llvm.smul.with.overflow.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn overflowing_smul(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_mul(rhs)
     }
@@ -226,13 +226,13 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `@llvm.sadd.sat.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn saturating_sadd(lhs: Self, rhs: Self) -> Self {
       lhs.saturating_add(rhs)
     }
 
     // LLVM generates `@llvm.ssub.sat.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn saturating_ssub(lhs: Self, rhs: Self) -> Self {
       lhs.saturating_sub(rhs)
     }
@@ -242,28 +242,28 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `add nsw $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_sadd(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_add(rhs) }
     }
 
     // LLVM generates `sub nsw $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_ssub(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_sub(rhs) }
     }
 
     // LLVM generates `mul nsw $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_smul(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_mul(rhs) }
     }
 
     // LLVM generates `sdiv $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_sdiv(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -278,7 +278,7 @@ specialize! {
     }
 
     // LLVM generates `srem $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_srem(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -293,7 +293,7 @@ specialize! {
     }
 
     // LLVM generates `ashr $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_ashr(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -317,7 +317,7 @@ specialize! {
 
     // LLVM generates `or disjoint $type` instruction
     #[cfg(feature = "disjoint_bitor")]
-    #[inline]
+    #[inline(always)]
     unsafe fn disjoint_bor(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -335,7 +335,7 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `@llvm.ucmp.i8.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn ucmp(lhs: Self, rhs: Self) -> Ordering {
       maybe_intrinsic! {
         @enabled => {
@@ -352,7 +352,7 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `@llvm.uadd.with.overflow.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn overflowing_uadd(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_add(rhs)
     }
@@ -361,13 +361,13 @@ specialize! {
     //
     // Note: `@llvm.usub.with.overflow.$type` is not emitted by rustc:
     //   https://github.com/rust-lang/rust/pull/103299
-    #[inline]
+    #[inline(always)]
     fn overflowing_usub(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_sub(rhs)
     }
 
     // LLVM generates `@llvm.umul.with.overflow.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn overflowing_umul(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_mul(rhs)
     }
@@ -377,13 +377,13 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `@llvm.uadd.sat.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn saturating_uadd(lhs: Self, rhs: Self) -> Self {
       lhs.saturating_add(rhs)
     }
 
     // LLVM generates `@llvm.usub.sat.$type` intrinsic
-    #[inline]
+    #[inline(always)]
     fn saturating_usub(lhs: Self, rhs: Self) -> Self {
       lhs.saturating_sub(rhs)
     }
@@ -393,28 +393,28 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // LLVM generates `add nuw $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_uadd(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_add(rhs) }
     }
 
     // LLVM generates `sub nuw $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_usub(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_sub(rhs) }
     }
 
     // LLVM generates `mul nuw $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_umul(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_mul(rhs) }
     }
 
     // LLVM generates `udiv $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_udiv(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -429,7 +429,7 @@ specialize! {
     }
 
     // LLVM generates `urem $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_urem(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -444,7 +444,7 @@ specialize! {
     }
 
     // LLVM generates `lshr $type` instruction
-    #[inline]
+    #[inline(always)]
     unsafe fn unchecked_lshr(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {

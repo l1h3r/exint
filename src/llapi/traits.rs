@@ -73,12 +73,12 @@ const_trait_impl! {
     type Uint = (T::Uint, bool);
     type Sint = (T::Sint, bool);
 
-    #[inline]
+    #[inline(always)]
     fn ucast(self) -> Self::Uint {
       (self.0.ucast(), self.1)
     }
 
-    #[inline]
+    #[inline(always)]
     fn scast(self) -> Self::Sint {
       (self.0.scast(), self.1)
     }
@@ -97,12 +97,12 @@ macro_rules! implement_cast {
         type Uint = $uint;
         type Sint = $sint;
 
-        #[inline]
+        #[inline(always)]
         fn ucast(self) -> Self::Uint {
           Self::Uint::from_ne_bytes(self)
         }
 
-        #[inline]
+        #[inline(always)]
         fn scast(self) -> Self::Sint {
           Self::Sint::from_ne_bytes(self)
         }
@@ -113,7 +113,7 @@ macro_rules! implement_cast {
         type Uint = [u8; $size];
         type Sint = ::core::convert::Infallible;
 
-        #[inline]
+        #[inline(always)]
         fn ucast(self) -> Self::Uint {
           Self::to_ne_bytes(self)
         }
@@ -146,7 +146,7 @@ macro_rules! implement_cast {
           ::core::panic!()
         }
 
-        #[inline]
+        #[inline(always)]
         fn scast(self) -> Self::Sint {
           Self::to_ne_bytes(self)
         }
@@ -219,7 +219,7 @@ macro_rules! implement_exts {
       }
 
       impl Proxy {
-        #[inline]
+        #[inline(always)]
         const fn new(integer: [u8; $size]) -> Self {
           Self {
             integer,
@@ -227,7 +227,7 @@ macro_rules! implement_exts {
           }
         }
 
-        #[inline]
+        #[inline(always)]
         const fn get(self) -> [u8; $size] {
           self.integer
         }
@@ -240,21 +240,21 @@ macro_rules! implement_exts {
 
           const UDIFF: u32 = <$uint>::BITS - <[u8; $size] as Consts>::BITS;
 
-          #[inline]
+          #[inline(always)]
           fn zext(self) -> Self::Uint {
             // SAFETY: `Proxy` is the same size and layout as `Uint`.
             unsafe { ::core::mem::transmute::<Proxy, Self::Uint>(Proxy::new(self)) }
           }
 
           #[expect(clippy::cast_possible_wrap, reason = "Recognized sign-extend pattern")]
-          #[inline]
+          #[inline(always)]
           fn sext(self) -> Self::Sint {
             ((self.zext() as $sint) << Self::UDIFF) >> Self::UDIFF
           }
         }
 
         impl const Trunc<[u8; $size]> for $uint {
-          #[inline]
+          #[inline(always)]
           fn trunc(self) -> [u8; $size] {
             // SAFETY: `Self` is the same size and layout as `Proxy`.
             unsafe { ::core::mem::transmute::<Self, Proxy>(self) }.get()
@@ -263,7 +263,7 @@ macro_rules! implement_exts {
 
         impl const Trunc<[u8; $size]> for $sint {
           #[expect(clippy::cast_sign_loss, reason = "Recognized truncate pattern")]
-          #[inline]
+          #[inline(always)]
           fn trunc(self) -> [u8; $size] {
             (self as $uint).trunc()
           }

@@ -44,7 +44,7 @@ macro_rules! define_traits {
     impl<const N: usize> const $base_name for [u8; N] {
       $(
         #[allow(unsafe_op_in_unsafe_fn, reason = "Non-public macro-generated code")]
-        #[inline]
+        #[inline(always)]
         $(#[$meta])*
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           $crate::llapi::impls::fallback::$function($($name),+)
@@ -56,7 +56,7 @@ macro_rules! define_traits {
     impl<T: ~const $base_name> const $spec_name for T {
       $(
         #[allow(unsafe_op_in_unsafe_fn, reason = "Non-public macro-generated code")]
-        #[inline]
+        #[inline(always)]
         $(#[$meta])*
         default $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           <T as $base_name>::$function($($name),+)
@@ -68,7 +68,7 @@ macro_rules! define_traits {
     impl<T: ~const $base_name> const $spec_name for T {
       $(
         #[allow(unsafe_op_in_unsafe_fn, reason = "Non-public macro-generated code")]
-        #[inline]
+        #[inline(always)]
         $(#[$meta])*
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
           <T as $base_name>::$function($($name),+)
@@ -78,7 +78,7 @@ macro_rules! define_traits {
 
     $(
       #[allow(unsafe_op_in_unsafe_fn, reason = "Non-public macro-generated code")]
-      #[inline]
+      #[inline(always)]
       $(#[$meta])*
       pub(crate) const $($safety)? fn $function<const N: usize>($($name: arg!($type)),+) $(-> arg!($return))? {
         <[u8; N] as $spec_name>::$function($($name),+)
