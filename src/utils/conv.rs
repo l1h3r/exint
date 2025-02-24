@@ -1,31 +1,60 @@
+use crate::error::TryFromIntError;
+use crate::types::int;
+use crate::types::uint;
+use crate::utils::Cast;
+
 pub(crate) trait TryConvert<T> {
   type Error;
 
   fn try_convert(self) -> ::core::result::Result<T, Self::Error>;
 }
 
-macro_rules! implement_lib {
-  ($name:ident) => {
-    impl<const N: usize> TryConvert<u32> for $crate::$name<N> {
-      type Error = $crate::error::TryFromIntError;
+impl<const N: usize> TryConvert<u32> for uint<N> {
+  type Error = TryFromIntError;
 
-      #[inline]
-      fn try_convert(self) -> ::core::result::Result<u32, Self::Error> {
-        let min: Self = $crate::utils::Cast::cast(u32::MIN);
-        let max: Self = $crate::utils::Cast::cast(u32::MAX);
-
-        if self.const_lt(&min) || self.const_gt(&max) {
-          ::core::result::Result::Err($crate::error::TryFromIntError::new())
-        } else {
-          ::core::result::Result::Ok(self.into_u32())
-        }
-      }
+  #[inline]
+  fn try_convert(self) -> ::core::result::Result<u32, Self::Error> {
+    if ::core::matches!(N, 1 | 2 | 3 | 4) {
+      ::core::result::Result::Ok(self.into_u32())
+    } else if self > Cast::cast(u32::MAX) {
+      ::core::result::Result::Err(TryFromIntError::new())
+    } else {
+      ::core::result::Result::Ok(self.into_u32())
     }
-  };
+  }
 }
 
-implement_lib!(int);
-implement_lib!(uint);
+impl<const N: usize> TryConvert<u32> for int<N> {
+  type Error = TryFromIntError;
+
+  #[inline]
+  fn try_convert(self) -> ::core::result::Result<u32, Self::Error> {
+    if self < Self::ZERO {
+      ::core::result::Result::Err(TryFromIntError::new())
+    } else if ::core::matches!(N, 1 | 2 | 3 | 4) {
+      ::core::result::Result::Ok(self.into_u32())
+    } else if self > Cast::cast(u32::MAX) {
+      ::core::result::Result::Err(TryFromIntError::new())
+    } else {
+      ::core::result::Result::Ok(self.into_u32())
+    }
+  }
+}
+
+impl<const N: usize> TryConvert<usize> for uint<N> {
+  type Error = TryFromIntError;
+
+  #[inline]
+  fn try_convert(self) -> ::core::result::Result<usize, Self::Error> {
+    if N <= ::core::mem::size_of::<usize>() {
+      ::core::result::Result::Ok(self.into_usize())
+    } else if self > Cast::cast(usize::MAX) {
+      ::core::result::Result::Err(TryFromIntError::new())
+    } else {
+      ::core::result::Result::Ok(self.into_usize())
+    }
+  }
+}
 
 macro_rules! implement_std {
   ($type:ty) => {
@@ -47,3 +76,18 @@ macro_rules! implement_std {
 
 implement_std!(i8 i16 i32 i64 i128 isize);
 implement_std!(u8 u16 u32 u64 u128 usize);
+
+impl<const N: usize> TryConvert<uint<N>> for usize {
+  type Error = TryFromIntError;
+
+  #[inline]
+  fn try_convert(self) -> ::core::result::Result<uint<N>, Self::Error> {
+    if N >= ::core::mem::size_of::<usize>() {
+      ::core::result::Result::Ok(uint::from_usize(self))
+    } else if self > Cast::cast(uint::<N>::MAX) {
+      ::core::result::Result::Err(TryFromIntError::new())
+    } else {
+      ::core::result::Result::Ok(uint::from_usize(self))
+    }
+  }
+}
