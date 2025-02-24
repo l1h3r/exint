@@ -82,16 +82,32 @@ specialize! {
       (SpecCore::swap8(integer.zext() << Self::UDIFF)).trunc()
     }
 
-    // LLVM generates `@llvm.fshl.$type` intrinsic
+    // TODO: Figure out how to get `@llvm.fshl.$type`
     #[inline(always)]
-    fn rotl(_integer: Self, _bits: u32) -> Self {
-      ::core::panic!("rotl")
+    fn rotl(integer: Self, bits: u32) -> Self {
+      let lhs: u32 = bits % Self::BITS;
+      let rhs: u32 = Self::BITS - lhs;
+
+      SpecCore::bor(
+        // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
+        unsafe { SpecCore::unchecked_shl(integer, lhs) },
+        // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
+        unsafe { SpecUint::unchecked_lshr(integer, rhs) },
+      )
     }
 
-    // LLVM generates `@llvm.fshr.$type` intrinsic
+    // TODO: Figure out how to get `@llvm.fshr.$type`
     #[inline(always)]
-    fn rotr(_integer: Self, _bits: u32) -> Self {
-      ::core::panic!("rotr")
+    fn rotr(integer: Self, bits: u32) -> Self {
+      let lhs: u32 = bits % Self::BITS;
+      let rhs: u32 = Self::BITS - lhs;
+
+      SpecCore::bor(
+        // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
+        unsafe { SpecUint::unchecked_lshr(integer, lhs) },
+        // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
+        unsafe { SpecCore::unchecked_shl(integer, rhs) },
+      )
     }
 
     // -------------------------------------------------------------------------
