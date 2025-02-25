@@ -218,38 +218,68 @@ specialize! {
     // Overflowing Operations
     // -------------------------------------------------------------------------
 
-    // LLVM generates `@llvm.sadd.with.overflow.$type` intrinsic
     #[inline(always)]
-    fn overflowing_sadd(_lhs: Self, _rhs: Self) -> (Self, bool) {
-      ::core::panic!("overflowing_sadd")
+    fn overflowing_sadd(lhs: Self, rhs: Self) -> (Self, bool) {
+      let lhs: <Self as Exts>::Sint = lhs.sext();
+      let rhs: <Self as Exts>::Sint = rhs.sext();
+      let out: <Self as Exts>::Sint = unsafe { lhs.unchecked_add(rhs) };
+      let cmp: bool = out > Self::SMAX.sext() || out < Self::SMIN.sext();
+
+      (out.trunc(), cmp)
     }
 
-    // LLVM generates `@llvm.ssub.with.overflow.$type` intrinsic
     #[inline(always)]
-    fn overflowing_ssub(_lhs: Self, _rhs: Self) -> (Self, bool) {
-      ::core::panic!("overflowing_ssub")
+    fn overflowing_ssub(lhs: Self, rhs: Self) -> (Self, bool) {
+      let lhs: <Self as Exts>::Sint = lhs.sext();
+      let rhs: <Self as Exts>::Sint = rhs.sext();
+      let out: <Self as Exts>::Sint = unsafe { lhs.unchecked_sub(rhs) };
+      let cmp: bool = out > Self::SMAX.sext() || out < Self::SMIN.sext();
+
+      (out.trunc(), cmp)
     }
 
-    // LLVM generates `@llvm.smul.with.overflow.$type` intrinsic
     #[inline(always)]
-    fn overflowing_smul(_lhs: Self, _rhs: Self) -> (Self, bool) {
-      ::core::panic!("overflowing_smul")
+    fn overflowing_smul(lhs: Self, rhs: Self) -> (Self, bool) {
+      let lhs: <Self as Exts>::Sint = lhs.sext();
+      let rhs: <Self as Exts>::Sint = rhs.sext();
+      let out: <Self as Exts>::Sint = unsafe { lhs.unchecked_mul(rhs) };
+      let cmp: bool = out > Self::SMAX.sext() || out < Self::SMIN.sext();
+
+      (out.trunc(), cmp)
     }
 
     // -------------------------------------------------------------------------
     // Saturating Operations
     // -------------------------------------------------------------------------
 
-    // LLVM generates `@llvm.sadd.sat.$type` intrinsic
     #[inline(always)]
-    fn saturating_sadd(_lhs: Self, _rhs: Self) -> Self {
-      ::core::panic!("saturating_sadd")
+    fn saturating_sadd(lhs: Self, rhs: Self) -> Self {
+      let lhs: <Self as Exts>::Sint = lhs.sext();
+      let rhs: <Self as Exts>::Sint = rhs.sext();
+      let out: <Self as Exts>::Sint = unsafe { lhs.unchecked_add(rhs) };
+
+      if out > Self::SMAX.sext() {
+        Self::SMAX
+      } else if out < Self::SMIN.sext() {
+        Self::SMIN
+      } else {
+        out.trunc()
+      }
     }
 
-    // LLVM generates `@llvm.ssub.sat.$type` intrinsic
     #[inline(always)]
-    fn saturating_ssub(_lhs: Self, _rhs: Self) -> Self {
-      ::core::panic!("saturating_ssub")
+    fn saturating_ssub(lhs: Self, rhs: Self) -> Self {
+      let lhs: <Self as Exts>::Sint = lhs.sext();
+      let rhs: <Self as Exts>::Sint = rhs.sext();
+      let out: <Self as Exts>::Sint = unsafe { lhs.unchecked_sub(rhs) };
+
+      if out > Self::SMAX.sext() {
+        Self::SMAX
+      } else if out < Self::SMIN.sext() {
+        Self::SMIN
+      } else {
+        out.trunc()
+      }
     }
 
     // -------------------------------------------------------------------------
