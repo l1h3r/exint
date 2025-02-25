@@ -941,7 +941,6 @@ impl<const N: usize> uint<N> {
 
 impl<const N: usize> uint<N> {
   #[doc = include_doc!(uint, "unbounded_shl")]
-  #[cfg(feature = "unbounded_shifts")]
   #[must_use = must_use_doc!()]
   #[inline]
   pub const fn unbounded_shl(self, rhs: u32) -> Self {
@@ -954,7 +953,6 @@ impl<const N: usize> uint<N> {
   }
 
   #[doc = include_doc!(uint, "unbounded_shr")]
-  #[cfg(feature = "unbounded_shifts")]
   #[must_use = must_use_doc!()]
   #[inline]
   pub const fn unbounded_shr(self, rhs: u32) -> Self {

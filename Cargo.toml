@@ -42,7 +42,6 @@ all_unstable = [
   "isolate_most_least_significant_one",
   "mixed_integer_ops_unsigned_sub",
   "strict_overflow_ops",
-  "unbounded_shifts",
   "unchecked_neg",
   "unchecked_shifts",
   "unsigned_signed_diff",
@@ -197,11 +196,6 @@ mixed_integer_ops_unsigned_sub = []
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/118260
 strict_overflow_ops = []
-
-# Enable support for `unbounded_shifts` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/129375
-unbounded_shifts = []
 
 # Enable support for `unchecked_neg` core functionality.
 #
