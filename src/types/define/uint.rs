@@ -27,16 +27,6 @@ pub struct uint<const N: usize = 4> {
 
 impl<const N: usize> uint<N> {
   macros::internals!(uint);
-
-  #[inline]
-  const fn one_less_than_next_power_of_two(self) -> Self {
-    if self.const_le(&Self::ONE) {
-      return Self::ZERO;
-    }
-
-    // SAFETY: `self - 1` is at *least* 2.
-    Self::MAX.const_shr(unsafe { llapi::ctlz_nonzero::<Self, N>(self.const_sub(Self::ONE)) })
-  }
 }
 
 impl<const N: usize> uint<N> {
