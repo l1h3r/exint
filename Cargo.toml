@@ -6,7 +6,12 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 
 [features]
-default = []
+default = [
+  "all_backend",
+  "all_nightly",
+  "all_unstable",
+  "std",
+]
 
 # ------------------------------------------------------------------------------
 # Groups
