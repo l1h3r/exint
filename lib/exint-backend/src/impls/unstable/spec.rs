@@ -1,12 +1,12 @@
 use ::core::cmp::Ordering;
 
-use crate::llapi::impls::unstable::SpecCore;
-use crate::llapi::impls::unstable::SpecSint;
-use crate::llapi::impls::unstable::SpecUint;
-use crate::llapi::macros::specialize;
-use crate::llapi::traits::Consts as _;
-use crate::llapi::traits::Exts;
-use crate::llapi::traits::Trunc as _;
+use crate::impls::unstable::SpecCore;
+use crate::impls::unstable::SpecSint;
+use crate::impls::unstable::SpecUint;
+use crate::macros::specialize;
+use crate::traits::Consts as _;
+use crate::traits::Exts;
+use crate::traits::Trunc as _;
 
 specialize! {
   impl const SpecCore for Int<3|5|6|7|9|10|11|12|13|14|15> {

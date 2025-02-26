@@ -1,6 +1,33 @@
-use crate::llapi::macros::const_trait_impl;
-use crate::llapi::utils::SIGN;
-use crate::llapi::utils::msb_index;
+use crate::macros::const_trait_impl;
+use crate::utils::SIGN;
+use crate::utils::msb_index;
+
+/// A marker trait for integer types.
+///
+/// # Safety
+///
+/// Types implementing this trait must ensure they are valid representations of
+/// integers with no padding or uninitialized bytes.
+pub unsafe trait Uint: ::core::marker::Copy {
+  /// Whether the type represents an unsigned integer.
+  const UINT: bool;
+}
+
+macro_rules! implement_uint {
+  ($type:ty, $uint:literal) => {
+    unsafe impl Uint for $type {
+      const UINT: bool = $uint;
+    }
+  };
+  ($($type:ty)+, $uint:literal) => {
+    $(
+      implement_uint!($type, $uint);
+    )+
+  };
+}
+
+implement_uint!(i8 i16 i32 i64 i128 isize, false);
+implement_uint!(u8 u16 u32 u64 u128 usize, true);
 
 // -----------------------------------------------------------------------------
 // Generic Constants

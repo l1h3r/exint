@@ -1,9 +1,9 @@
 use ::core::cmp::Ordering;
 
-use crate::llapi::macros::maybe_intrinsic;
-use crate::llapi::macros::read_lsb;
-use crate::llapi::macros::read_msb;
-use crate::llapi::traits::Consts;
+use crate::macros::maybe_intrinsic;
+use crate::macros::read_lsb;
+use crate::macros::read_msb;
+use crate::traits::Consts;
 
 // -----------------------------------------------------------------------------
 // Bitwise Operations

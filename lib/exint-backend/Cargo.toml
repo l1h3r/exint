@@ -1,0 +1,61 @@
+[package]
+name = "exint-backend"
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+
+[lints]
+workspace = true
+
+[features]
+default = []
+
+# ------------------------------------------------------------------------------
+# Features - Markers
+# ------------------------------------------------------------------------------
+
+# Marker indicating features that require a nightly compiler
+nightly = []
+
+# Marker indicating features that require internal rust features
+internal_features = ["nightly"]
+
+# ------------------------------------------------------------------------------
+# Features - Backend
+# ------------------------------------------------------------------------------
+
+# Enable backend functionality that requires the `const_trait_impl` feature
+#
+# Note: This is not useful without `min_specialization`.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/67792
+const_trait_impl = ["nightly"]
+
+# Enable backend functionality that requires the `core_intrinsics` feature
+#
+# Note: This is perma-unstable in Rust.
+core_intrinsics = ["internal_features"]
+
+# Enable backend functionality that requires the `min_specialization` feature
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/31844
+min_specialization = ["const_trait_impl"]
+
+# ------------------------------------------------------------------------------
+# Features - Nightly
+# ------------------------------------------------------------------------------
+
+# Enable support for `disjoint_bitor` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/135758
+disjoint_bitor = ["nightly"]
+
+# ------------------------------------------------------------------------------
+# Features - Unstable
+# ------------------------------------------------------------------------------
+
+# Enable support for `bigint_helper_methods` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85532
+bigint_helper_methods = []

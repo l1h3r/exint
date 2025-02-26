@@ -1,10 +1,10 @@
 use ::core::cmp::Ordering;
 
-use crate::llapi::impls::unstable::SpecCore;
-use crate::llapi::impls::unstable::SpecSint;
-use crate::llapi::impls::unstable::SpecUint;
-use crate::llapi::macros::specialize;
-use crate::llapi::traits::Cast as _;
+use crate::impls::unstable::SpecCore;
+use crate::impls::unstable::SpecSint;
+use crate::impls::unstable::SpecUint;
+use crate::macros::specialize;
+use crate::traits::Cast as _;
 
 specialize! {
   impl const SpecCore for Int<1|2|4|8|16> {

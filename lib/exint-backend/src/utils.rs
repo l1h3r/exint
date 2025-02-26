@@ -1,5 +1,5 @@
-use crate::llapi::api;
-use crate::utils::Uint;
+use crate::export::api;
+use crate::traits::Uint;
 
 /// Sign digit for a two's complement integer.
 ///
@@ -7,9 +7,7 @@ use crate::utils::Uint;
 /// - `1` indicates number is signed as negative.
 pub(crate) const SIGN: u8 = 0b10000000;
 
-/// Get the index of the least-significant byte from an [`Integer`] of size `N`.
-///
-/// [`Integer`]: crate::types::Integer
+/// Get the index of the least-significant byte from an `integer` of size `N`.
 #[expect(dead_code, reason = "Not currently used")]
 #[inline(always)]
 pub(crate) const fn lsb_index<const N: usize>() -> usize {
@@ -20,9 +18,7 @@ pub(crate) const fn lsb_index<const N: usize>() -> usize {
   { 0 }
 }
 
-/// Get the index of the most-significant byte from an [`Integer`] of size `N`.
-///
-/// [`Integer`]: crate::types::Integer
+/// Get the index of the most-significant byte from an `integer` of size `N`.
 #[inline(always)]
 pub(crate) const fn msb_index<const N: usize>() -> usize {
   #[cfg(target_endian = "big")]

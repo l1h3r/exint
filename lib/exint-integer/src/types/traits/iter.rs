@@ -1,3 +1,4 @@
+#[allow(unused_macro_rules, reason = "Step branches are not not always used")]
 macro_rules! implement {
   ($outer:ident<$inner:ident<N>>) => {
     implement!(@core $crate::$outer<$crate::$inner<N>>);

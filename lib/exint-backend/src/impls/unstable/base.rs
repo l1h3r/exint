@@ -47,7 +47,7 @@ macro_rules! define_traits {
         #[inline(always)]
         $(#[$meta])*
         $($safety)? fn $function($($name: $type),+) $(-> $return)? {
-          $crate::llapi::impls::fallback::$function($($name),+)
+          $crate::impls::fallback::$function($($name),+)
         }
       )+
     }

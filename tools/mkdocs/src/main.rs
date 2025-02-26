@@ -10,7 +10,7 @@ const WRAPPERS: &[&str] = &["Saturating", "Strict", "Wrapping"];
 fn main() -> Result<(), Error> {
   let source: &Path = Path::new(env!("CARGO_MANIFEST_DIR"));
   let parent: &Path = source.parent().and_then(Path::parent).unwrap();
-  let target: PathBuf = parent.join("src").join("docs");
+  let target: PathBuf = parent.join("lib").join("exint-integer").join("src").join("docs");
 
   // Make sure this is a crate root
   assert!(parent.join("Cargo.toml").exists());

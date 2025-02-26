@@ -1,20 +1,20 @@
 use ::core::cmp::Ordering;
 
-use crate::llapi::impls::unstable::SpecCore;
-use crate::llapi::impls::unstable::SpecSint;
-use crate::llapi::impls::unstable::SpecUint;
-use crate::llapi::macros::maybe_intrinsic;
-use crate::llapi::macros::specialize;
+use crate::impls::unstable::SpecCore;
+use crate::impls::unstable::SpecSint;
+use crate::impls::unstable::SpecUint;
+use crate::macros::maybe_intrinsic;
+use crate::macros::specialize;
 
 #[cfg(not(feature = "core_intrinsics"))]
 macro_rules! three_way_compare {
   ($lhs:ident, $rhs:ident) => {
     if $lhs < $rhs {
-      ::core::cmp::Ordering::Less
+      Ordering::Less
     } else if $lhs != $rhs {
-      ::core::cmp::Ordering::Greater
+      Ordering::Greater
     } else {
-      ::core::cmp::Ordering::Equal
+      Ordering::Equal
     }
   };
 }
