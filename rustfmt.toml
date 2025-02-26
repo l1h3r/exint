@@ -1,1 +1,11 @@
+# **NIGHTLY ONLY**
+format_macro_bodies = false
+
+# **NIGHTLY ONLY**
+skip_macro_invocations = [
+  "define",
+  "implement",
+  "implement_from_char",
+]
+
 tab_spaces = 2
