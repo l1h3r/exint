@@ -3,6 +3,7 @@ mkdocs = "run --release --manifest-path tools/mkdocs/Cargo.toml"
 
 [build]
 rustdocflags = [
+  "--default-theme", "dark",
   "--cfg", "docsrs",
 ]
 rustflags = [
