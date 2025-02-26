@@ -242,10 +242,9 @@ specialize! {
     fn overflowing_smul(lhs: Self, rhs: Self) -> (Self, bool) {
       let lhs: <Self as Exts>::Sint = lhs.sext();
       let rhs: <Self as Exts>::Sint = rhs.sext();
-      let out: <Self as Exts>::Sint = unsafe { lhs.unchecked_mul(rhs) };
-      let cmp: bool = out > Self::SMAX.sext() || out < Self::SMIN.sext();
+      let (out, cmp): (<Self as Exts>::Sint, bool) = lhs.overflowing_mul(rhs);
 
-      (out.trunc(), cmp)
+      (out.trunc(), cmp || out > Self::SMAX.sext() || out < Self::SMIN.sext())
     }
 
     // -------------------------------------------------------------------------
@@ -402,13 +401,9 @@ specialize! {
     fn overflowing_umul(lhs: Self, rhs: Self) -> (Self, bool) {
       let lhs: <Self as Exts>::Uint = lhs.zext();
       let rhs: <Self as Exts>::Uint = rhs.zext();
+      let (out, cmp): (<Self as Exts>::Uint, bool) = SpecUint::overflowing_umul(lhs, rhs);
 
-      // SAFETY: Multiplication cannot overflow the next power-of-two size.
-      let out: <Self as Exts>::Uint = unsafe {
-        SpecUint::unchecked_umul(lhs, rhs)
-      };
-
-      (out.trunc(), out > Self::UMAX.zext())
+      (out.trunc(), cmp || out > Self::UMAX.zext())
     }
 
     // -------------------------------------------------------------------------
