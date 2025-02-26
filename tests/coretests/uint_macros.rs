@@ -3,7 +3,7 @@
 // https://github.com/rust-lang/rust/blob/bb2cc59a2172d6e35c89b409a4e6b5058d9039d7/library/coretests/tests/num/uint_macros.rs
 
 macro_rules! uint_tests {
-  (uint<$size:literal>, $bigint:ident) => {
+  (uint<$size:literal>) => {
     use ::core::ops::BitAnd;
     use ::core::ops::BitOr;
     use ::core::ops::BitXor;
@@ -336,31 +336,26 @@ macro_rules! uint_tests {
       assert_eq!(uint::MAX.borrowing_sub(uint::MAX, true), (uint::MAX, true));
     }
 
-    // TODO: Enable for all sizes once `carrying_mul_add` is fully implemented
-    macro_rules! test_bigint_mul {
-      (bigint_pass) => {
-        #[test]
-        fn test_widening_mul() {
-          assert_eq!(uint::MAX.widening_mul(uint::MAX), (uint!(1), uint::MAX - uint!(1)));
-        }
-
-        #[test]
-        fn test_carrying_mul() {
-          assert_eq!(uint::MAX.carrying_mul(uint::MAX, uint!(0)), (uint!(1), uint::MAX - uint!(1)));
-          assert_eq!(uint::MAX.carrying_mul(uint::MAX, uint::MAX), (uint!(0), uint::MAX));
-        }
-
-        #[test]
-        fn test_carrying_mul_add() {
-          assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint!(0), uint!(0)), (uint!(1), uint::MAX - uint!(1)));
-          assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint::MAX, uint!(0)), (uint!(0), uint::MAX));
-          assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint::MAX, uint::MAX), (uint::MAX, uint::MAX));
-        }
-      };
-      (bigint_fail) => {};
+    #[test]
+    #[ignore = "not yet implemented"]
+    fn test_widening_mul() {
+      assert_eq!(uint::MAX.widening_mul(uint::MAX), (uint!(1), uint::MAX - uint!(1)));
     }
 
-    test_bigint_mul!($bigint);
+    #[test]
+    #[ignore = "not yet implemented"]
+    fn test_carrying_mul() {
+      assert_eq!(uint::MAX.carrying_mul(uint::MAX, uint!(0)), (uint!(1), uint::MAX - uint!(1)));
+      assert_eq!(uint::MAX.carrying_mul(uint::MAX, uint::MAX), (uint!(0), uint::MAX));
+    }
+
+    #[test]
+    #[ignore = "not yet implemented"]
+    fn test_carrying_mul_add() {
+      assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint!(0), uint!(0)), (uint!(1), uint::MAX - uint!(1)));
+      assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint::MAX, uint!(0)), (uint!(0), uint::MAX));
+      assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint::MAX, uint::MAX), (uint::MAX, uint::MAX));
+    }
 
     #[test]
     fn test_midpoint() {

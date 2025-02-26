@@ -3,7 +3,7 @@
 // https://github.com/rust-lang/rust/blob/bb2cc59a2172d6e35c89b409a4e6b5058d9039d7/library/coretests/tests/num/int_macros.rs
 
 macro_rules! int_tests {
-  (int<$size:literal>, $bigint:ident) => {
+  (int<$size:literal>) => {
     use ::core::ops::BitAnd;
     use ::core::ops::BitOr;
     use ::core::ops::BitXor;
@@ -432,161 +432,156 @@ macro_rules! int_tests {
       assert_eq!(int!(0).borrowing_sub(int::MIN, true), (int::MAX, false));
     }
 
-    // TODO: Enable for all sizes once `carrying_mul_add` is fully implemented
-    macro_rules! test_bigint_mul {
-      (bigint_pass) => {
-        #[test]
-        fn test_widening_mul() {
-          assert_eq!(int::MAX.widening_mul(int::MAX), (uint!(1), int::MAX / int!(2)));
-          assert_eq!(int::MIN.widening_mul(int::MAX), (int::MIN.cast_unsigned(), int::MIN / int!(2)));
-          assert_eq!(int::MIN.widening_mul(int::MIN), (uint!(0), int::MAX / int!(2) + int!(1)));
-        }
-
-        #[test]
-        fn test_carrying_mul() {
-          assert_eq!(
-            int::MAX.carrying_mul(int::MAX, int!(0)),
-            (uint!(1), int::MAX / int!(2))
-          );
-
-          assert_eq!(
-            int::MAX.carrying_mul(int::MAX, int::MAX),
-            (uint::MAX / uint!(2) + uint!(1), int::MAX / int!(2))
-          );
-
-          assert_eq!(
-            int::MAX.carrying_mul(int::MAX, int::MIN),
-            (uint::MAX / uint!(2) + uint!(2), int::MAX / int!(2) - int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul(int::MAX, int!(0)),
-            (int::MIN.cast_unsigned(), int::MIN / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul(int::MAX, int::MAX),
-            (uint::MAX, int::MIN / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul(int::MAX, int::MIN),
-            (uint!(0), int::MIN / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul(int::MIN, int!(0)),
-            (uint!(0), int::MAX / int!(2) + int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul(int::MIN, int::MAX),
-            (uint::MAX / uint!(2), int::MAX / int!(2) + int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul(int::MIN, int::MIN),
-            (uint::MAX / uint!(2) + uint!(1), int::MAX / int!(2))
-          );
-        }
-
-        #[test]
-        fn test_carrying_mul_add() {
-          assert_eq!(
-            int::MAX.carrying_mul_add(int::MAX, int!(0), int!(0)),
-            (uint!(1), int::MAX / int!(2))
-          );
-
-          assert_eq!(
-            int::MAX.carrying_mul_add(int::MAX, int::MAX, int!(0)),
-            (uint::MAX / uint!(2) + uint!(1), int::MAX / int!(2))
-          );
-
-          assert_eq!(
-            int::MAX.carrying_mul_add(int::MAX, int::MIN, int!(0)),
-            (uint::MAX / uint!(2) + uint!(2), int::MAX / int!(2) - int!(1))
-          );
-
-          assert_eq!(
-            int::MAX.carrying_mul_add(int::MAX, int::MAX, int::MAX),
-            (uint::MAX, int::MAX / int!(2))
-          );
-
-          assert_eq!(
-            int::MAX.carrying_mul_add(int::MAX, int::MAX, int::MIN),
-            (uint!(0), int::MAX / int!(2))
-          );
-
-          assert_eq!(
-            int::MAX.carrying_mul_add(int::MAX, int::MIN, int::MIN),
-            (uint!(1), int::MAX / int!(2) - int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MAX, int!(0), int!(0)),
-            (int::MIN.cast_unsigned(), int::MIN / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MAX, int::MAX, int!(0)),
-            (uint::MAX, int::MIN / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MAX, int::MIN, int!(0)),
-            (uint!(0), int::MIN / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MAX, int::MAX, int::MAX),
-            (uint::MAX / uint!(2) - uint!(1), int::MIN / int!(2) + int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MAX, int::MAX, int::MIN),
-            (uint::MAX / uint!(2), int::MIN / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MAX, int::MIN, int::MIN),
-            (uint::MAX / uint!(2) + uint!(1), int::MIN / int!(2) - int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MIN, int!(0), int!(0)),
-            (uint!(0), int::MAX / int!(2) + int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MIN, int::MAX, int!(0)),
-            (uint::MAX / uint!(2), int::MAX / int!(2) + int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MIN, int::MIN, int!(0)),
-            (uint::MAX / uint!(2) + uint!(1), int::MAX / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MIN, int::MAX, int::MAX),
-            (uint::MAX - uint!(1), int::MAX / int!(2) + int!(1))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MIN, int::MAX, int::MIN),
-            (uint::MAX, int::MAX / int!(2))
-          );
-
-          assert_eq!(
-            int::MIN.carrying_mul_add(int::MIN, int::MIN, int::MIN),
-            (uint!(0), int::MAX / int!(2))
-          );
-        }
-      };
-      (bigint_fail) => {};
+    #[test]
+    #[ignore = "not yet implemented"]
+    fn test_widening_mul() {
+      assert_eq!(int::MAX.widening_mul(int::MAX), (uint!(1), int::MAX / int!(2)));
+      assert_eq!(int::MIN.widening_mul(int::MAX), (int::MIN.cast_unsigned(), int::MIN / int!(2)));
+      assert_eq!(int::MIN.widening_mul(int::MIN), (uint!(0), int::MAX / int!(2) + int!(1)));
     }
 
-    test_bigint_mul!($bigint);
+    #[test]
+    #[ignore = "not yet implemented"]
+    fn test_carrying_mul() {
+      assert_eq!(
+        int::MAX.carrying_mul(int::MAX, int!(0)),
+        (uint!(1), int::MAX / int!(2))
+      );
+
+      assert_eq!(
+        int::MAX.carrying_mul(int::MAX, int::MAX),
+        (uint::MAX / uint!(2) + uint!(1), int::MAX / int!(2))
+      );
+
+      assert_eq!(
+        int::MAX.carrying_mul(int::MAX, int::MIN),
+        (uint::MAX / uint!(2) + uint!(2), int::MAX / int!(2) - int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul(int::MAX, int!(0)),
+        (int::MIN.cast_unsigned(), int::MIN / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul(int::MAX, int::MAX),
+        (uint::MAX, int::MIN / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul(int::MAX, int::MIN),
+        (uint!(0), int::MIN / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul(int::MIN, int!(0)),
+        (uint!(0), int::MAX / int!(2) + int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul(int::MIN, int::MAX),
+        (uint::MAX / uint!(2), int::MAX / int!(2) + int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul(int::MIN, int::MIN),
+        (uint::MAX / uint!(2) + uint!(1), int::MAX / int!(2))
+      );
+    }
+
+    #[test]
+    #[ignore = "not yet implemented"]
+    fn test_carrying_mul_add() {
+      assert_eq!(
+        int::MAX.carrying_mul_add(int::MAX, int!(0), int!(0)),
+        (uint!(1), int::MAX / int!(2))
+      );
+
+      assert_eq!(
+        int::MAX.carrying_mul_add(int::MAX, int::MAX, int!(0)),
+        (uint::MAX / uint!(2) + uint!(1), int::MAX / int!(2))
+      );
+
+      assert_eq!(
+        int::MAX.carrying_mul_add(int::MAX, int::MIN, int!(0)),
+        (uint::MAX / uint!(2) + uint!(2), int::MAX / int!(2) - int!(1))
+      );
+
+      assert_eq!(
+        int::MAX.carrying_mul_add(int::MAX, int::MAX, int::MAX),
+        (uint::MAX, int::MAX / int!(2))
+      );
+
+      assert_eq!(
+        int::MAX.carrying_mul_add(int::MAX, int::MAX, int::MIN),
+        (uint!(0), int::MAX / int!(2))
+      );
+
+      assert_eq!(
+        int::MAX.carrying_mul_add(int::MAX, int::MIN, int::MIN),
+        (uint!(1), int::MAX / int!(2) - int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MAX, int!(0), int!(0)),
+        (int::MIN.cast_unsigned(), int::MIN / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MAX, int::MAX, int!(0)),
+        (uint::MAX, int::MIN / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MAX, int::MIN, int!(0)),
+        (uint!(0), int::MIN / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MAX, int::MAX, int::MAX),
+        (uint::MAX / uint!(2) - uint!(1), int::MIN / int!(2) + int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MAX, int::MAX, int::MIN),
+        (uint::MAX / uint!(2), int::MIN / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MAX, int::MIN, int::MIN),
+        (uint::MAX / uint!(2) + uint!(1), int::MIN / int!(2) - int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MIN, int!(0), int!(0)),
+        (uint!(0), int::MAX / int!(2) + int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MIN, int::MAX, int!(0)),
+        (uint::MAX / uint!(2), int::MAX / int!(2) + int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MIN, int::MIN, int!(0)),
+        (uint::MAX / uint!(2) + uint!(1), int::MAX / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MIN, int::MAX, int::MAX),
+        (uint::MAX - uint!(1), int::MAX / int!(2) + int!(1))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MIN, int::MAX, int::MIN),
+        (uint::MAX, int::MAX / int!(2))
+      );
+
+      assert_eq!(
+        int::MIN.carrying_mul_add(int::MIN, int::MIN, int::MIN),
+        (uint!(0), int::MAX / int!(2))
+      );
+    }
 
     #[test]
     fn test_midpoint() {
