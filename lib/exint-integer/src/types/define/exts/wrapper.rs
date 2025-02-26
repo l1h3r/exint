@@ -1,6 +1,34 @@
 macro_rules! implement {
   (
     $(#[$meta:meta])*
+    pub struct Strict;
+    forward {
+      $(#[$pow_docs:meta])+
+      pow = $pow:ident;
+      $(#[$abs_docs:meta])+
+      abs = $abs:ident;
+    }
+  ) => {
+    #[cfg(feature = "strict_overflow_ops")]
+    $(#[$meta])*
+    #[derive(Clone, Copy, Default, Hash, PartialEq, Eq, PartialOrd, Ord)]
+    #[repr(transparent)]
+    pub struct Strict<T>(pub T);
+
+    #[cfg(feature = "strict_overflow_ops")]
+    implement! {
+      @implement
+      pub struct Strict;
+      forward {
+        $(#[$pow_docs])+
+        pow = $pow;
+        $(#[$abs_docs])+
+        abs = $abs;
+      }
+    }
+  };
+  (
+    $(#[$meta:meta])*
     pub struct $name:ident;
     forward {
       $(#[$pow_docs:meta])+
@@ -14,6 +42,28 @@ macro_rules! implement {
     #[repr(transparent)]
     pub struct $name<T>(pub T);
 
+    implement! {
+      @implement
+      pub struct $name;
+      forward {
+        $(#[$pow_docs])+
+        pow = $pow;
+        $(#[$abs_docs])+
+        abs = $abs;
+      }
+    }
+  };
+  (
+    @implement
+    $(#[$meta:meta])*
+    pub struct $name:ident;
+    forward {
+      $(#[$pow_docs:meta])+
+      pow = $pow:ident;
+      $(#[$abs_docs:meta])+
+      abs = $abs:ident;
+    }
+  ) => {
     // -------------------------------------------------------------------------
     // Implementation - uint
     // -------------------------------------------------------------------------
@@ -176,7 +226,6 @@ implement! {
   }
 }
 
-#[cfg(feature = "strict_overflow_ops")]
 implement! {
   /// Provides intentionally-strict arithmetic on `T`.
   ///
