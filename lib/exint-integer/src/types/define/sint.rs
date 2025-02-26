@@ -741,7 +741,7 @@ impl<const N: usize> int<N> {
     if llapi::unlikely(self.const_eq(&Self::MIN)) {
       (Self::MIN, true)
     } else {
-      (self.const_neg(), false)
+      (self.wrapping_neg(), false)
     }
   }
 
