@@ -14,7 +14,7 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
-# #[macro_use] extern crate exint;
+# #[macro_use] extern crate exint_integer as exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 assert_eq!(int!(5).widening_mul(int!(-2)), (uint!(4294967286), int!(-1)));

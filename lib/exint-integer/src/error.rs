@@ -50,7 +50,9 @@ impl From<!> for TryFromIntError {
 /// # Examples
 ///
 /// ```should_panic
-/// # use exint::int;
+/// # extern crate exint_integer as exint;
+/// use exint::int;
+///
 /// if let Err(e) = int::<4>::from_str_radix("a12", 10) {
 ///     panic!("Failed conversion to int: {:?}", e.kind());
 /// }
@@ -95,7 +97,9 @@ pub enum IntErrorKind {
 /// # Examples
 ///
 /// ```should_panic
-/// # use exint::int;
+/// # extern crate exint_integer as exint;
+/// use exint::int;
+///
 /// if let Err(e) = int::<4>::from_str_radix("a12", 10) {
 ///     panic!("Failed conversion to int: {e}");
 /// }

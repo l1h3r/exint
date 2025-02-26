@@ -192,6 +192,7 @@ implement! {
     /// Basic usage:
     ///
     /// ```
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Saturating};
     ///
     /// assert_eq!(Saturating(int!(3)).pow(4), Saturating(int!(81)));
@@ -200,6 +201,7 @@ implement! {
     /// Results that are too large are saturated:
     ///
     /// ```
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Saturating};
     ///
     /// assert_eq!(Saturating(int!(3 i8)).pow(5), Saturating(int!(127 i8)));
@@ -214,6 +216,7 @@ implement! {
     /// Basic usage:
     ///
     /// ```
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Saturating};
     ///
     /// assert_eq!(Saturating(int!(100)).abs(), Saturating(int!(100)));
@@ -255,6 +258,7 @@ implement! {
     /// Basic usage:
     ///
     /// ```
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Strict};
     ///
     /// assert_eq!(Strict(int!(3)).pow(4), Strict(int!(81)));
@@ -263,6 +267,7 @@ implement! {
     /// Results that are too large trigger a panic:
     ///
     /// ```should_panic
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Strict};
     ///
     /// let _ = Strict(int!(3 i8)).pow(5);
@@ -276,6 +281,7 @@ implement! {
     /// Basic usage:
     ///
     /// ```
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Strict};
     ///
     /// assert_eq!(Strict(int!(-5)).abs(), Strict(int!(5)));
@@ -284,6 +290,7 @@ implement! {
     /// The following panics because of overflow:
     ///
     /// ```should_panic
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Strict};
     ///
     /// let _ = Strict(<int>::MIN).abs();
@@ -321,6 +328,7 @@ implement! {
     /// Basic usage:
     ///
     /// ```
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Wrapping};
     ///
     /// assert_eq!(Wrapping(int!(3)).pow(4), Wrapping(int!(81)));
@@ -329,6 +337,7 @@ implement! {
     /// Results that are too large are wrapped:
     ///
     /// ```
+    /// # extern crate exint_integer as exint;
     /// use exint::{int, Wrapping};
     ///
     /// assert_eq!(Wrapping(int!(3 i8)).pow(5), Wrapping(int!(-13 i8)));
@@ -348,7 +357,8 @@ implement! {
     /// Basic usage:
     ///
     /// ```
-    /// use exint::{int, uint, Wrapping};
+    /// # extern crate exint_integer as exint;
+    /// use exint::{int, Wrapping};
     ///
     /// assert_eq!(Wrapping(int!(100)).abs(), Wrapping(int!(100)));
     /// assert_eq!(Wrapping(int!(-100)).abs(), Wrapping(int!(100)));

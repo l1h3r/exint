@@ -7,7 +7,7 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
-# #[macro_use] extern crate exint;
+# #[macro_use] extern crate exint_integer as exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 assert_eq!(int!(3).wrapping_pow(4), int!(81));

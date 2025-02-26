@@ -20,6 +20,7 @@ macro_rules! parse_str {
 
     macros::stability! {
       #[unstable(feature = "int_from_ascii")]
+      #[allow(rustdoc::private_doc_tests, reason = "Might not be public due to features")]
       #[doc = $crate::utils::include_doc!($name, "int_from_ascii")]
       #[inline]
       pub const fn from_ascii_radix(

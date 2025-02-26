@@ -16,7 +16,7 @@ Basic usage:
 
 ```
 # #![allow(non_camel_case_types)]
-# #[macro_use] extern crate exint;
+# #[macro_use] extern crate exint_integer as exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 assert_eq!(uint!(100).strict_div_euclid(uint!(10)), uint!(10));
@@ -26,7 +26,7 @@ The following panics because of division by zero:
 
 ```should_panic
 # #![allow(non_camel_case_types)]
-# #[macro_use] extern crate exint;
+# #[macro_use] extern crate exint_integer as exint;
 # type uint = exint::uint<4>;
 # type int  = exint::int<4>;
 let _ = uint!(1).strict_div_euclid(uint!(0));

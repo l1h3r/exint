@@ -7,6 +7,7 @@
 /// # Examples
 ///
 /// ```
+/// # extern crate exint_integer as exint;
 /// use exint::uint;
 ///
 /// const A: uint<1> = uint!(255 u8);
@@ -105,6 +106,7 @@ macro_rules! __uint {
 /// # Examples
 ///
 /// ```
+/// # extern crate exint_integer as exint;
 /// use exint::int;
 ///
 /// const A: int<1> = int!(-128 i8);
