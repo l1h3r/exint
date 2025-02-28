@@ -68,6 +68,10 @@ pub mod filecheck {
     "wrapping_next_power_of_two",
   ];
 
+  const EXINT_FEATS: &[&'static str] = &[
+    "unstable_internals",
+  ];
+
   pub fn purge() {
     if let Err(error) = __purge() {
       panic!("{error}");
@@ -157,7 +161,7 @@ pub mod filecheck {
           (backend.name, backend.output()),
           (integer.name, integer.output()),
         ],
-        features: &[],
+        features: EXINT_FEATS,
       };
 
       if let Some(krate) = context.find_dep(&config) {

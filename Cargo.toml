@@ -19,6 +19,9 @@ members = [
 exint-backend = { path = "lib/exint-backend", version = "=0.1.0", default-features = false }
 exint-integer = { path = "lib/exint-integer", version = "=0.1.0", default-features = false }
 
+[dev-dependencies]
+compiletest = { path = "tools/compiletest", version = "=0.1.0" }
+
 [features]
 default = [
   "all_backend",
