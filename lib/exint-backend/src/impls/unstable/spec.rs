@@ -355,7 +355,7 @@ specialize! {
     #[inline(always)]
     unsafe fn disjoint_bor(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
-      unsafe { SpecUint::disjoint_bor(lhs.zext(), rhs.zext()).trunc() }
+      unsafe { SpecUint::disjoint_bor(lhs.zext(), rhs.zext()) }.trunc()
     }
 
     // -------------------------------------------------------------------------
@@ -390,8 +390,9 @@ specialize! {
     //   https://github.com/rust-lang/rust/pull/103299
     #[inline(always)]
     fn overflowing_usub(lhs: Self, rhs: Self) -> (Self, bool) {
-      let out: Self = SpecCore::wrapping_sub(lhs, rhs);
+      // Note: This order (cmp -> sub) is important for larger sizes
       let cmp: bool = SpecUint::ucmp(lhs, rhs).is_lt();
+      let out: Self = SpecCore::wrapping_sub(lhs, rhs);
 
       (out, cmp)
     }
