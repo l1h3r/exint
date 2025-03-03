@@ -31,7 +31,13 @@ fn test_codegen() {
   filecheck::verify("codegen/check/inspect/ctlz_nonzero.rs");
   filecheck::verify("codegen/check/inspect/cttz_nonzero.rs");
 
+  filecheck::verify("codegen/check/overflowing/uadd.rs"); // TODO: i24,i40,i48,i56,i72,i80,i88,i96,i104,i112,i120
   filecheck::verify("codegen/check/overflowing/usub.rs");
+  filecheck::verify("codegen/check/overflowing/umul.rs"); // TODO: i24,i40,i48,i56,i72,i80,i88,i96,i104,i112,i120
+
+  filecheck::verify("codegen/check/overflowing/sadd.rs"); // TODO: i24,i40,i48,i56,i72,i80,i88,i96,i104,i112,i120
+  filecheck::verify("codegen/check/overflowing/ssub.rs"); // TODO: i24,i40,i48,i56,i72,i80,i88,i96,i104,i112,i120
+  filecheck::verify("codegen/check/overflowing/smul.rs"); // TODO: i24,i40,i48,i56,i72,i80,i88,i96,i104,i112,i120
 
   filecheck::verify("codegen/check/saturating/uadd.rs");
   filecheck::verify("codegen/check/saturating/usub.rs");
