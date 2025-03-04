@@ -54,38 +54,6 @@ macro_rules! maybe_intrinsic {
   };
 }
 
-/// Read the least significant byte of an array.
-#[cfg(target_endian = "big")]
-macro_rules! read_lsb {
-  ($size:expr_2021, $data:expr_2021, $index:expr_2021) => {
-    $data[$size - 1 - $index]
-  };
-}
-
-/// Read the least significant byte of an array.
-#[cfg(target_endian = "little")]
-macro_rules! read_lsb {
-  ($_size:expr_2021, $data:expr_2021, $index:expr_2021) => {
-    $data[$index]
-  };
-}
-
-/// Read the most significant byte of an array.
-#[cfg(target_endian = "big")]
-macro_rules! read_msb {
-  ($_size:expr_2021, $data:expr_2021, $index:expr_2021) => {
-    $data[$index]
-  };
-}
-
-/// Read the most significant byte of an array.
-#[cfg(target_endian = "little")]
-macro_rules! read_msb {
-  ($size:expr_2021, $data:expr_2021, $index:expr_2021) => {
-    $data[$size - 1 - $index]
-  };
-}
-
 /// Implement a specialized `const` trait for multiple explicit integer sizes
 /// with identical implementations.
 #[cfg(feature = "min_specialization")]
@@ -117,8 +85,6 @@ macro_rules! specialize {
 pub(crate) use cast;
 pub(crate) use const_trait_impl;
 pub(crate) use maybe_intrinsic;
-pub(crate) use read_lsb;
-pub(crate) use read_msb;
 
 #[cfg(feature = "min_specialization")]
 pub(crate) use specialize;

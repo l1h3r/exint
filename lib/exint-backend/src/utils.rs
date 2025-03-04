@@ -7,25 +7,41 @@ use crate::traits::Uint;
 /// - `1` indicates number is signed as negative.
 pub(crate) const SIGN: u8 = 0b10000000;
 
-/// Get the index of the least-significant byte from an `integer` of size `N`.
-#[expect(dead_code, reason = "Not currently used")]
-#[inline(always)]
-pub(crate) const fn lsb_index<const N: usize>() -> usize {
-  #[cfg(target_endian = "big")]
-  { N - 1 }
+#[repr(transparent)]
+pub(crate) struct Index(pub(crate) usize);
 
-  #[cfg(target_endian = "little")]
-  { 0 }
-}
+impl Index {
+  pub(crate) const ZERO: Self = Self(0);
 
-/// Get the index of the most-significant byte from an `integer` of size `N`.
-#[inline(always)]
-pub(crate) const fn msb_index<const N: usize>() -> usize {
-  #[cfg(target_endian = "big")]
-  { 0 }
+  /// Get the index relative to the least-significant byte
+  /// of an `integer` with size `N`.
+  #[inline(always)]
+  pub(crate) const fn lsb<const N: usize>(self) -> usize {
+    #[cfg(target_endian = "big")]
+    {
+      N - 1 - self.0
+    }
 
-  #[cfg(target_endian = "little")]
-  { N - 1 }
+    #[cfg(target_endian = "little")]
+    {
+      self.0
+    }
+  }
+
+  /// Get the index relative to the most-significant byte
+  /// of an `integer` with size `N`.
+  #[inline(always)]
+  pub(crate) const fn msb<const N: usize>(self) -> usize {
+    #[cfg(target_endian = "big")]
+    {
+      self.0
+    }
+
+    #[cfg(target_endian = "little")]
+    {
+      N - 1 - self.0
+    }
+  }
 }
 
 /// Resize an integer type to another of a different size.

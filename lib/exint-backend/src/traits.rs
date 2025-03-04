@@ -1,6 +1,6 @@
 use crate::macros::const_trait_impl;
+use crate::utils::Index;
 use crate::utils::SIGN;
-use crate::utils::msb_index;
 
 /// A marker trait for integer types.
 ///
@@ -58,13 +58,13 @@ impl<const N: usize> Consts for [u8; N] {
 
   const SMAX: Self = {
     let mut bytes: Self = Self::UMAX;
-    bytes[msb_index::<{ N }>()] ^= SIGN;
+    bytes[Index::ZERO.msb::<N>()] ^= SIGN;
     bytes
   };
 
   const SMIN: Self = {
     let mut bytes: Self = Self::UMIN;
-    bytes[msb_index::<{ N }>()] |= SIGN;
+    bytes[Index::ZERO.msb::<N>()] |= SIGN;
     bytes
   };
 }

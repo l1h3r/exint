@@ -1,9 +1,8 @@
 use ::core::cmp::Ordering;
 
 use crate::macros::maybe_intrinsic;
-use crate::macros::read_lsb;
-use crate::macros::read_msb;
 use crate::traits::Consts;
+use crate::utils::Index;
 
 // -----------------------------------------------------------------------------
 // Bitwise Operations
@@ -94,8 +93,8 @@ pub(crate) const fn ucmp<const N: usize>(lhs: [u8; N], rhs: [u8; N]) -> Ordering
   let mut index: usize = 0;
 
   while index < N {
-    let lhs: u8 = read_msb!(N, lhs, index);
-    let rhs: u8 = read_msb!(N, rhs, index);
+    let lhs: u8 = lhs[Index(index).msb::<N>()];
+    let rhs: u8 = rhs[Index(index).msb::<N>()];
 
     if lhs < rhs {
       return Ordering::Less;
@@ -177,7 +176,7 @@ pub(crate) const fn ctlz<const N: usize>(integer: [u8; N]) -> u32 {
   let mut index: usize = 0;
 
   while index < N {
-    match read_msb!(N, integer, index) {
+    match integer[Index(index).msb::<N>()] {
       0 => value += u8::BITS,
       v => return value + v.leading_zeros(),
     }
@@ -194,7 +193,7 @@ pub(crate) const fn cttz<const N: usize>(integer: [u8; N]) -> u32 {
   let mut index: usize = 0;
 
   while index < N {
-    match read_lsb!(N, integer, index) {
+    match integer[Index(index).lsb::<N>()] {
       0 => value += u8::BITS,
       v => return value + v.trailing_zeros(),
     }
