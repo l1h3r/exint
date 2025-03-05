@@ -1,5 +1,9 @@
-use exint::int;
-use exint::uint;
+//! Tests for the `Integer::{ilog,log2,log10}` methods.
+
+use exint::primitive::i16;
+use exint::primitive::i8;
+use exint::primitive::u16;
+use exint::primitive::u8;
 
 #[test]
 fn checked_ilog() {
@@ -21,17 +25,17 @@ fn checked_ilog() {
   assert_eq!(int!(0 i16).checked_ilog(int!(4 i16)), None);
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in int::<2>::MIN..=int!(0 i16) {
+  for value in i16::MIN..=int!(0 i16) {
     assert_eq!(value.checked_ilog(int!(4 i16)), None, "checking {value}");
   }
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in int!(1 i16)..=int::<2>::MAX {
+  for value in int!(1 i16)..=i16::MAX {
     assert_eq!(value.checked_ilog(int!(13 i16)), Some(f32::from(value).log(13.0) as u32), "checking {value}");
   }
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in uint!(1 u16)..=uint::<2>::MAX {
+  for value in uint!(1 u16)..=u16::MAX {
     assert_eq!(value.checked_ilog(uint!(13 u16)), Some(f32::from(value).log(13.0) as u32), "checking {value}");
   }
 }
@@ -52,30 +56,30 @@ fn checked_ilog2() {
   assert_eq!(uint!(32768 u16).checked_ilog2(), Some((32768f32).log2() as u32));
   assert_eq!(int!(8192 i16).checked_ilog2(), Some((8192f32).log2() as u32));
 
-  for value in uint!(1 u8)..=uint::<1>::MAX {
+  for value in uint!(1 u8)..=u8::MAX {
     assert_eq!(value.checked_ilog2(), Some(f32::from(value).log2() as u32), "checking {value}");
   }
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in uint!(1 u16)..=uint::<2>::MAX {
+  for value in uint!(1 u16)..=u16::MAX {
     assert_eq!(value.checked_ilog2(), Some(f32::from(value).log2() as u32), "checking {value}");
   }
 
-  for value in int::<1>::MIN..=int!(0 i8) {
+  for value in i8::MIN..=int!(0 i8) {
     assert_eq!(value.checked_ilog2(), None, "checking {value}");
   }
 
-  for value in int!(1 i8)..=int::<1>::MAX {
+  for value in int!(1 i8)..=i8::MAX {
     assert_eq!(value.checked_ilog2(), Some(f32::from(value).log2() as u32), "checking {value}");
   }
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in int::<2>::MIN..=int!(0 i16) {
+  for value in i16::MIN..=int!(0 i16) {
     assert_eq!(value.checked_ilog2(), None, "checking {value}");
   }
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in int!(1 i16)..=int::<2>::MAX {
+  for value in int!(1 i16)..=i16::MAX {
     assert_eq!(value.checked_ilog2(), Some(f32::from(value).log2() as u32), "checking {value}");
   }
 }
@@ -89,17 +93,17 @@ fn checked_ilog10() {
   assert_eq!(int!(0 i16).checked_ilog10(), None);
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in int::<2>::MIN..=int!(0 i16) {
+  for value in i16::MIN..=int!(0 i16) {
     assert_eq!(value.checked_ilog10(), None, "checking {value}");
   }
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in int!(1 i16)..=int::<2>::MAX {
+  for value in int!(1 i16)..=i16::MAX {
     assert_eq!(value.checked_ilog10(), Some(f32::from(value).log10() as u32), "checking {value}");
   }
 
   #[cfg(not(miri))] // Miri is too slow
-  for value in uint!(1 u16)..=uint::<2>::MAX {
+  for value in uint!(1 u16)..=u16::MAX {
     assert_eq!(value.checked_ilog10(), Some(f32::from(value).log10() as u32), "checking {value}");
   }
 
@@ -110,35 +114,35 @@ fn checked_ilog10() {
 }
 
 macro_rules! ilog10_loop {
-  ($type:ty, $size:ident, $max:expr) => {
-    assert_eq!(<$type>::MAX.ilog10(), $max);
+  ($type:ident, $max:expr) => {
+    assert_eq!(exint::primitive::$type::MAX.ilog10(), $max);
 
     for value in 0..=$max {
-      let p = uint!(10 $size).pow(value);
+      let p = uint!(10 $type).pow(value);
 
-      if p >= uint!(10 $size) {
-        assert_eq!((p - uint!(9 $size)).ilog10(), value - 1);
-        assert_eq!((p - uint!(1 $size)).ilog10(), value - 1);
+      if p >= uint!(10 $type) {
+        assert_eq!((p - uint!(9 $type)).ilog10(), value - 1);
+        assert_eq!((p - uint!(1 $type)).ilog10(), value - 1);
       }
 
       assert_eq!(p.ilog10(), value);
-      assert_eq!((p + uint!(1 $size)).ilog10(), value);
+      assert_eq!((p + uint!(1 $type)).ilog10(), value);
 
-      if p >= uint!(10 $size) {
-        assert_eq!((p + uint!(9 $size)).ilog10(), value);
+      if p >= uint!(10 $type) {
+        assert_eq!((p + uint!(9 $type)).ilog10(), value);
       }
 
       // also check `x.ilog(10)`
-      if p >= uint!(10 $size) {
-        assert_eq!((p - uint!(9 $size)).ilog(uint!(10 $size)), value - 1);
-        assert_eq!((p - uint!(1 $size)).ilog(uint!(10 $size)), value - 1);
+      if p >= uint!(10 $type) {
+        assert_eq!((p - uint!(9 $type)).ilog(uint!(10 $type)), value - 1);
+        assert_eq!((p - uint!(1 $type)).ilog(uint!(10 $type)), value - 1);
       }
 
-      assert_eq!(p.ilog(uint!(10 $size)), value);
-      assert_eq!((p + uint!(1 $size)).ilog(uint!(10 $size)), value);
+      assert_eq!(p.ilog(uint!(10 $type)), value);
+      assert_eq!((p + uint!(1 $type)).ilog(uint!(10 $type)), value);
 
-      if p >= uint!(10 $size) {
-        assert_eq!((p + uint!(9 $size)).ilog(uint!(10 $size)), value);
+      if p >= uint!(10 $type) {
+        assert_eq!((p + uint!(9 $type)).ilog(uint!(10 $type)), value);
       }
     }
   };
@@ -146,27 +150,82 @@ macro_rules! ilog10_loop {
 
 #[test]
 fn ilog10_u8() {
-  ilog10_loop!(uint<1>, u8, 2);
+  ilog10_loop!(u8, 2);
 }
 
 #[test]
 fn ilog10_u16() {
-  ilog10_loop!(uint<2>, u16, 4);
+  ilog10_loop!(u16, 4);
+}
+
+#[test]
+fn ilog10_u24() {
+  ilog10_loop!(u24, 7);
 }
 
 #[test]
 fn ilog10_u32() {
-  ilog10_loop!(uint<4>, u32, 9);
+  ilog10_loop!(u32, 9);
+}
+
+#[test]
+fn ilog10_u40() {
+  ilog10_loop!(u40, 12);
+}
+
+#[test]
+fn ilog10_u48() {
+  ilog10_loop!(u48, 14);
+}
+
+#[test]
+fn ilog10_u56() {
+  ilog10_loop!(u56, 16);
 }
 
 #[test]
 fn ilog10_u64() {
-  ilog10_loop!(uint<8>, u64, 19);
+  ilog10_loop!(u64, 19);
+}
+
+#[test]
+fn ilog10_u72() {
+  ilog10_loop!(u72, 21);
+}
+
+#[test]
+fn ilog10_u80() {
+  ilog10_loop!(u80, 24);
+}
+
+#[test]
+fn ilog10_u88() {
+  ilog10_loop!(u88, 26);
+}
+
+#[test]
+fn ilog10_u96() {
+  ilog10_loop!(u96, 28);
+}
+
+#[test]
+fn ilog10_u104() {
+  ilog10_loop!(u104, 31);
+}
+
+#[test]
+fn ilog10_u112() {
+  ilog10_loop!(u112, 33);
+}
+
+#[test]
+fn ilog10_u120() {
+  ilog10_loop!(u120, 36);
 }
 
 #[test]
 fn ilog10_u128() {
-  ilog10_loop!(uint<16>, u128, 38);
+  ilog10_loop!(u128, 38);
 }
 
 #[test]

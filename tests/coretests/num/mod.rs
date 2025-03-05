@@ -8,7 +8,7 @@ mod uint_macros;
 
 mod int_log;
 mod midpoint;
-mod wrapping;
+mod wrapping; // TODO: missing shifts
 
 fn test_num<T>(ten: T, two: T)
 where
@@ -27,49 +27,36 @@ where
   assert_eq!(ten.rem(two), ten % two);
 }
 
-macro_rules! define_tests {
-  ($mod:ident, int<$size:literal>) => {
-    mod $mod {
-      int_tests!(int<$size>);
-    }
-  };
-  ($mod:ident, uint<$size:literal>) => {
-    mod $mod {
-      uint_tests!(uint<$size>);
-    }
-  };
-}
+mod i8 { int_tests!(i8, u8); }
+mod i16 { int_tests!(i16, u16); }
+mod i24 { int_tests!(i24, u24); }
+mod i32 { int_tests!(i32, u32); }
+mod i40 { int_tests!(i40, u40); }
+mod i48 { int_tests!(i48, u48); }
+mod i56 { int_tests!(i56, u56); }
+mod i64 { int_tests!(i64, u64); }
+mod i72 { int_tests!(i72, u72); }
+mod i80 { int_tests!(i80, u80); }
+mod i88 { int_tests!(i88, u88); }
+mod i96 { int_tests!(i96, u96); }
+mod i104 { int_tests!(i104, u104); }
+mod i112 { int_tests!(i112, u112); }
+mod i120 { int_tests!(i120, u120); }
+mod i128 { int_tests!(i128, u128); }
 
-define_tests!(i8, int<1>);
-define_tests!(i16, int<2>);
-define_tests!(i24, int<3>);
-define_tests!(i32, int<4>);
-define_tests!(i40, int<5>);
-define_tests!(i48, int<6>);
-define_tests!(i56, int<7>);
-define_tests!(i64, int<8>);
-define_tests!(i72, int<9>);
-define_tests!(i80, int<10>);
-define_tests!(i88, int<11>);
-define_tests!(i96, int<12>);
-define_tests!(i104, int<13>);
-define_tests!(i112, int<14>);
-define_tests!(i120, int<15>);
-define_tests!(i128, int<16>);
-
-define_tests!(u8, uint<1>);
-define_tests!(u16, uint<2>);
-define_tests!(u24, uint<3>);
-define_tests!(u32, uint<4>);
-define_tests!(u40, uint<5>);
-define_tests!(u48, uint<6>);
-define_tests!(u56, uint<7>);
-define_tests!(u64, uint<8>);
-define_tests!(u72, uint<9>);
-define_tests!(u80, uint<10>);
-define_tests!(u88, uint<11>);
-define_tests!(u96, uint<12>);
-define_tests!(u104, uint<13>);
-define_tests!(u112, uint<14>);
-define_tests!(u120, uint<15>);
-define_tests!(u128, uint<16>);
+mod u8 { uint_tests!(u8); }
+mod u16 { uint_tests!(u16); }
+mod u24 { uint_tests!(u24); }
+mod u32 { uint_tests!(u32); }
+mod u40 { uint_tests!(u40); }
+mod u48 { uint_tests!(u48); }
+mod u56 { uint_tests!(u56); }
+mod u64 { uint_tests!(u64); }
+mod u72 { uint_tests!(u72); }
+mod u80 { uint_tests!(u80); }
+mod u88 { uint_tests!(u88); }
+mod u96 { uint_tests!(u96); }
+mod u104 { uint_tests!(u104); }
+mod u112 { uint_tests!(u112); }
+mod u120 { uint_tests!(u120); }
+mod u128 { uint_tests!(u128); }

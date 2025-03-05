@@ -1,4 +1,8 @@
-use exint::int;
+//! Test the following expectations:
+//!  - midpoint(a, b) == (a + b) / 2
+//!  - midpoint(a, b) == midpoint(b, a)
+//!  - midpoint(-a, -b) == -midpoint(a, b)
+
 use exint::primitive::i8;
 use exint::primitive::u8;
 

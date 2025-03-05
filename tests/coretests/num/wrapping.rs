@@ -1,6 +1,4 @@
-use exint::int;
 use exint::primitive::*;
-use exint::uint;
 use exint::Wrapping;
 
 macro_rules! ihex {

@@ -1,5 +1,5 @@
 macro_rules! uint_tests {
-  (uint<$size:literal>) => {
+  ($type:ident) => {
     use ::core::ops::BitAnd;
     use ::core::ops::BitOr;
     use ::core::ops::BitXor;
@@ -8,23 +8,22 @@ macro_rules! uint_tests {
     use ::core::ops::Shr;
     use ::core::str::FromStr;
 
-    #[allow(non_camel_case_types)]
-    type uint = exint::uint<$size>;
+    use exint::primitive::$type;
 
     macro_rules! uint {
       ($value:tt) => {
-        uint::from_u128($value)
+        $type::from_u128($value)
       };
       ($head:tt $tail:tt) => {
-        uint::from_u128($head $tail)
+        $type::from_u128($head $tail)
       };
     }
 
     #[test]
     fn test_overflows() {
-      assert!(uint::MAX > uint!(0));
-      assert!(uint::MIN <= uint!(0));
-      assert!((uint::MIN + uint::MAX).wrapping_add(uint!(1)) == uint!(0));
+      assert!($type::MAX > uint!(0));
+      assert!($type::MIN <= uint!(0));
+      assert!(($type::MIN + $type::MAX).wrapping_add(uint!(1)) == uint!(0));
     }
 
     #[test]
@@ -39,15 +38,15 @@ macro_rules! uint_tests {
       assert!(uint!(0b0110) == uint!(0b1100).bitxor(uint!(0b1010)));
       assert!(uint!(0b1110) == uint!(0b0111).shl(1));
       assert!(uint!(0b0111) == uint!(0b1110).shr(1));
-      assert!(uint::MAX - uint!(0b1011) == uint!(0b1011).not());
+      assert!($type::MAX - uint!(0b1011) == uint!(0b1011).not());
     }
 
-    const A: uint = uint!(0b0101100);
-    const B: uint = uint!(0b0100001);
-    const C: uint = uint!(0b1111001);
+    const A: $type = uint!(0b0101100);
+    const B: $type = uint!(0b0100001);
+    const C: $type = uint!(0b1111001);
 
-    const _0: uint = uint!(0);
-    const _1: uint = uint!(!0);
+    const _0: $type = uint!(0);
+    const _1: $type = uint!(!0);
 
     #[test]
     fn test_count_ones() {
@@ -58,39 +57,39 @@ macro_rules! uint_tests {
 
     #[test]
     fn test_count_zeros() {
-      assert!(A.count_zeros() == uint::BITS - 3);
-      assert!(B.count_zeros() == uint::BITS - 2);
-      assert!(C.count_zeros() == uint::BITS - 5);
+      assert!(A.count_zeros() == $type::BITS - 3);
+      assert!(B.count_zeros() == $type::BITS - 2);
+      assert!(C.count_zeros() == $type::BITS - 5);
     }
 
     #[test]
     fn test_leading_trailing_ones() {
-      const A: uint = uint!(0b0101_1111);
+      const A: $type = uint!(0b0101_1111);
       assert_eq!(A.trailing_ones(), 5);
-      assert_eq!((!A).leading_ones(), uint::BITS - 7);
+      assert_eq!((!A).leading_ones(), $type::BITS - 7);
 
       assert_eq!(A.reverse_bits().leading_ones(), 5);
 
-      assert_eq!(_1.leading_ones(), uint::BITS);
-      assert_eq!(_1.trailing_ones(), uint::BITS);
+      assert_eq!(_1.leading_ones(), $type::BITS);
+      assert_eq!(_1.trailing_ones(), $type::BITS);
 
       assert_eq!((_1 << 1_i32).trailing_ones(), 0);
       assert_eq!((_1 >> 1_i32).leading_ones(), 0);
 
-      assert_eq!((_1 << 1_i32).leading_ones(), uint::BITS - 1);
-      assert_eq!((_1 >> 1_i32).trailing_ones(), uint::BITS - 1);
+      assert_eq!((_1 << 1_i32).leading_ones(), $type::BITS - 1);
+      assert_eq!((_1 >> 1_i32).trailing_ones(), $type::BITS - 1);
 
       assert_eq!(_0.leading_ones(), 0);
       assert_eq!(_0.trailing_ones(), 0);
 
-      const X: uint = uint!(0b0010_1100);
+      const X: $type = uint!(0b0010_1100);
       assert_eq!(X.leading_ones(), 0);
       assert_eq!(X.trailing_ones(), 0);
     }
 
     #[test]
     fn test_rotate() {
-      const ROT: u32 = 128_u32.next_multiple_of(uint::BITS);
+      const ROT: ::core::primitive::u32 = 128_u32.next_multiple_of($type::BITS);
 
       assert_eq!(A.rotate_left(6).rotate_right(2).rotate_right(4), A);
       assert_eq!(B.rotate_left(3).rotate_left(2).rotate_right(5), B);
@@ -139,22 +138,22 @@ macro_rules! uint_tests {
 
     #[test]
     fn test_le() {
-      assert_eq!(uint::from_le(A.to_le()), A);
-      assert_eq!(uint::from_le(B.to_le()), B);
-      assert_eq!(uint::from_le(C.to_le()), C);
-      assert_eq!(uint::from_le(_0), _0);
-      assert_eq!(uint::from_le(_1), _1);
+      assert_eq!($type::from_le(A.to_le()), A);
+      assert_eq!($type::from_le(B.to_le()), B);
+      assert_eq!($type::from_le(C.to_le()), C);
+      assert_eq!($type::from_le(_0), _0);
+      assert_eq!($type::from_le(_1), _1);
       assert_eq!(_0.to_le(), _0);
       assert_eq!(_1.to_le(), _1);
     }
 
     #[test]
     fn test_be() {
-      assert_eq!(uint::from_be(A.to_be()), A);
-      assert_eq!(uint::from_be(B.to_be()), B);
-      assert_eq!(uint::from_be(C.to_be()), C);
-      assert_eq!(uint::from_be(_0), _0);
-      assert_eq!(uint::from_be(_1), _1);
+      assert_eq!($type::from_be(A.to_be()), A);
+      assert_eq!($type::from_be(B.to_be()), B);
+      assert_eq!($type::from_be(C.to_be()), C);
+      assert_eq!($type::from_be(_0), _0);
+      assert_eq!($type::from_be(_1), _1);
       assert_eq!(_0.to_be(), _0);
       assert_eq!(_1.to_be(), _1);
     }
@@ -167,14 +166,14 @@ macro_rules! uint_tests {
 
     #[test]
     fn test_isolate_most_significant_one() {
-      const BITS: uint = uint::MAX;
-      const MOST_SIG_ONE: uint = uint!(1).checked_shl(uint::BITS - 1).unwrap();
+      const BITS: $type = $type::MAX;
+      const MOST_SIG_ONE: $type = uint!(1).checked_shl($type::BITS - 1).unwrap();
 
-      let mut index: u32 = 0;
+      let mut index: ::core::primitive::u32 = 0;
 
       // Right shift the most significant one through each
       // bit position, starting with all bits set
-      while index < uint::BITS {
+      while index < $type::BITS {
         assert_eq!(
           (BITS >> index).isolate_most_significant_one(),
           (MOST_SIG_ONE >> index).isolate_most_significant_one(),
@@ -186,14 +185,14 @@ macro_rules! uint_tests {
 
     #[test]
     fn test_isolate_least_significant_one() {
-      const BITS: uint = uint::MAX;
-      const LEAST_SIG_ONE: uint = uint!(1);
+      const BITS: $type = $type::MAX;
+      const LEAST_SIG_ONE: $type = uint!(1);
 
-      let mut index: u32 = 0;
+      let mut index: ::core::primitive::u32 = 0;
 
       // Left shift the least significant one through each
       // bit position, starting with all bits set
-      while index < uint::BITS {
+      while index < $type::BITS {
         assert_eq!(
           (BITS << index).isolate_least_significant_one(),
           (LEAST_SIG_ONE << index).isolate_least_significant_one(),
@@ -215,27 +214,27 @@ macro_rules! uint_tests {
       assert_eq!(from_str("123456789"), Some(exint::uint!(123456789)));
       assert_eq!(from_str("00100"), Some(uint!(100)));
 
-      assert_eq!(from_str::<uint>(""), None);
-      assert_eq!(from_str::<uint>(" "), None);
-      assert_eq!(from_str::<uint>("x"), None);
+      assert_eq!(from_str::<$type>(""), None);
+      assert_eq!(from_str::<$type>(" "), None);
+      assert_eq!(from_str::<$type>("x"), None);
     }
 
     #[test]
     fn test_parse_bytes() {
-      assert_eq!(uint::from_str_radix("123", 10), Ok(uint!(123)));
-      assert_eq!(uint::from_str_radix("1001", 2), Ok(uint!(9)));
-      assert_eq!(uint::from_str_radix("123", 8), Ok(uint!(83)));
+      assert_eq!($type::from_str_radix("123", 10), Ok(uint!(123)));
+      assert_eq!($type::from_str_radix("1001", 2), Ok(uint!(9)));
+      assert_eq!($type::from_str_radix("123", 8), Ok(uint!(83)));
       assert_eq!(exint::uint::from_str_radix("123", 16), Ok(exint::uint!(291 u16)));
       assert_eq!(exint::uint::from_str_radix("ffff", 16), Ok(exint::uint!(65535 u16)));
-      assert_eq!(uint::from_str_radix("z", 36), Ok(uint!(35)));
+      assert_eq!($type::from_str_radix("z", 36), Ok(uint!(35)));
 
-      assert!(uint::from_str_radix("Z", 10).is_err());
-      assert!(uint::from_str_radix("_", 2).is_err());
+      assert!($type::from_str_radix("Z", 10).is_err());
+      assert!($type::from_str_radix("_", 2).is_err());
     }
 
     #[test]
     fn test_pow() {
-      const R1: uint = uint!(2);
+      const R1: $type = uint!(2);
       assert_eq!(R1.pow(2), uint!(4));
       assert_eq!(R1.pow(0), uint!(1));
       assert_eq!(R1.wrapping_pow(2), uint!(4));
@@ -247,11 +246,11 @@ macro_rules! uint_tests {
       assert_eq!(R1.saturating_pow(2), uint!(4));
       assert_eq!(R1.saturating_pow(0), uint!(1));
 
-      const R2: uint = uint::MAX;
+      const R2: $type = $type::MAX;
       assert_eq!(R2.wrapping_pow(2), uint!(1));
       assert_eq!(R2.checked_pow(2), None);
       assert_eq!(R2.overflowing_pow(2), (uint!(1), true));
-      assert_eq!(R2.saturating_pow(2), uint::MAX);
+      assert_eq!(R2.saturating_pow(2), $type::MAX);
     }
 
     #[test]
@@ -261,27 +260,27 @@ macro_rules! uint_tests {
       assert_eq!(uint!(2).isqrt(), uint!(1));
       assert_eq!(uint!(99).isqrt(), uint!(9));
       assert_eq!(uint!(100).isqrt(), uint!(10));
-      assert_eq!(uint::MAX.isqrt(), (uint!(1) << (uint::BITS / 2)) - uint!(1));
+      assert_eq!($type::MAX.isqrt(), (uint!(1) << ($type::BITS / 2)) - uint!(1));
     }
 
     #[cfg(not(miri))] // Miri is too slow
     #[test]
     fn test_lots_of_isqrt() {
-      let n_max_sat: u128 = 2_u128.saturating_pow(uint::BITS) - 1;
-      let n_max: uint = uint::from_u128((1024 * 1024).min(n_max_sat));
+      let n_max_sat: ::core::primitive::u128 = 2_u128.saturating_pow($type::BITS) - 1;
+      let n_max: $type = $type::from_u128((1024 * 1024).min(n_max_sat));
 
       for n in uint!(0)..=n_max {
-        let isqrt: uint = n.isqrt();
+        let isqrt: $type = n.isqrt();
 
         assert!(isqrt.pow(2) <= n);
-        assert!(isqrt + uint!(1) == uint!(1) << (uint::BITS / 2) || (isqrt + uint!(1)).pow(2) > n);
+        assert!(isqrt + uint!(1) == uint!(1) << ($type::BITS / 2) || (isqrt + uint!(1)).pow(2) > n);
       }
 
-      for n in (uint::MAX - uint!(255))..=uint::MAX {
-        let isqrt: uint = n.isqrt();
+      for n in ($type::MAX - uint!(255))..=$type::MAX {
+        let isqrt: $type = n.isqrt();
 
         assert!(isqrt.pow(2) <= n);
-        assert!(isqrt + uint!(1) == uint!(1) << (uint::BITS / 2) || (isqrt + uint!(1)).pow(2) > n);
+        assert!(isqrt + uint!(1) == uint!(1) << ($type::BITS / 2) || (isqrt + uint!(1)).pow(2) > n);
       }
     }
 
@@ -299,7 +298,7 @@ macro_rules! uint_tests {
     fn test_next_multiple_of() {
       assert_eq!(uint!(16).next_multiple_of(uint!(8)), uint!(16));
       assert_eq!(uint!(23).next_multiple_of(uint!(8)), uint!(24));
-      assert_eq!(uint::MAX.next_multiple_of(uint!(1)), uint::MAX);
+      assert_eq!($type::MAX.next_multiple_of(uint!(1)), $type::MAX);
     }
 
     #[test]
@@ -307,76 +306,76 @@ macro_rules! uint_tests {
       assert_eq!(uint!(16).checked_next_multiple_of(uint!(8)), Some(uint!(16)));
       assert_eq!(uint!(23).checked_next_multiple_of(uint!(8)), Some(uint!(24)));
       assert_eq!(uint!(1).checked_next_multiple_of(uint!(0)), None);
-      assert_eq!(uint::MAX.checked_next_multiple_of(uint!(2)), None);
+      assert_eq!($type::MAX.checked_next_multiple_of(uint!(2)), None);
     }
 
     #[test]
     fn test_carrying_add() {
-      assert_eq!(uint::MAX.carrying_add(uint!(1), false), (uint!(0), true));
-      assert_eq!(uint::MAX.carrying_add(uint!(0), true), (uint!(0), true));
-      assert_eq!(uint::MAX.carrying_add(uint!(1), true), (uint!(1), true));
+      assert_eq!($type::MAX.carrying_add(uint!(1), false), (uint!(0), true));
+      assert_eq!($type::MAX.carrying_add(uint!(0), true), (uint!(0), true));
+      assert_eq!($type::MAX.carrying_add(uint!(1), true), (uint!(1), true));
 
-      assert_eq!(uint::MIN.carrying_add(uint::MAX, false), (uint::MAX, false));
-      assert_eq!(uint::MIN.carrying_add(uint!(0), true), (uint!(1), false));
-      assert_eq!(uint::MIN.carrying_add(uint::MAX, true), (uint!(0), true));
+      assert_eq!($type::MIN.carrying_add($type::MAX, false), ($type::MAX, false));
+      assert_eq!($type::MIN.carrying_add(uint!(0), true), (uint!(1), false));
+      assert_eq!($type::MIN.carrying_add($type::MAX, true), (uint!(0), true));
     }
 
     #[test]
     fn test_borrowing_sub() {
-      assert_eq!(uint::MIN.borrowing_sub(uint!(1), false), (uint::MAX, true));
-      assert_eq!(uint::MIN.borrowing_sub(uint!(0), true), (uint::MAX, true));
-      assert_eq!(uint::MIN.borrowing_sub(uint!(1), true), (uint::MAX - uint!(1), true));
+      assert_eq!($type::MIN.borrowing_sub(uint!(1), false), ($type::MAX, true));
+      assert_eq!($type::MIN.borrowing_sub(uint!(0), true), ($type::MAX, true));
+      assert_eq!($type::MIN.borrowing_sub(uint!(1), true), ($type::MAX - uint!(1), true));
 
-      assert_eq!(uint::MAX.borrowing_sub(uint::MAX, false), (uint!(0), false));
-      assert_eq!(uint::MAX.borrowing_sub(uint!(0), true), (uint::MAX - uint!(1), false));
-      assert_eq!(uint::MAX.borrowing_sub(uint::MAX, true), (uint::MAX, true));
+      assert_eq!($type::MAX.borrowing_sub($type::MAX, false), (uint!(0), false));
+      assert_eq!($type::MAX.borrowing_sub(uint!(0), true), ($type::MAX - uint!(1), false));
+      assert_eq!($type::MAX.borrowing_sub($type::MAX, true), ($type::MAX, true));
     }
 
     #[test]
     #[ignore = "not yet implemented"]
     fn test_widening_mul() {
-      assert_eq!(uint::MAX.widening_mul(uint::MAX), (uint!(1), uint::MAX - uint!(1)));
+      assert_eq!($type::MAX.widening_mul($type::MAX), (uint!(1), $type::MAX - uint!(1)));
     }
 
     #[test]
     #[ignore = "not yet implemented"]
     fn test_carrying_mul() {
-      assert_eq!(uint::MAX.carrying_mul(uint::MAX, uint!(0)), (uint!(1), uint::MAX - uint!(1)));
-      assert_eq!(uint::MAX.carrying_mul(uint::MAX, uint::MAX), (uint!(0), uint::MAX));
+      assert_eq!($type::MAX.carrying_mul($type::MAX, uint!(0)), (uint!(1), $type::MAX - uint!(1)));
+      assert_eq!($type::MAX.carrying_mul($type::MAX, $type::MAX), (uint!(0), $type::MAX));
     }
 
     #[test]
     #[ignore = "not yet implemented"]
     fn test_carrying_mul_add() {
-      assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint!(0), uint!(0)), (uint!(1), uint::MAX - uint!(1)));
-      assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint::MAX, uint!(0)), (uint!(0), uint::MAX));
-      assert_eq!(uint::MAX.carrying_mul_add(uint::MAX, uint::MAX, uint::MAX), (uint::MAX, uint::MAX));
+      assert_eq!($type::MAX.carrying_mul_add($type::MAX, uint!(0), uint!(0)), (uint!(1), $type::MAX - uint!(1)));
+      assert_eq!($type::MAX.carrying_mul_add($type::MAX, $type::MAX, uint!(0)), (uint!(0), $type::MAX));
+      assert_eq!($type::MAX.carrying_mul_add($type::MAX, $type::MAX, $type::MAX), ($type::MAX, $type::MAX));
     }
 
     #[test]
     fn test_midpoint() {
-      assert_eq!(uint::midpoint(uint!(1), uint!(3)), uint!(2));
-      assert_eq!(uint::midpoint(uint!(3), uint!(1)), uint!(2));
+      assert_eq!($type::midpoint(uint!(1), uint!(3)), uint!(2));
+      assert_eq!($type::midpoint(uint!(3), uint!(1)), uint!(2));
 
-      assert_eq!(uint::midpoint(uint!(0), uint!(0)), uint!(0));
-      assert_eq!(uint::midpoint(uint!(0), uint!(2)), uint!(1));
-      assert_eq!(uint::midpoint(uint!(2), uint!(0)), uint!(1));
-      assert_eq!(uint::midpoint(uint!(2), uint!(2)), uint!(2));
+      assert_eq!($type::midpoint(uint!(0), uint!(0)), uint!(0));
+      assert_eq!($type::midpoint(uint!(0), uint!(2)), uint!(1));
+      assert_eq!($type::midpoint(uint!(2), uint!(0)), uint!(1));
+      assert_eq!($type::midpoint(uint!(2), uint!(2)), uint!(2));
 
-      assert_eq!(uint::midpoint(uint!(1), uint!(4)), uint!(2));
-      assert_eq!(uint::midpoint(uint!(4), uint!(1)), uint!(2));
-      assert_eq!(uint::midpoint(uint!(3), uint!(4)), uint!(3));
-      assert_eq!(uint::midpoint(uint!(4), uint!(3)), uint!(3));
+      assert_eq!($type::midpoint(uint!(1), uint!(4)), uint!(2));
+      assert_eq!($type::midpoint(uint!(4), uint!(1)), uint!(2));
+      assert_eq!($type::midpoint(uint!(3), uint!(4)), uint!(3));
+      assert_eq!($type::midpoint(uint!(4), uint!(3)), uint!(3));
 
-      assert_eq!(uint::midpoint(uint::MIN, uint::MAX), (uint::MAX - uint::MIN) / uint!(2));
-      assert_eq!(uint::midpoint(uint::MAX, uint::MIN), (uint::MAX - uint::MIN) / uint!(2));
-      assert_eq!(uint::midpoint(uint::MIN, uint::MIN), uint::MIN);
-      assert_eq!(uint::midpoint(uint::MAX, uint::MAX), uint::MAX);
+      assert_eq!($type::midpoint($type::MIN, $type::MAX), ($type::MAX - $type::MIN) / uint!(2));
+      assert_eq!($type::midpoint($type::MAX, $type::MIN), ($type::MAX - $type::MIN) / uint!(2));
+      assert_eq!($type::midpoint($type::MIN, $type::MIN), $type::MIN);
+      assert_eq!($type::midpoint($type::MAX, $type::MAX), $type::MAX);
 
-      assert_eq!(uint::midpoint(uint::MIN, uint!(6)), uint::MIN / uint!(2) + uint!(3));
-      assert_eq!(uint::midpoint(uint!(6), uint::MIN), uint::MIN / uint!(2) + uint!(3));
-      assert_eq!(uint::midpoint(uint::MAX, uint!(6)), (uint::MAX - uint::MIN) / uint!(2) + uint!(3));
-      assert_eq!(uint::midpoint(uint!(6), uint::MAX), (uint::MAX - uint::MIN) / uint!(2) + uint!(3));
+      assert_eq!($type::midpoint($type::MIN, uint!(6)), $type::MIN / uint!(2) + uint!(3));
+      assert_eq!($type::midpoint(uint!(6), $type::MIN), $type::MIN / uint!(2) + uint!(3));
+      assert_eq!($type::midpoint($type::MAX, uint!(6)), ($type::MAX - $type::MIN) / uint!(2) + uint!(3));
+      assert_eq!($type::midpoint(uint!(6), $type::MAX), ($type::MAX - $type::MIN) / uint!(2) + uint!(3));
     }
   };
 }
