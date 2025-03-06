@@ -28,13 +28,6 @@ define!(u1024 as uint<128>, "The 1024-bit unsigned integer type.");
 define!(u2048 as uint<256>, "The 2048-bit unsigned integer type.");
 define!(u4096 as uint<512>, "The 4096-bit unsigned integer type.");
 
-#[cfg(target_pointer_width = "16")]
-define!(usize as uint<2>, "The pointer-sized unsigned integer type.");
-#[cfg(target_pointer_width = "32")]
-define!(usize as uint<4>, "The pointer-sized unsigned integer type.");
-#[cfg(target_pointer_width = "64")]
-define!(usize as uint<8>, "The pointer-sized unsigned integer type.");
-
 define!(i8    as int<1>,   "The 8-bit signed integer type.");
 define!(i16   as int<2>,   "The 16-bit signed integer type.");
 define!(i24   as int<3>,   "The 24-bit signed integer type.");
@@ -56,10 +49,3 @@ define!(i512  as int<64>,  "The 512-bit signed integer type.");
 define!(i1024 as int<128>, "The 1024-bit signed integer type.");
 define!(i2048 as int<256>, "The 2048-bit signed integer type.");
 define!(i4096 as int<512>, "The 4096-bit signed integer type.");
-
-#[cfg(target_pointer_width = "16")]
-define!(isize as int<2>, "The pointer-sized signed integer type.");
-#[cfg(target_pointer_width = "32")]
-define!(isize as int<4>, "The pointer-sized signed integer type.");
-#[cfg(target_pointer_width = "64")]
-define!(isize as int<8>, "The pointer-sized signed integer type.");
