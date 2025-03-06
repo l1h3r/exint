@@ -35,7 +35,7 @@ impl<const T: usize, const U: usize> Cast<uint<U>> for uint<T> {
 }
 
 macro_rules! implement {
-  ($type:ty, $uint:literal) => {
+  ($type:ty) => {
     const _: () = {
       const SIZE: usize = ::core::mem::size_of::<$type>();
 
@@ -68,17 +68,12 @@ macro_rules! implement {
       }
     };
   };
-  (sint $($type:ty)+) => {
+  ($($type:ty)+) => {
     $(
-      implement!($type, false);
-    )+
-  };
-  (uint $($type:ty)+) => {
-    $(
-      implement!($type, true);
+      implement!($type);
     )+
   };
 }
 
-implement!(sint i8 i16 i32 i64 i128 isize);
-implement!(uint u8 u16 u32 u64 u128 usize);
+implement!(i8 i16 i32 i64 i128 isize);
+implement!(u8 u16 u32 u64 u128 usize);
