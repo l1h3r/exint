@@ -211,7 +211,7 @@ macro_rules! implement {
           bytes => (bytes, 10),
         };
 
-        match Self::from_ascii_radix(bytes, radix) {
+        match Self::__from_ascii_radix::<true>(bytes, radix) {
           ::core::result::Result::Ok(value) => value,
           ::core::result::Result::Err(error) => ::core::panic!("{}", error.as_str()),
         }
