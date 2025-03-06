@@ -74,29 +74,29 @@ specialize! {
     // TODO: Figure out how to get `@llvm.fshl.$type`
     #[inline(always)]
     fn rotl(integer: Self, bits: u32) -> Self {
-      let lhs: u32 = bits % Self::BITS;
-      let rhs: u32 = Self::BITS - lhs;
+      let lhs_shift: u32 = bits % Self::BITS;
+      let rhs_shift: u32 = (Self::BITS - lhs_shift) % Self::BITS;
 
-      SpecCore::bor(
-        // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
-        unsafe { SpecCore::unchecked_shl(integer, lhs) },
-        // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
-        unsafe { SpecUint::unchecked_lshr(integer, rhs) },
-      )
+      // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
+      let lhs_value: Self = unsafe { SpecCore::unchecked_shl(integer, lhs_shift) };
+      // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
+      let rhs_value: Self = unsafe { SpecUint::unchecked_lshr(integer, rhs_shift) };
+
+      SpecCore::bor(lhs_value, rhs_value)
     }
 
     // TODO: Figure out how to get `@llvm.fshr.$type`
     #[inline(always)]
     fn rotr(integer: Self, bits: u32) -> Self {
-      let lhs: u32 = bits % Self::BITS;
-      let rhs: u32 = Self::BITS - lhs;
+      let lhs_shift: u32 = bits % Self::BITS;
+      let rhs_shift: u32 = (Self::BITS - lhs_shift) % Self::BITS;
 
-      SpecCore::bor(
-        // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
-        unsafe { SpecUint::unchecked_lshr(integer, lhs) },
-        // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
-        unsafe { SpecCore::unchecked_shl(integer, rhs) },
-      )
+      // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
+      let lhs_value: Self = unsafe { SpecUint::unchecked_lshr(integer, lhs_shift) };
+      // SAFETY: We mask the shift value so we cannot shift out-of-bounds.
+      let rhs_value: Self = unsafe { SpecCore::unchecked_shl(integer, rhs_shift) };
+
+      SpecCore::bor(lhs_value, rhs_value)
     }
 
     // -------------------------------------------------------------------------
