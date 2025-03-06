@@ -79,6 +79,67 @@ impl<const N: usize> ::core::ops::IndexMut<usize> for Buffer<N> {
   }
 }
 
+macro_rules! fmt {
+  ($this:ident, $f:ident, $base:ident, $non_negative:expr) => {{
+    let non_negative: bool = $non_negative;
+
+    if $this.is_zero() {
+      return $f.pad_integral(non_negative, $base::PREFIX, "0");
+    }
+
+    let mut buffer: Buffer<N> = Buffer::new();
+
+    let mut cursor: usize = buffer.len();
+    let mut source: Self = *$this;
+
+    let base: Self = Self::from_u8($base::DIGITS);
+
+    if non_negative {
+      loop {
+        let value: Self = source % base;
+        let value: u8 = $base.digit(value.into_u8());
+
+        source /= base;
+        cursor -= 1;
+
+        buffer[cursor].write(value);
+
+        if source.is_zero() {
+          break;
+        }
+      }
+    } else {
+      loop {
+        let value: Self = Self::ZERO - (source % base);
+        let value: u8 = $base.digit(value.into_u8());
+
+        source /= base;
+        cursor -= 1;
+
+        buffer[cursor].write(value);
+
+        if source.is_zero() {
+          break;
+        }
+      }
+    }
+
+    let ptr: *const u8 = buffer[cursor].as_ptr();
+    let len: usize = buffer.len() - cursor;
+
+    let slice: &[u8] = unsafe {
+      ::core::slice::from_raw_parts(ptr, len)
+    };
+
+    // SAFETY: The only characters written to `buffer` are valid UTF-8.
+    let string: &str = unsafe {
+      ::core::str::from_utf8_unchecked(slice)
+    };
+
+    $f.pad_integral(non_negative, $base::PREFIX, string)
+  }};
+}
+
 macro_rules! implement {
   (impl Debug for $name:ident) => {
     impl<const N: usize> ::core::fmt::Debug for $crate::$name<N> {
@@ -97,71 +158,31 @@ macro_rules! implement {
       }
     }
   };
+  (impl Display for $name:ident) => {
+    impl<const N: usize> ::core::fmt::Display for $crate::$name<N> {
+      fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        fmt!(self, f, Decimal, self.const_ge(&Self::ZERO))
+      }
+    }
+  };
   (impl LowerExp for $name:ident) => {
     // TODO
   };
   (impl UpperExp for $name:ident) => {
     // TODO
   };
-  (impl $format:ident for $name:ident as $base:ident) => {
-    impl<const N: usize> ::core::fmt::$format for $crate::$name<N> {
+  (impl $format:ident for int as $base:ident) => {
+    impl<const N: usize> ::core::fmt::$format for $crate::int<N> {
+      #[inline]
       fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-        let non_negative: bool = <Self as $crate::llapi::Uint>::UINT || self.const_ge(&Self::ZERO);
-
-        if self.is_zero() {
-          return f.pad_integral(non_negative, $base::PREFIX, "0");
-        }
-
-        let mut buffer: Buffer<N> = Buffer::new();
-
-        let mut cursor: usize = buffer.len();
-        let mut source: Self = *self;
-
-        let base: Self = Self::from_u8($base::DIGITS);
-
-        if non_negative {
-          loop {
-            let value: Self = source % base;
-            let value: u8 = $base.digit(value.into_u8());
-
-            source /= base;
-            cursor -= 1;
-
-            buffer[cursor].write(value);
-
-            if source.is_zero() {
-              break;
-            }
-          }
-        } else {
-          loop {
-            let value: Self = Self::ZERO - (source % base);
-            let value: u8 = $base.digit(value.into_u8());
-
-            source /= base;
-            cursor -= 1;
-
-            buffer[cursor].write(value);
-
-            if source.is_zero() {
-              break;
-            }
-          }
-        }
-
-        let ptr: *const u8 = buffer[cursor].as_ptr();
-        let len: usize = buffer.len() - cursor;
-
-        let slice: &[u8] = unsafe {
-          ::core::slice::from_raw_parts(ptr, len)
-        };
-
-        // SAFETY: The only characters written to `buffer` are valid UTF-8.
-        let string: &str = unsafe {
-          ::core::str::from_utf8_unchecked(slice)
-        };
-
-        f.pad_integral(non_negative, $base::PREFIX, string)
+        ::core::fmt::$format::fmt(&self.cast_unsigned(), f)
+      }
+    }
+  };
+  (impl $format:ident for uint as $base:ident) => {
+    impl<const N: usize> ::core::fmt::$format for $crate::uint<N> {
+      fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        fmt!(self, f, $base, true)
       }
     }
   };
@@ -176,7 +197,7 @@ macro_rules! implement {
   (int) => {
     implement!(impl Binary   for int as Binary);
     implement!(impl Debug    for int);
-    implement!(impl Display  for int as Decimal);
+    implement!(impl Display  for int);
     implement!(impl LowerExp for int);
     implement!(impl LowerHex for int as LowerHex);
     implement!(impl Octal    for int as Octal);
@@ -186,7 +207,7 @@ macro_rules! implement {
   (uint) => {
     implement!(impl Binary   for uint as Binary);
     implement!(impl Debug    for uint);
-    implement!(impl Display  for uint as Decimal);
+    implement!(impl Display  for uint);
     implement!(impl LowerExp for uint);
     implement!(impl LowerHex for uint as LowerHex);
     implement!(impl Octal    for uint as Octal);
