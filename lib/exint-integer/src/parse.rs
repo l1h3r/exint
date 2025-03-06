@@ -1,6 +1,6 @@
 /// Create a generic unsigned integer from a literal expression.
 ///
-/// Valid suffixes are `u{8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|256|512}`.
+/// Valid suffixes are `u{8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|256|512|1024|2048|4096}`.
 ///
 /// [`u32`][crate::primitive::u32] is used by default if no suffix is provided.
 ///
@@ -92,6 +92,15 @@ macro_rules! __uint {
   ($input:literal u512) => {
     $crate::__uint!(@parse uint<64>::__parse(stringify!($input)))
   };
+  ($input:literal u1024) => {
+    $crate::__uint!(@parse uint<128>::__parse(stringify!($input)))
+  };
+  ($input:literal u2048) => {
+    $crate::__uint!(@parse uint<256>::__parse(stringify!($input)))
+  };
+  ($input:literal u4096) => {
+    $crate::__uint!(@parse uint<512>::__parse(stringify!($input)))
+  };
   (@parse uint<$size:literal>::$parse:ident($input:expr_2021)) => {
     const { $crate::uint::<$size>::$parse($input) }
   };
@@ -99,7 +108,7 @@ macro_rules! __uint {
 
 /// Create a generic signed integer from a literal expression.
 ///
-/// Valid suffixes are `i{8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|256|512}`.
+/// Valid suffixes are `i{8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|256|512|1024|2048|4096}`.
 ///
 /// [`i32`][crate::primitive::i32] is used by default if no suffix is provided.
 ///
@@ -190,6 +199,15 @@ macro_rules! __int {
   };
   ($input:literal i512) => {
     $crate::__int!(@parse int<64>::__parse(stringify!($input)))
+  };
+  ($input:literal i1024) => {
+    $crate::__int!(@parse int<128>::__parse(stringify!($input)))
+  };
+  ($input:literal i2048) => {
+    $crate::__int!(@parse int<256>::__parse(stringify!($input)))
+  };
+  ($input:literal i4096) => {
+    $crate::__int!(@parse int<512>::__parse(stringify!($input)))
   };
   (@parse int<$size:literal>::$parse:ident($input:expr_2021)) => {
     const { $crate::int::<$size>::$parse($input) }
