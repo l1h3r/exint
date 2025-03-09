@@ -5,7 +5,7 @@ macro_rules! parse_str {
     pub const fn from_str_radix(
       src: &str,
       radix: u32,
-    ) -> ::core::result::Result<Self, $crate::error::ParseIntError> {
+    ) -> Result<Self, $crate::error::ParseIntError> {
       Self::from_ascii_radix(src.as_bytes(), radix)
     }
 
@@ -14,7 +14,7 @@ macro_rules! parse_str {
     #[inline]
     pub const fn from_ascii(
       src: &[u8],
-    ) -> ::core::result::Result<Self, $crate::error::ParseIntError> {
+    ) -> Result<Self, $crate::error::ParseIntError> {
       Self::from_ascii_radix(src, 10)
     }
 
@@ -26,7 +26,7 @@ macro_rules! parse_str {
       pub const fn from_ascii_radix(
         src: &[u8],
         radix: u32,
-      ) -> ::core::result::Result<Self, $crate::error::ParseIntError> {
+      ) -> Result<Self, $crate::error::ParseIntError> {
         Self::__from_ascii_radix::<false>(src, radix)
       }
     }
@@ -35,7 +35,7 @@ macro_rules! parse_str {
     pub(crate) const fn __from_ascii_radix<const MACRO_HACK: bool>(
       src: &[u8],
       radix: u32,
-    ) -> ::core::result::Result<Self, $crate::error::ParseIntError> {
+    ) -> Result<Self, $crate::error::ParseIntError> {
       if 2 > radix || radix > 36 {
         // TODO: Runtime panic formatting
         ::core::panic!("from_ascii_radix: radix must lie in the range `[2, 36]`");
@@ -43,7 +43,7 @@ macro_rules! parse_str {
 
       #[inline]
       const fn no_overflow<T>(radix: u32, signed: bool, bytes: &[u8]) -> bool {
-        radix <= 16 && bytes.len() <= ::core::mem::size_of::<T>() * 2 - signed as usize
+        radix <= 16 && bytes.len() <= size_of::<T>() * 2 - signed as usize
       }
 
       macro_rules! error {
@@ -56,19 +56,19 @@ macro_rules! parse_str {
         ($expr:expr_2021, $error:ident) => {
           match $expr {
             Some(value) => value,
-            None => return ::core::result::Result::Err(error!($error)),
+            None => return Err(error!($error)),
           }
         };
       }
 
       if src.is_empty() {
-        return ::core::result::Result::Err(error!(Empty));
+        return Err(error!(Empty));
       }
 
       let signed: bool = !<Self as $crate::llapi::Uint>::UINT;
 
       let (positive, mut digits): (bool, &[u8]) = match src {
-        [b'+' | b'-'] => return ::core::result::Result::Err(error!(InvalidDigit)),
+        [b'+' | b'-'] => return Err(error!(InvalidDigit)),
         [b'+', tail @ ..] => (true, tail),
         [b'-', b' ', tail @ ..] if MACRO_HACK && signed => (false, tail),
         [b'-', tail @ ..] if signed => (false, tail),
@@ -114,7 +114,7 @@ macro_rules! parse_str {
         }
       }
 
-      ::core::result::Result::Ok(result)
+      Ok(result)
     }
   };
 }

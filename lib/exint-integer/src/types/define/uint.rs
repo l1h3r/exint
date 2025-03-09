@@ -1,6 +1,11 @@
+use ::core::cmp::Ordering;
+use ::core::mem::size_of;
 use ::core::option::Option;
 use ::core::option::Option::None;
 use ::core::option::Option::Some;
+use ::core::result::Result;
+use ::core::result::Result::Err;
+use ::core::result::Result::Ok;
 
 use crate::llapi;
 use crate::panic;

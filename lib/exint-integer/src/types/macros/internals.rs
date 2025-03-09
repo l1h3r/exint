@@ -4,7 +4,7 @@ macro_rules! internals {
     $crate::types::macros::internals!(@core);
 
     #[inline]
-    pub(crate) const fn const_cmp(&self, other: &Self) -> ::core::cmp::Ordering {
+    pub(crate) const fn const_cmp(&self, other: &Self) -> Ordering {
       $crate::llapi::ucmp::<Self, N>(*self, *other)
     }
 
@@ -24,7 +24,7 @@ macro_rules! internals {
     pub(crate) const NEG_ONE: Self = Self::from_i8(-1);
 
     #[inline]
-    pub(crate) const fn const_cmp(&self, other: &Self) -> ::core::cmp::Ordering {
+    pub(crate) const fn const_cmp(&self, other: &Self) -> Ordering {
       $crate::llapi::scmp::<Self, N>(*self, *other)
     }
   };
@@ -210,7 +210,7 @@ macro_rules! internals {
     #[doc(hidden)] // Only exposed for use with `int/uint` macros.
     #[inline]
     pub const fn $from(other: $type) -> Self {
-      const M: usize = ::core::mem::size_of::<$type>();
+      const M: usize = size_of::<$type>();
 
       let input: [u8; M] = other.to_ne_bytes();
       let value: [u8; N] = $crate::llapi::cast_bytes::<$type, M, N>(input);
@@ -221,7 +221,7 @@ macro_rules! internals {
     #[doc(hidden)] // Only exposed for use with `int/uint` macros.
     #[inline]
     pub const fn $into(self) -> $type {
-      const M: usize = ::core::mem::size_of::<$type>();
+      const M: usize = size_of::<$type>();
 
       let input: [u8; N] = self.to_ne_bytes();
       let value: [u8; M] = $crate::llapi::cast_bytes::<Self, N, M>(input);
