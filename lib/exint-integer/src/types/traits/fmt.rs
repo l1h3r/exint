@@ -166,10 +166,34 @@ macro_rules! implement {
     }
   };
   (impl LowerExp for $name:ident) => {
-    // TODO
+    impl<const N: usize> ::core::fmt::LowerExp for $crate::$name<N> {
+      fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        if Self::BITS <= u128::BITS {
+          if <Self as $crate::llapi::Uint>::UINT {
+            return ::core::fmt::LowerExp::fmt(&self.into_u128(), f);
+          } else {
+            return ::core::fmt::LowerExp::fmt(&self.into_i128(), f);
+          }
+        }
+
+        ::core::panic!("TODO: LowerExp")
+      }
+    }
   };
   (impl UpperExp for $name:ident) => {
-    // TODO
+    impl<const N: usize> ::core::fmt::UpperExp for $crate::$name<N> {
+      fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+        if Self::BITS <= u128::BITS {
+          if <Self as $crate::llapi::Uint>::UINT {
+            return ::core::fmt::UpperExp::fmt(&self.into_u128(), f);
+          } else {
+            return ::core::fmt::UpperExp::fmt(&self.into_i128(), f);
+          }
+        }
+
+        ::core::panic!("TODO: UpperExp")
+      }
+    }
   };
   (impl $format:ident for int as $base:ident) => {
     impl<const N: usize> ::core::fmt::$format for $crate::int<N> {
