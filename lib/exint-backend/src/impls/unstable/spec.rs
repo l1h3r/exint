@@ -14,22 +14,22 @@ specialize! {
     // Bitwise Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn band(lhs: Self, rhs: Self) -> Self {
       SpecCore::band(lhs.zext(), rhs.zext()).trunc()
     }
 
-    #[inline(always)]
+    #[inline]
     fn bor(lhs: Self, rhs: Self) -> Self {
       SpecCore::bor(lhs.zext(), rhs.zext()).trunc()
     }
 
-    #[inline(always)]
+    #[inline]
     fn bxor(lhs: Self, rhs: Self) -> Self {
       SpecCore::bxor(lhs.zext(), rhs.zext()).trunc()
     }
 
-    #[inline(always)]
+    #[inline]
     fn bnot(integer: Self) -> Self {
       (SpecCore::bnot(integer.zext()) & Self::UMAX.zext()).trunc()
     }
@@ -38,7 +38,7 @@ specialize! {
     // Comparison Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn eq(lhs: Self, rhs: Self) -> bool {
       SpecCore::eq(lhs.zext(), rhs.zext())
     }
@@ -51,7 +51,7 @@ specialize! {
     //       threshold with the following: `-C llvm-args=-unroll-threshold=n`
     //
     // Note: Bad optimization when `N >= 72`, where N is the width of `Self` in bits.
-    #[inline(always)]
+    #[inline]
     fn swap1(integer: Self) -> Self {
       let mut input: <Self as Exts>::Uint = integer.zext();
       let mut value: <Self as Exts>::Uint = 0;
@@ -66,13 +66,13 @@ specialize! {
       value.trunc()
     }
 
-    #[inline(always)]
+    #[inline]
     fn swap8(integer: Self) -> Self {
       (SpecCore::swap8(integer.zext() << Self::UDIFF)).trunc()
     }
 
     // TODO: Figure out how to get `@llvm.fshl.$type`
-    #[inline(always)]
+    #[inline]
     fn rotl(integer: Self, bits: u32) -> Self {
       let lhs_shift: u32 = bits % Self::BITS;
       let rhs_shift: u32 = (Self::BITS - lhs_shift) % Self::BITS;
@@ -86,7 +86,7 @@ specialize! {
     }
 
     // TODO: Figure out how to get `@llvm.fshr.$type`
-    #[inline(always)]
+    #[inline]
     fn rotr(integer: Self, bits: u32) -> Self {
       let lhs_shift: u32 = bits % Self::BITS;
       let rhs_shift: u32 = (Self::BITS - lhs_shift) % Self::BITS;
@@ -103,19 +103,19 @@ specialize! {
     // Bit Inspection Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn ctpop(integer: Self) -> u32 {
       SpecCore::ctpop(integer.zext())
     }
 
     // Note: LLVM only recognizes this pattern when increasing the loop unroll
     //       threshold with the following: `-C llvm-args=-unroll-threshold=n`
-    #[inline(always)]
+    #[inline]
     fn ctlz(integer: Self) -> u32 {
       SpecCore::cttz(SpecCore::swap1(integer))
     }
 
-    #[inline(always)]
+    #[inline]
     fn cttz(integer: Self) -> u32 {
       if integer.zext() == 0 {
         return Self::BITS;
@@ -124,13 +124,13 @@ specialize! {
       SpecCore::cttz(integer.zext())
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn ctlz_nonzero(integer: Self) -> u32 {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecCore::cttz_nonzero(SpecCore::swap1(integer)) }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn cttz_nonzero(integer: Self) -> u32 {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecCore::cttz_nonzero(integer.zext()) }
@@ -141,7 +141,7 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // TODO: Figure out how to get `shl $type`
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_shl(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecCore::unchecked_shl(integer.zext(), bits) }.trunc()
@@ -151,7 +151,7 @@ specialize! {
     // Wrapping Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn wrapping_add(lhs: Self, rhs: Self) -> Self {
       let lhs: <Self as Exts>::Uint = lhs.zext();
       let rhs: <Self as Exts>::Uint = rhs.zext();
@@ -160,7 +160,7 @@ specialize! {
       (out & Self::UMAX.zext()).trunc()
     }
 
-    #[inline(always)]
+    #[inline]
     fn wrapping_sub(lhs: Self, rhs: Self) -> Self {
       let lhs: <Self as Exts>::Uint = lhs.zext();
       let rhs: <Self as Exts>::Uint = rhs.zext();
@@ -169,7 +169,7 @@ specialize! {
       (out & Self::UMAX.zext()).trunc()
     }
 
-    #[inline(always)]
+    #[inline]
     fn wrapping_mul(lhs: Self, rhs: Self) -> Self {
       let lhs: <Self as Exts>::Uint = lhs.zext();
       let rhs: <Self as Exts>::Uint = rhs.zext();
@@ -186,7 +186,7 @@ specialize! {
     // Comparison Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn scmp(lhs: Self, rhs: Self) -> Ordering {
       SpecSint::scmp(lhs.sext(), rhs.sext())
     }
@@ -195,7 +195,7 @@ specialize! {
     // Overflowing Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_sadd(lhs: Self, rhs: Self) -> (Self, bool) {
       let lhs: <Self as Exts>::Sint = lhs.sext();
       let rhs: <Self as Exts>::Sint = rhs.sext();
@@ -208,7 +208,7 @@ specialize! {
       (out.trunc(), out > Self::SMAX.sext() || out < Self::SMIN.sext())
     }
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_ssub(lhs: Self, rhs: Self) -> (Self, bool) {
       let lhs: <Self as Exts>::Sint = lhs.sext();
       let rhs: <Self as Exts>::Sint = rhs.sext();
@@ -221,7 +221,7 @@ specialize! {
       (out.trunc(), out > Self::SMAX.sext() || out < Self::SMIN.sext())
     }
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_smul(lhs: Self, rhs: Self) -> (Self, bool) {
       let lhs: <Self as Exts>::Sint = lhs.sext();
       let rhs: <Self as Exts>::Sint = rhs.sext();
@@ -234,7 +234,7 @@ specialize! {
     // Saturating Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn saturating_sadd(lhs: Self, rhs: Self) -> Self {
       let lhs: <Self as Exts>::Sint = lhs.sext();
       let rhs: <Self as Exts>::Sint = rhs.sext();
@@ -253,7 +253,7 @@ specialize! {
       }
     }
 
-    #[inline(always)]
+    #[inline]
     fn saturating_ssub(lhs: Self, rhs: Self) -> Self {
       let lhs: <Self as Exts>::Sint = lhs.sext();
       let rhs: <Self as Exts>::Sint = rhs.sext();
@@ -277,19 +277,19 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // TODO: Figure out how to get `nsw` keyword
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_sadd(lhs: Self, rhs: Self) -> Self {
       SpecCore::wrapping_add(lhs, rhs)
     }
 
     // TODO: Figure out how to get `nsw` keyword
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_ssub(lhs: Self, rhs: Self) -> Self {
       SpecCore::wrapping_sub(lhs, rhs)
     }
 
     // TODO: Figure out how to get `nsw` keyword
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_smul(lhs: Self, rhs: Self) -> Self {
       SpecCore::wrapping_mul(lhs, rhs)
     }
@@ -297,7 +297,7 @@ specialize! {
     // TODO: Figure out how to get `sdiv $type`
     //
     // Note: LLVM does not actually seem to support narrowing sdiv
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_sdiv(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecSint::unchecked_sdiv(lhs.sext(), rhs.sext()) }.trunc()
@@ -306,14 +306,14 @@ specialize! {
     // TODO: Figure out how to get `srem $type`
     //
     // Note: LLVM does not actually seem to support narrowing srem
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_srem(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecSint::unchecked_srem(lhs.sext(), rhs.sext()) }.trunc()
     }
 
     // TODO: Figure out how to get `ashr $type`
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_ashr(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecSint::unchecked_ashr(integer.sext(), bits) }.trunc()
@@ -329,7 +329,7 @@ specialize! {
 
     // TODO: Figure out how to get `disjoint` keyword
     #[cfg(feature = "disjoint_bitor")]
-    #[inline(always)]
+    #[inline]
     unsafe fn disjoint_bor(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecUint::disjoint_bor(lhs.zext(), rhs.zext()) }.trunc()
@@ -339,7 +339,7 @@ specialize! {
     // Comparison Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn ucmp(lhs: Self, rhs: Self) -> Ordering {
       SpecUint::ucmp(lhs.zext(), rhs.zext())
     }
@@ -352,7 +352,7 @@ specialize! {
     //
     // Note: This appears to be the recommended pattern:
     //   https://github.com/rust-lang/rust/pull/124114#issuecomment-2066173305
-    #[inline(always)]
+    #[inline]
     fn overflowing_uadd(lhs: Self, rhs: Self) -> (Self, bool) {
       let out: Self = SpecCore::wrapping_add(lhs, rhs);
       let cmp: bool = SpecUint::ucmp(out, lhs).is_lt();
@@ -363,7 +363,7 @@ specialize! {
     // Note: LLVM generates `sub $type` and `icmp ult $type` which is
     //       considered the canonical form of `usub.with.overflow`.
     //       More info here: https://github.com/rust-lang/rust/pull/103299
-    #[inline(always)]
+    #[inline]
     fn overflowing_usub(lhs: Self, rhs: Self) -> (Self, bool) {
       // Note: This order (cmp -> sub) is important for i24,i40,i48,i56
       if ::core::matches!(Self::SIZE, 3 | 5 | 6 | 7) {
@@ -380,7 +380,7 @@ specialize! {
     }
 
     // LLVM generates `@llvm.umul.with.overflow.$type` intrinsic
-    #[inline(always)]
+    #[inline]
     fn overflowing_umul(lhs: Self, rhs: Self) -> (Self, bool) {
       let lhs: <Self as Exts>::Uint = lhs.zext();
       let rhs: <Self as Exts>::Uint = rhs.zext();
@@ -393,7 +393,7 @@ specialize! {
     // Saturating Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn saturating_uadd(lhs: Self, rhs: Self) -> Self {
       let out: Self = SpecCore::wrapping_add(lhs, rhs);
       let cmp: bool = SpecUint::ucmp(out, lhs).is_lt();
@@ -405,7 +405,7 @@ specialize! {
       out
     }
 
-    #[inline(always)]
+    #[inline]
     fn saturating_usub(lhs: Self, rhs: Self) -> Self {
       if SpecUint::ucmp(lhs, rhs).is_lt() {
         return Self::UMIN;
@@ -419,37 +419,37 @@ specialize! {
     // -------------------------------------------------------------------------
 
     // TODO: Figure out how to get `nuw` keyword
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_uadd(lhs: Self, rhs: Self) -> Self {
       SpecCore::wrapping_add(lhs, rhs)
     }
 
     // TODO: Figure out how to get `nuw` keyword
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_usub(lhs: Self, rhs: Self) -> Self {
       SpecCore::wrapping_sub(lhs, rhs)
     }
 
     // TODO: Figure out how to get `nuw` keyword
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_umul(lhs: Self, rhs: Self) -> Self {
       SpecCore::wrapping_mul(lhs, rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_udiv(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecUint::unchecked_udiv(lhs.zext(), rhs.zext()) }.trunc()
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_urem(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecUint::unchecked_urem(lhs.zext(), rhs.zext()) }.trunc()
     }
 
     // TODO: Figure out how to get `lshr $type`
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_lshr(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { SpecUint::unchecked_lshr(integer.zext(), bits) }.trunc()

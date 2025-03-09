@@ -25,22 +25,22 @@ specialize! {
     // Bitwise Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn band(lhs: Self, rhs: Self) -> Self {
       lhs & rhs
     }
 
-    #[inline(always)]
+    #[inline]
     fn bor(lhs: Self, rhs: Self) -> Self {
       lhs | rhs
     }
 
-    #[inline(always)]
+    #[inline]
     fn bxor(lhs: Self, rhs: Self) -> Self {
       lhs ^ rhs
     }
 
-    #[inline(always)]
+    #[inline]
     fn bnot(integer: Self) -> Self {
       !integer
     }
@@ -49,7 +49,7 @@ specialize! {
     // Comparison Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn eq(lhs: Self, rhs: Self) -> bool {
       lhs == rhs
     }
@@ -58,22 +58,22 @@ specialize! {
     // Bit Conversion Operation
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn swap1(integer: Self) -> Self {
       integer.reverse_bits()
     }
 
-    #[inline(always)]
+    #[inline]
     fn swap8(integer: Self) -> Self {
       integer.swap_bytes()
     }
 
-    #[inline(always)]
+    #[inline]
     fn rotl(integer: Self, bits: u32) -> Self {
       integer.rotate_left(bits)
     }
 
-    #[inline(always)]
+    #[inline]
     fn rotr(integer: Self, bits: u32) -> Self {
       integer.rotate_right(bits)
     }
@@ -82,22 +82,22 @@ specialize! {
     // Bit Inspection Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn ctpop(integer: Self) -> u32 {
       integer.count_ones()
     }
 
-    #[inline(always)]
+    #[inline]
     fn ctlz(integer: Self) -> u32 {
       integer.leading_zeros()
     }
 
-    #[inline(always)]
+    #[inline]
     fn cttz(integer: Self) -> u32 {
       integer.trailing_zeros()
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn ctlz_nonzero(integer: Self) -> u32 {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -110,7 +110,7 @@ specialize! {
       }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn cttz_nonzero(integer: Self) -> u32 {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -127,7 +127,7 @@ specialize! {
     // Unchecked Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_shl(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -145,17 +145,17 @@ specialize! {
     // Wrapping Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn wrapping_add(lhs: Self, rhs: Self) -> Self {
       lhs.wrapping_add(rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn wrapping_sub(lhs: Self, rhs: Self) -> Self {
       lhs.wrapping_sub(rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn wrapping_mul(lhs: Self, rhs: Self) -> Self {
       lhs.wrapping_mul(rhs)
     }
@@ -168,7 +168,7 @@ specialize! {
     // Comparison Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn scmp(lhs: Self, rhs: Self) -> Ordering {
       maybe_intrinsic! {
         @enabled => {
@@ -184,17 +184,17 @@ specialize! {
     // Overflowing Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_sadd(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_add(rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_ssub(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_sub(rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_smul(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_mul(rhs)
     }
@@ -203,12 +203,12 @@ specialize! {
     // Saturating Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn saturating_sadd(lhs: Self, rhs: Self) -> Self {
       lhs.saturating_add(rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn saturating_ssub(lhs: Self, rhs: Self) -> Self {
       lhs.saturating_sub(rhs)
     }
@@ -217,25 +217,25 @@ specialize! {
     // Unchecked Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_sadd(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_add(rhs) }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_ssub(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_sub(rhs) }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_smul(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_mul(rhs) }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_sdiv(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -249,7 +249,7 @@ specialize! {
       }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_srem(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -263,7 +263,7 @@ specialize! {
       }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_ashr(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -286,7 +286,7 @@ specialize! {
     // -------------------------------------------------------------------------
 
     #[cfg(feature = "disjoint_bitor")]
-    #[inline(always)]
+    #[inline]
     unsafe fn disjoint_bor(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -303,7 +303,7 @@ specialize! {
     // Comparison Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn ucmp(lhs: Self, rhs: Self) -> Ordering {
       maybe_intrinsic! {
         @enabled => {
@@ -319,17 +319,17 @@ specialize! {
     // Overflowing Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_uadd(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_add(rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_usub(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_sub(rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn overflowing_umul(lhs: Self, rhs: Self) -> (Self, bool) {
       lhs.overflowing_mul(rhs)
     }
@@ -338,12 +338,12 @@ specialize! {
     // Saturating Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     fn saturating_uadd(lhs: Self, rhs: Self) -> Self {
       lhs.saturating_add(rhs)
     }
 
-    #[inline(always)]
+    #[inline]
     fn saturating_usub(lhs: Self, rhs: Self) -> Self {
       lhs.saturating_sub(rhs)
     }
@@ -352,25 +352,25 @@ specialize! {
     // Unchecked Operations
     // -------------------------------------------------------------------------
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_uadd(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_add(rhs) }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_usub(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_sub(rhs) }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_umul(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       unsafe { lhs.unchecked_mul(rhs) }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_udiv(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -384,7 +384,7 @@ specialize! {
       }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_urem(lhs: Self, rhs: Self) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
@@ -398,7 +398,7 @@ specialize! {
       }
     }
 
-    #[inline(always)]
+    #[inline]
     unsafe fn unchecked_lshr(integer: Self, bits: u32) -> Self {
       // SAFETY: This is guaranteed to be safe by the caller.
       maybe_intrinsic! {
