@@ -199,20 +199,26 @@ specialize! {
     fn overflowing_sadd(lhs: Self, rhs: Self) -> (Self, bool) {
       let lhs: <Self as Exts>::Sint = lhs.sext();
       let rhs: <Self as Exts>::Sint = rhs.sext();
-      let out: <Self as Exts>::Sint = unsafe { lhs.unchecked_add(rhs) };
-      let cmp: bool = out > Self::SMAX.sext() || out < Self::SMIN.sext();
 
-      (out.trunc(), cmp)
+      // SAFETY: Signed addition cannot overflow the larger built-in type.
+      let out: <Self as Exts>::Sint = unsafe {
+        SpecSint::unchecked_sadd(lhs, rhs)
+      };
+
+      (out.trunc(), out > Self::SMAX.sext() || out < Self::SMIN.sext())
     }
 
     #[inline(always)]
     fn overflowing_ssub(lhs: Self, rhs: Self) -> (Self, bool) {
       let lhs: <Self as Exts>::Sint = lhs.sext();
       let rhs: <Self as Exts>::Sint = rhs.sext();
-      let out: <Self as Exts>::Sint = unsafe { lhs.unchecked_sub(rhs) };
-      let cmp: bool = out > Self::SMAX.sext() || out < Self::SMIN.sext();
 
-      (out.trunc(), cmp)
+      // SAFETY: Signed subtraction cannot overflow the larger built-in type.
+      let out: <Self as Exts>::Sint = unsafe {
+        SpecSint::unchecked_ssub(lhs, rhs)
+      };
+
+      (out.trunc(), out > Self::SMAX.sext() || out < Self::SMIN.sext())
     }
 
     #[inline(always)]
