@@ -44,6 +44,11 @@ impl Index {
   }
 }
 
+#[inline]
+pub(crate) const fn is_negative<const N: usize>(integer: [u8; N]) -> bool {
+  integer[Index::ZERO.msb::<N>()] & SIGN == SIGN
+}
+
 /// Resize an integer type to another of a different size.
 #[inline]
 pub(crate) const fn resize_bytes<T, const N: usize, const M: usize>(bytes: [u8; N]) -> [u8; M]

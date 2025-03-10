@@ -47,6 +47,8 @@ pub(crate) trait Consts {
   const SMAX: Self;
   /// The smallest signed value that can be represented by this integer type.
   const SMIN: Self;
+  /// The value `1` represented by this integer type.
+  const ONE: Self;
 }
 
 impl<const N: usize> Consts for [u8; N] {
@@ -65,6 +67,12 @@ impl<const N: usize> Consts for [u8; N] {
   const SMIN: Self = {
     let mut bytes: Self = Self::UMIN;
     bytes[Index::ZERO.msb::<N>()] |= SIGN;
+    bytes
+  };
+
+  const ONE: Self = {
+    let mut bytes: [u8; N] = Consts::UMIN;
+    bytes[Index::ZERO.lsb::<N>()] = 1;
     bytes
   };
 }
