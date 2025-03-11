@@ -102,7 +102,7 @@ macro_rules! fmt {
         source /= base;
         cursor -= 1;
 
-        buffer[cursor].write(value);
+        let _: &mut u8 = buffer[cursor].write(value);
 
         if source.is_zero() {
           break;
@@ -116,7 +116,7 @@ macro_rules! fmt {
         source /= base;
         cursor -= 1;
 
-        buffer[cursor].write(value);
+        let _: &mut u8 = buffer[cursor].write(value);
 
         if source.is_zero() {
           break;

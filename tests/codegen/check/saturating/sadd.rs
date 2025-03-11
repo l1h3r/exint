@@ -42,7 +42,7 @@ pub fn int_8(a: int<8>, b: int<8>) -> int<8> {
 pub fn int_9(a: int<9>, b: int<9>) -> int<9> {
   // CHECK: %[[D:.+]] = load i72, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i72, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i72 @llvm.sadd.sat.i72(i72 %[[D]], i72 %[[E]])
+  // CHECK: %[[F:.+]] = tail call i72 @llvm.sadd.sat.i72(i72 %[[E]], i72 %[[D]])
   // CHECK: store i72 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   a.saturating_add(b)
@@ -54,7 +54,7 @@ pub fn int_9(a: int<9>, b: int<9>) -> int<9> {
 pub fn int_10(a: int<10>, b: int<10>) -> int<10> {
   // CHECK: %[[D:.+]] = load i80, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i80, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i80 @llvm.sadd.sat.i80(i80 %[[D]], i80 %[[E]])
+  // CHECK: %[[F:.+]] = tail call i80 @llvm.sadd.sat.i80(i80 %[[E]], i80 %[[D]])
   // CHECK: store i80 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   a.saturating_add(b)
@@ -66,7 +66,7 @@ pub fn int_10(a: int<10>, b: int<10>) -> int<10> {
 pub fn int_11(a: int<11>, b: int<11>) -> int<11> {
   // CHECK: %[[D:.+]] = load i88, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i88, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i88 @llvm.sadd.sat.i88(i88 %[[D]], i88 %[[E]])
+  // CHECK: %[[F:.+]] = tail call i88 @llvm.sadd.sat.i88(i88 %[[E]], i88 %[[D]])
   // CHECK: store i88 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   a.saturating_add(b)
@@ -78,7 +78,7 @@ pub fn int_11(a: int<11>, b: int<11>) -> int<11> {
 pub fn int_12(a: int<12>, b: int<12>) -> int<12> {
   // CHECK: %[[D:.+]] = load i96, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i96, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i96 @llvm.sadd.sat.i96(i96 %[[D]], i96 %[[E]])
+  // CHECK: %[[F:.+]] = tail call i96 @llvm.sadd.sat.i96(i96 %[[E]], i96 %[[D]])
   // CHECK: store i96 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   a.saturating_add(b)
@@ -90,7 +90,7 @@ pub fn int_12(a: int<12>, b: int<12>) -> int<12> {
 pub fn int_13(a: int<13>, b: int<13>) -> int<13> {
   // CHECK: %[[D:.+]] = load i104, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i104, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i104 @llvm.sadd.sat.i104(i104 %[[D]], i104 %[[E]])
+  // CHECK: %[[F:.+]] = tail call i104 @llvm.sadd.sat.i104(i104 %[[E]], i104 %[[D]])
   // CHECK: store i104 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   a.saturating_add(b)
@@ -102,7 +102,7 @@ pub fn int_13(a: int<13>, b: int<13>) -> int<13> {
 pub fn int_14(a: int<14>, b: int<14>) -> int<14> {
   // CHECK: %[[D:.+]] = load i112, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i112, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i112 @llvm.sadd.sat.i112(i112 %[[D]], i112 %[[E]])
+  // CHECK: %[[F:.+]] = tail call i112 @llvm.sadd.sat.i112(i112 %[[E]], i112 %[[D]])
   // CHECK: store i112 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   a.saturating_add(b)
@@ -114,7 +114,7 @@ pub fn int_14(a: int<14>, b: int<14>) -> int<14> {
 pub fn int_15(a: int<15>, b: int<15>) -> int<15> {
   // CHECK: %[[D:.+]] = load i120, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i120, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i120 @llvm.sadd.sat.i120(i120 %[[D]], i120 %[[E]])
+  // CHECK: %[[F:.+]] = tail call i120 @llvm.sadd.sat.i120(i120 %[[E]], i120 %[[D]])
   // CHECK: store i120 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   a.saturating_add(b)
