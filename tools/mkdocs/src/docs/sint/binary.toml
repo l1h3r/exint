@@ -1,0 +1,145 @@
+[reverse_bits]
+overview = """
+Reverses the order of bits in the integer. The least significant bit becomes the
+most significant bit, second least-significant bit becomes second
+most-significant bit, etc.
+"""
+examples = """
+let n = $to_swap_i24;
+let m = n.reverse_bits();
+
+assert_eq!(m, $swap_b8_i24);
+assert_eq!(0_i24, 0_i24.reverse_bits());
+"""
+
+[swap_bytes]
+overview = """
+Reverses the byte order of the integer.
+"""
+examples = """
+let n = $to_swap_i24;
+let m = n.swap_bytes();
+
+assert_eq!(m, $swap_b1_i24);
+"""
+
+[rotate_left]
+overview = """
+Shifts the bits to the left by a specified amount, `n`,
+wrapping the truncated bits to the end of the resulting integer.
+
+Please note this isn't the same operation as the `<<` shifting operator!
+"""
+examples = """
+let n = $rotate_from_i24;
+let m = $rotate_into_i24;
+
+assert_eq!(n.rotate_left($rotate_size), m);
+"""
+
+[rotate_right]
+overview = """
+Shifts the bits to the right by a specified amount, `n`,
+wrapping the truncated bits to the beginning of the resulting integer.
+
+Please note this isn't the same operation as the `>>` shifting operator!
+"""
+examples = """
+let n = $rotate_into_i24;
+let m = $rotate_from_i24;
+
+assert_eq!(n.rotate_right($rotate_size), m);
+"""
+
+[count_ones]
+overview = """
+Returns the number of ones in the binary representation of `self`.
+"""
+examples = """
+assert_eq!(0b01000000_i24.count_ones(), 1);
+"""
+
+[count_zeros]
+overview = """
+Returns the number of zeros in the binary representation of `self`.
+"""
+examples = """
+assert_eq!(i24::MAX.count_zeros(), 1);
+"""
+
+[leading_ones]
+overview = """
+Returns the number of leading ones in the binary representation of `self`.
+"""
+examples = """
+assert_eq!((-1_i24).leading_ones(), i24::BITS);
+"""
+
+[leading_zeros]
+overview = """
+Returns the number of leading zeros in the binary representation of `self`.
+
+Depending on what you're doing with the value, you might also be interested in the
+[`ilog2`] function which returns a consistent number, even if the type widens.
+
+[`ilog2`]: Self::ilog2
+"""
+examples = """
+assert_eq!((-1_i24).leading_zeros(), 0);
+"""
+
+[trailing_ones]
+overview = """
+Returns the number of trailing ones in the binary representation of `self`.
+"""
+examples = """
+assert_eq!(3_i24.trailing_ones(), 2);
+"""
+
+[trailing_zeros]
+overview = """
+Returns the number of trailing zeros in the binary representation of `self`.
+"""
+examples = """
+assert_eq!((-4_i24).trailing_zeros(), 2);
+"""
+
+[isolate_highest_one]
+overview = """
+Returns `self` with only the most significant bit set, or `0` if the input is `0`.
+"""
+examples = """
+assert_eq!(0b01100100_i24.isolate_highest_one(), 0b01000000_i24);
+assert_eq!(0_i24.isolate_highest_one(), 0_i24);
+"""
+
+[isolate_lowest_one]
+overview = """
+Returns `self` with only the least significant bit set, or `0` if the input is `0`.
+"""
+examples = """
+assert_eq!(0b01100100_i24.isolate_lowest_one(), 0b00000100_i24);
+assert_eq!(0_i24.isolate_lowest_one(), 0_i24);
+"""
+
+[highest_one]
+overview = """
+Returns the index of the highest bit set to one in `self`, or `None` if `self` is `0`.
+"""
+examples = """
+assert_eq!(0x0_i24.highest_one(), None);
+assert_eq!(0x1_i24.highest_one(), Some(0));
+assert_eq!(0x10_i24.highest_one(), Some(4));
+assert_eq!(0x1f_i24.highest_one(), Some(4));
+"""
+
+[lowest_one]
+overview = """
+Returns the index of the lowest bit set to one in `self`, or `None` if `self` is `0`.
+"""
+examples = """
+assert_eq!(0x0_i24.lowest_one(), None);
+assert_eq!(0x1_i24.lowest_one(), Some(0));
+assert_eq!(0x10_i24.lowest_one(), Some(4));
+assert_eq!(0x1f_i24.lowest_one(), Some(0));
+"""

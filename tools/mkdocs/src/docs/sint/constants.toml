@@ -1,0 +1,23 @@
+[BITS]
+overview = """
+The size of this integer type in bits.
+"""
+examples = """
+assert_eq!(i24::BITS, $bits);
+"""
+
+[MAX]
+overview = """
+The largest value that can be represented by this integer type. (2<sup>($bits &minus; 1)</sup> &minus; 1).
+"""
+examples = """
+assert_eq!(i24::MAX, $int_max_i24);
+"""
+
+[MIN]
+overview = """
+The smallest value that can be represented by this integer type.
+"""
+examples = """
+assert_eq!(i24::MIN, $int_min_i24);
+"""

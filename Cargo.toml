@@ -1,0 +1,426 @@
+[package]
+name = "exint"
+version = "0.1.0"
+authors = ["l1h3r <5410284+l1h3r@users.noreply.github.com>"]
+categories = ["data-structures", "mathematics", "no-std", "no-std::no-alloc"]
+description = "An implementation of generic signed and unsigned integers."
+documentation = "https://docs.rs/exint"
+edition = "2024"
+homepage = "https://github.com/l1h3r/exint"
+keywords = ["bignum", "mathematics", "int", "uint"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/l1h3r/exint"
+rust-version = "1.91"
+
+[workspace]
+exclude = ["benches", "tools/mkdocs"]
+members = ["exint-macro"]
+
+[dependencies]
+exint-macro = { version = "=0.1.0", path = "exint-macro" }
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+all-features = true
+rustdoc-args = [
+  "--generate-link-to-definition",
+  "--generate-macro-expansion",
+  "--extern-html-root-url=core=https://doc.rust-lang.org",
+  "--extern-html-root-url=alloc=https://doc.rust-lang.org",
+  "--extern-html-root-url=std=https://doc.rust-lang.org",
+]
+
+[[test]]
+name = "codegen"
+path = "tests/codegen/main.rs"
+harness = false
+
+[features]
+default = ["std"]
+
+all = [
+  "all_const",
+  "all_backend",
+  "all_unstable",
+  "all_nightly",
+]
+
+all_const = [
+  "const_traits",
+  "const_clone",
+  "const_cmp",
+  "const_convert",
+  "const_default",
+  "const_ops",
+  "const_option",
+  "const_result",
+]
+
+all_backend = [
+  "core_intrinsics",
+  "const_eval_select",
+  "min_specialization",
+  "portable_simd",
+  "proc_macro_diagnostic",
+]
+
+all_unstable = [
+  "exact_bitshifts",
+  "int_from_ascii",
+  "int_lowest_highest_one",
+  "int_roundings",
+  "is_ascii_octdigit",
+  "isolate_most_least_significant_one",
+  "uint_bit_width",
+  "unchecked_neg",
+  "unchecked_shifts",
+  "utf16_extra",
+  "wrapping_next_power_of_two",
+]
+
+all_nightly = [
+  "adt_const_params",
+  "ascii_char",
+  "bigint_helper_methods",
+  "disjoint_bitor",
+  "exact_div",
+  "f16",
+  "f128",
+  "funnel_shifts",
+  "integer_atomics",
+  "never_type",
+  "random",
+  "step_trait",
+  "structural_match",
+  "trusted_step",
+  "unsized_const_params",
+]
+
+# ------------------------------------------------------------------------------
+# Features - Internal
+# ------------------------------------------------------------------------------
+
+# Force overflow checks - useful when compiling tests in release mode
+__internal_force_overflow_checks = []
+
+# Note: To be replaced with `panic=immediate-abort`
+# https://github.com/rust-lang/rust/pull/146317
+__internal_panic_immediate_abort = []
+
+# Leave disabled to speed up tests by only testing a small subset of sizes
+__internal_test_all_custom_sizes = []
+
+# ------------------------------------------------------------------------------
+# Features - Markers
+# ------------------------------------------------------------------------------
+
+# Marker indicating features that require a nightly compiler
+nightly = []
+
+# Marker indicating features that require the rust standard library
+std = []
+
+# Marker indicating features that require internal rust features
+internal_features = ["nightly"]
+
+# Marker indicating features that require incomplete rust features
+incomplete_features = ["nightly"]
+
+# ------------------------------------------------------------------------------
+# Features - Const Traits
+# ------------------------------------------------------------------------------
+
+# https://github.com/rust-lang/rust/issues/143874
+const_traits = ["nightly"]
+# https://github.com/rust-lang/rust/issues/142757
+const_clone = ["const_traits"]
+# https://github.com/rust-lang/rust/issues/143800
+const_cmp = ["const_traits"]
+# https://github.com/rust-lang/rust/issues/143773
+const_convert = ["const_cmp", "const_option", "const_result"]
+# https://github.com/rust-lang/rust/issues/143894
+const_default = ["const_traits"]
+# https://github.com/rust-lang/rust/issues/143802
+const_ops = ["const_convert"]
+# https://github.com/rust-lang/rust/issues/143956
+const_option = ["const_traits"]
+# https://github.com/rust-lang/rust/issues/144211
+const_result = ["const_traits"]
+
+# ------------------------------------------------------------------------------
+# Features - Backend
+# ------------------------------------------------------------------------------
+
+# Enable functionality that requires the `const_eval_select` feature
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/124625
+const_eval_select = ["core_intrinsics"]
+
+# Enable functionality that requires the `core_intrinsics` feature
+#
+# Note: This is perma-unstable in Rust.
+core_intrinsics = ["internal_features"]
+
+# Enable functionality that requires the `min_specialization` feature
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/31844
+min_specialization = ["nightly"]
+
+# Enable functionality that requires the `portable_simd` feature
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/86656
+portable_simd = ["const_eval_select"]
+
+# Enable functionality that requires the `proc_macro_diagnostic` feature
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/54140
+proc_macro_diagnostic = ["exint-macro/proc_macro_diagnostic"]
+
+# ------------------------------------------------------------------------------
+# Features - Unstable (Stable)
+# ------------------------------------------------------------------------------
+
+# Enable support for `exact_bitshifts` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/144336
+exact_bitshifts = []
+
+# Enable support for `int_from_ascii` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/134821
+int_from_ascii = []
+
+# Enable support for `int_lowest_highest_one` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/145203
+int_lowest_highest_one = []
+
+# Enable support for `int_roundings` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/88581
+int_roundings = []
+
+# Enable support for `is_ascii_octdigit` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/101288
+is_ascii_octdigit = []
+
+# Enable support for `isolate_most_least_significant_one` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/136909
+isolate_most_least_significant_one = []
+
+# Enable support for `uint_bit_width` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/142326
+uint_bit_width = []
+
+# Enable support for `unchecked_neg` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85122
+unchecked_neg = []
+
+# Enable support for `unchecked_shifts` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85122
+unchecked_shifts = []
+
+# Enable support for `utf16_extra` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/94919
+utf16_extra = []
+
+# Enable support for `wrapping_next_power_of_two` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/32463
+wrapping_next_power_of_two = []
+
+# ------------------------------------------------------------------------------
+# Features - Unstable (Nightly)
+# ------------------------------------------------------------------------------
+
+# Enable support for `adt_const_params` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/95174
+adt_const_params = ["unsized_const_params"]
+
+# Enable support for `ascii_char` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/110998
+ascii_char = ["nightly"]
+
+# Enable support for `bigint_helper_methods` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85532
+bigint_helper_methods = ["nightly"]
+
+# Enable support for `disjoint_bitor` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/135758
+disjoint_bitor = ["nightly"]
+
+# Enable support for `exact_div` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/139911
+exact_div = ["nightly"]
+
+# Enable support for `f16` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/116909
+f16 = ["nightly"]
+
+# Enable support for `f128` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/116909
+f128 = ["nightly"]
+
+# Enable support for `funnel_shifts` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/145686
+funnel_shifts = ["nightly"]
+
+# Enable support for `integer_atomics` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/99069
+integer_atomics = ["nightly"]
+
+# Enable support for `never_type` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/35121
+never_type = ["nightly"]
+
+# Enable support for `random` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/130703
+random = ["nightly"]
+
+# Enable support for `step_trait` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/42168
+step_trait = ["nightly"]
+
+# Enable support for `structural_match` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/31434
+# Tracking Issue: https://github.com/rust-lang/rust/issues/120362
+structural_match = ["nightly"]
+
+# Enable support for `trusted_step` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/85731
+trusted_step = ["step_trait", "min_specialization"]
+
+# Enable support for `unsized_const_params` core functionality.
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/128028
+unsized_const_params = ["incomplete_features", "structural_match"]
+
+# ------------------------------------------------------------------------------
+# Rustc Lints
+# https://doc.rust-lang.org/rustc/lints/index.html
+# ------------------------------------------------------------------------------
+
+[workspace.lints.rust]
+# Lint Groups
+warnings = { level = "deny", priority = -1 }
+deprecated-safe = { level = "deny", priority = -1 }
+future-incompatible = { level = "deny", priority = -1 }
+keyword-idents = { level = "deny", priority = -1 }
+let-underscore = { level = "deny", priority = -1 }
+nonstandard-style = { level = "deny", priority = -1 }
+refining-impl-trait = { level = "deny", priority = -1 }
+rust-2018-compatibility = { level = "deny", priority = -1 }
+rust-2018-idioms = { level = "deny", priority = -1 }
+rust-2021-compatibility = { level = "deny", priority = -1 }
+rust-2024-compatibility = { level = "deny", priority = -1 }
+unused = { level = "deny", priority = -1 }
+
+# Standalone Lints
+ambiguous_negative_literals = "deny"
+closure_returning_async_block = "deny"
+deref_into_dyn_supertrait = "deny"
+ffi_unwind_calls = "deny"
+impl_trait_redundant_captures = "deny"
+linker_messages = "deny"
+macro_use_extern_crate = "deny"
+meta_variable_misuse = "deny"
+missing_copy_implementations = "deny"
+missing_debug_implementations = "deny"
+missing_docs = "deny"
+non_ascii_idents = "deny"
+redundant_imports = "deny"
+redundant_lifetimes = "deny"
+single_use_lifetimes = "allow" # allow because noisy
+trivial_casts = "deny"
+trivial_numeric_casts = "deny"
+unit_bindings = "deny"
+unnameable_types = "deny"
+unreachable_pub = "deny"
+unsafe_code = "allow" # allow because we define and use unsafe APIs
+unstable_features = "allow" # allow because we allow user-enabled features
+unused_crate_dependencies = "allow" # allow because deps are configurable
+unused_import_braces = "deny"
+unused_lifetimes = "deny"
+unused_qualifications = "deny"
+unused_results = "deny"
+variant_size_differences = "deny"
+
+# Standalone Lints (Unstable)
+# fuzzy_provenance_casts
+# lossy_provenance_casts
+# multiple_supertrait_upcastable
+# must_not_suspend
+# non_exhaustive_omitted_patterns
+# supertrait_item_shadowing_definition
+# supertrait_item_shadowing_usage
+# unqualified_local_imports
+
+# Standalone Lints (Renamed)
+# async_idents => keyword_idents
+# keyword_idents => keyword_idents_2018
+# disjoint_capture_migration => rust_2021_incompatible_closure_captures
+# elided_lifetime_in_path => elided_lifetimes_in_paths
+# or_patterns_back_compat => rust_2021_incompatible_or_patterns
+
+# ------------------------------------------------------------------------------
+# Clippy Lints
+# https://doc.rust-lang.org/clippy
+# ------------------------------------------------------------------------------
+
+[workspace.lints.clippy]
+correctness = { level = "deny", priority = -1 }
+suspicious = { level = "deny", priority = -1 }
+style = { level = "deny", priority = -1 }
+complexity = { level = "deny", priority = -1 }
+perf = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+restriction = { level = "allow", priority = -1 }
+nursery = { level = "allow", priority = -1 }
+cargo = { level = "allow", priority = -1 }
+
+# pedantic noise
+cast_possible_truncation = "allow"
+many_single_char_names = "allow"
+missing_errors_doc = "allow"
+must_use_candidate = "allow"
+unused_self = "allow"
+wildcard_imports = "allow"
+
+# ------------------------------------------------------------------------------
+# Rustdoc Lints
+# https://doc.rust-lang.org/rustdoc/lints.html
+# ------------------------------------------------------------------------------
+
+[workspace.lints.rustdoc]
+broken_intra_doc_links = "deny"
+private_intra_doc_links = "deny"
+missing_crate_level_docs = "deny"
+# missing_doc_code_examples = "deny" # unstable
+private_doc_tests = "deny"
+invalid_codeblock_attributes = "deny"
+invalid_html_tags = "deny"
+invalid_rust_codeblocks = "deny"
+bare_urls = "deny"
+unescaped_backticks = "deny"
+redundant_explicit_links = "deny"

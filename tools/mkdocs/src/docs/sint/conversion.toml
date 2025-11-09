@@ -1,0 +1,81 @@
+[convert_from_bool]
+overview = """
+Converts a [`bool`] to [`int`] losslessly.
+The resulting value is `0` for `false` and `1` for `true` values.
+
+[`int`]: crate::types::int
+"""
+examples = """
+assert_eq!(i24::from(true), 1_i24);
+assert_eq!(i24::from(false), 0_i24);
+"""
+
+[convert_i8_atomic]
+overview = """
+Converts an [`int<1>`] into an [`AtomicI8`].
+
+[`AtomicI8`]: ::core::sync::atomic::AtomicI8
+"""
+
+[convert_i16_atomic]
+overview = """
+Converts an [`int<2>`] into an [`AtomicI16`].
+
+[`AtomicI16`]: ::core::sync::atomic::AtomicI16
+"""
+
+[convert_i32_atomic]
+overview = """
+Converts an [`int<4>`] into an [`AtomicI32`].
+
+[`AtomicI32`]: ::core::sync::atomic::AtomicI32
+"""
+
+[convert_i64_atomic]
+overview = """
+Converts an [`int<8>`] into an [`AtomicI64`].
+
+[`AtomicI64`]: ::core::sync::atomic::AtomicI64
+"""
+
+[convert_i128_atomic]
+overview = """
+Converts an [`int<16>`] into an [`AtomicI128`].
+
+[`AtomicI128`]: ::core::sync::atomic::AtomicI128
+"""
+
+[convert_i8_nonzero]
+overview = """
+Attempts to convert [`int<1>`] to [`NonZeroI8`].
+
+[`NonZeroI8`]: ::core::num::NonZeroI8
+"""
+
+[convert_i16_nonzero]
+overview = """
+Attempts to convert [`int<2>`] to [`NonZeroI16`].
+
+[`NonZeroI16`]: ::core::num::NonZeroI16
+"""
+
+[convert_i32_nonzero]
+overview = """
+Attempts to convert [`int<4>`] to [`NonZeroI32`].
+
+[`NonZeroI32`]: ::core::num::NonZeroI32
+"""
+
+[convert_i64_nonzero]
+overview = """
+Attempts to convert [`int<8>`] to [`NonZeroI64`].
+
+[`NonZeroI64`]: ::core::num::NonZeroI64
+"""
+
+[convert_i128_nonzero]
+overview = """
+Attempts to convert [`int<16>`] to [`NonZeroI128`].
+
+[`NonZeroI128`]: ::core::num::NonZeroI128
+"""

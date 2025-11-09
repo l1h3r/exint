@@ -1,0 +1,123 @@
+[convert_from_bool]
+overview = """
+Converts a [`bool`] to [`uint`] losslessly.
+The resulting value is `0` for `false` and `1` for `true` values.
+
+[`uint`]: crate::types::uint
+"""
+examples = """
+assert_eq!(u24::from(true), 1_u24);
+assert_eq!(u24::from(false), 0_u24);
+"""
+
+[convert_from_char]
+overview = """
+Converts a [`char`] into a [`uint`].
+
+[`uint`]: crate::types::uint
+"""
+examples = """
+assert!(4 == size_of_val(&u32::from('c')));
+assert!(4 == size_of_val(&u32::from('👤')));
+assert!(4 == size_of_val(&u32::from('⚙')));
+"""
+
+[convert_try_from_char]
+overview = """
+Tries to convert a [`char`] into a [`uint`].
+
+[`uint`]: crate::types::uint
+"""
+examples = """
+let a = 'ÿ'; // U+00FF
+let b = 'Ā'; // U+0100
+let c = '🥷'; // U+1F977
+let d = char::MAX; // U+10FFFF
+
+assert_eq!(u8::try_from(a), Ok(0xFF_u8));
+assert_eq!(u8::try_from(b).is_err(), true);
+assert_eq!(u16::try_from(b), Ok(0x0100_u16));
+assert_eq!(u16::try_from(c).is_err(), true);
+assert_eq!(u24::try_from(c), Ok(0x1F977_u24));
+assert_eq!(u24::try_from(d), Ok(0x10FFFF_u24));
+"""
+
+[convert_u8_char]
+overview = """
+Converts a [`uint<1>`] into a [`char`].
+"""
+examples = """
+let u = 32_u8;
+let c = char::from(u);
+assert!(4 == size_of_val(&c))
+"""
+
+[convert_u8_atomic]
+overview = """
+Converts a [`uint<1>`] into an [`AtomicU8`].
+
+[`AtomicU8`]: ::core::sync::atomic::AtomicU8
+"""
+
+[convert_u16_atomic]
+overview = """
+Converts a [`uint<2>`] into an [`AtomicU16`].
+
+[`AtomicU16`]: ::core::sync::atomic::AtomicU16
+"""
+
+[convert_u32_atomic]
+overview = """
+Converts a [`uint<4>`] into an [`AtomicU32`].
+
+[`AtomicU32`]: ::core::sync::atomic::AtomicU32
+"""
+
+[convert_u64_atomic]
+overview = """
+Converts a [`uint<8>`] into an [`AtomicU64`].
+
+[`AtomicU64`]: ::core::sync::atomic::AtomicU64
+"""
+
+[convert_u128_atomic]
+overview = """
+Converts a [`uint<16>`] into an [`AtomicU128`].
+
+[`AtomicU128`]: ::core::sync::atomic::AtomicU128
+"""
+
+[convert_u8_nonzero]
+overview = """
+Attempts to convert [`uint<1>`] to [`NonZeroU8`].
+
+[`NonZeroU8`]: ::core::num::NonZeroU8
+"""
+
+[convert_u16_nonzero]
+overview = """
+Attempts to convert [`uint<2>`] to [`NonZeroU16`].
+
+[`NonZeroU16`]: ::core::num::NonZeroU16
+"""
+
+[convert_u32_nonzero]
+overview = """
+Attempts to convert [`uint<4>`] to [`NonZeroU32`].
+
+[`NonZeroU32`]: ::core::num::NonZeroU32
+"""
+
+[convert_u64_nonzero]
+overview = """
+Attempts to convert [`uint<8>`] to [`NonZeroU64`].
+
+[`NonZeroU64`]: ::core::num::NonZeroU64
+"""
+
+[convert_u128_nonzero]
+overview = """
+Attempts to convert [`uint<16>`] to [`NonZeroU128`].
+
+[`NonZeroU128`]: ::core::num::NonZeroU128
+"""

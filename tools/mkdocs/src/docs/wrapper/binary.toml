@@ -1,0 +1,140 @@
+[reverse_bits]
+overview = """
+Reverses the order of bits in the integer. The least significant bit becomes the
+most significant bit, second least-significant bit becomes second
+most-significant bit, etc.
+"""
+examples = """
+use exint::$outer;
+
+let n = $outer($to_swap_$inner);
+let m = n.reverse_bits();
+
+assert_eq!(m, $outer($swap_b8_$inner));
+assert_eq!($outer(0_$inner), $outer(0_$inner.reverse_bits()));
+"""
+
+[swap_bytes]
+overview = """
+Reverses the byte order of the integer.
+"""
+examples = """
+use exint::$outer;
+
+let n = $outer($to_swap_$inner);
+let m = n.swap_bytes();
+
+assert_eq!(m, $outer($swap_b1_$inner));
+"""
+
+[rotate_left]
+overview = """
+Shifts the bits to the left by a specified amount, `n`,
+wrapping the truncated bits to the end of the resulting integer.
+
+Please note this isn't the same operation as the `<<` shifting operator!
+"""
+examples = """
+use exint::$outer;
+
+let n: $outer<$inner> = $outer($rotate_from_$inner);
+let m: $outer<$inner> = $outer($rotate_into_$inner);
+
+assert_eq!(n.rotate_left($rotate_size), m);
+"""
+
+[rotate_right]
+overview = """
+Shifts the bits to the right by a specified amount, `n`,
+wrapping the truncated bits to the beginning of the resulting integer.
+
+Please note this isn't the same operation as the `>>` shifting operator!
+"""
+examples = """
+use exint::$outer;
+
+let n: $outer<$inner> = $outer($rotate_into_$inner);
+let m: $outer<$inner> = $outer($rotate_from_$inner);
+
+assert_eq!(n.rotate_right($rotate_size), m);
+"""
+
+[count_ones]
+overview = """
+Returns the number of ones in the binary representation of `self`.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer(0b01001100_$inner).count_ones(), 3);
+"""
+
+[count_zeros]
+overview = """
+Returns the number of zeros in the binary representation of `self`.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer(!0_$inner).count_zeros(), 0);
+"""
+
+[leading_ones]
+overview = """
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer(0_$inner).leading_ones(), 0);
+"""
+
+[leading_zeros]
+overview = """
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer(0_$inner).leading_zeros(), $bits);
+"""
+
+[trailing_ones]
+overview = """
+Returns the number of trailing ones in the binary representation of `self`.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer(0b01010111_$inner).trailing_ones(), 3);
+"""
+
+[trailing_zeros]
+overview = """
+Returns the number of trailing zeros in the binary representation of `self`.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer(0b00101000_$inner).trailing_zeros(), 3);
+"""
+
+[isolate_highest_one]
+overview = """
+Returns `self` with only the most significant bit set, or `0` if the input is `0`.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer(0b01100100_$inner).isolate_highest_one(), $outer(0b01000000_$inner));
+assert_eq!($outer(0_$inner).isolate_highest_one(), $outer(0_$inner));
+"""
+
+[isolate_lowest_one]
+overview = """
+Returns `self` with only the least significant bit set, or `0` if the input is `0`.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer(0b01100100_$inner).isolate_lowest_one(), $outer(0b00000100_$inner));
+assert_eq!($outer(0_$inner).isolate_lowest_one(), $outer(0_$inner));
+"""

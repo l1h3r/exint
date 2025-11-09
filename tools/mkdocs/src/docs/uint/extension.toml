@@ -1,0 +1,461 @@
+[is_ascii]
+overview = """
+Checks if the value is within the ASCII range.
+"""
+examples = """
+let ascii = 97_u8;
+let non_ascii = 150_u8;
+
+assert!(ascii.is_ascii());
+assert!(!non_ascii.is_ascii());
+"""
+
+[is_ascii_alphabetic]
+overview = """
+Checks if the value is an ASCII alphabetic character:
+
+- U+0041 'A' ..= U+005A 'Z', or
+- U+0061 'a' ..= U+007A 'z'.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(uppercase_a.is_ascii_alphabetic());
+assert!(uppercase_g.is_ascii_alphabetic());
+assert!(a.is_ascii_alphabetic());
+assert!(g.is_ascii_alphabetic());
+assert!(!zero.is_ascii_alphabetic());
+assert!(!percent.is_ascii_alphabetic());
+assert!(!space.is_ascii_alphabetic());
+assert!(!lf.is_ascii_alphabetic());
+assert!(!esc.is_ascii_alphabetic());
+"""
+
+[is_ascii_alphanumeric]
+overview = """
+Checks if the value is an ASCII alphanumeric character:
+
+- U+0041 'A' ..= U+005A 'Z', or
+- U+0061 'a' ..= U+007A 'z', or
+- U+0030 '0' ..= U+0039 '9'.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(uppercase_a.is_ascii_alphanumeric());
+assert!(uppercase_g.is_ascii_alphanumeric());
+assert!(a.is_ascii_alphanumeric());
+assert!(g.is_ascii_alphanumeric());
+assert!(zero.is_ascii_alphanumeric());
+assert!(!percent.is_ascii_alphanumeric());
+assert!(!space.is_ascii_alphanumeric());
+assert!(!lf.is_ascii_alphanumeric());
+assert!(!esc.is_ascii_alphanumeric());
+"""
+
+[is_ascii_digit]
+overview = """
+Checks if the value is an ASCII decimal digit:
+U+0030 '0' ..= U+0039 '9'.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(!uppercase_a.is_ascii_digit());
+assert!(!uppercase_g.is_ascii_digit());
+assert!(!a.is_ascii_digit());
+assert!(!g.is_ascii_digit());
+assert!(zero.is_ascii_digit());
+assert!(!percent.is_ascii_digit());
+assert!(!space.is_ascii_digit());
+assert!(!lf.is_ascii_digit());
+assert!(!esc.is_ascii_digit());
+"""
+
+[is_ascii_uppercase]
+overview = """
+Checks if the value is an ASCII uppercase character:
+U+0041 'A' ..= U+005A 'Z'.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(uppercase_a.is_ascii_uppercase());
+assert!(uppercase_g.is_ascii_uppercase());
+assert!(!a.is_ascii_uppercase());
+assert!(!g.is_ascii_uppercase());
+assert!(!zero.is_ascii_uppercase());
+assert!(!percent.is_ascii_uppercase());
+assert!(!space.is_ascii_uppercase());
+assert!(!lf.is_ascii_uppercase());
+assert!(!esc.is_ascii_uppercase());
+"""
+
+[is_ascii_lowercase]
+overview = """
+Checks if the value is an ASCII lowercase character:
+U+0061 'a' ..= U+007A 'z'.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(!uppercase_a.is_ascii_lowercase());
+assert!(!uppercase_g.is_ascii_lowercase());
+assert!(a.is_ascii_lowercase());
+assert!(g.is_ascii_lowercase());
+assert!(!zero.is_ascii_lowercase());
+assert!(!percent.is_ascii_lowercase());
+assert!(!space.is_ascii_lowercase());
+assert!(!lf.is_ascii_lowercase());
+assert!(!esc.is_ascii_lowercase());
+"""
+
+[is_ascii_hexdigit]
+overview = """
+Checks if the value is an ASCII hexadecimal digit:
+
+- U+0030 '0' ..= U+0039 '9', or
+- U+0041 'A' ..= U+0046 'F', or
+- U+0061 'a' ..= U+0066 'f'.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(uppercase_a.is_ascii_hexdigit());
+assert!(!uppercase_g.is_ascii_hexdigit());
+assert!(a.is_ascii_hexdigit());
+assert!(!g.is_ascii_hexdigit());
+assert!(zero.is_ascii_hexdigit());
+assert!(!percent.is_ascii_hexdigit());
+assert!(!space.is_ascii_hexdigit());
+assert!(!lf.is_ascii_hexdigit());
+assert!(!esc.is_ascii_hexdigit());
+"""
+
+[is_ascii_octdigit]
+overview = """
+Checks if the value is an ASCII octal digit:
+U+0030 '0' ..= U+0037 '7'.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let a = u8::from(b'a');
+let zero = u8::from(b'0');
+let seven = u8::from(b'7');
+let nine = u8::from(b'9');
+let percent = u8::from(b'%');
+let lf = u8::from(b'\\n');
+
+assert!(!uppercase_a.is_ascii_octdigit());
+assert!(!a.is_ascii_octdigit());
+assert!(zero.is_ascii_octdigit());
+assert!(seven.is_ascii_octdigit());
+assert!(!nine.is_ascii_octdigit());
+assert!(!percent.is_ascii_octdigit());
+assert!(!lf.is_ascii_octdigit());
+"""
+
+[is_ascii_punctuation]
+overview = """
+Checks if the value is an ASCII punctuation character:
+
+- U+0021 ..= U+002F `! " # $ % & ' ( ) * + , - . /`, or
+- U+003A ..= U+0040 `: ; < = > ? @`, or
+- U+005B ..= U+0060 `` [ \\ ] ^ _ ` ``, or
+- U+007B ..= U+007E `{ | } ~`
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(!uppercase_a.is_ascii_punctuation());
+assert!(!uppercase_g.is_ascii_punctuation());
+assert!(!a.is_ascii_punctuation());
+assert!(!g.is_ascii_punctuation());
+assert!(!zero.is_ascii_punctuation());
+assert!(percent.is_ascii_punctuation());
+assert!(!space.is_ascii_punctuation());
+assert!(!lf.is_ascii_punctuation());
+assert!(!esc.is_ascii_punctuation());
+"""
+
+[is_ascii_graphic]
+overview = """
+Checks if the value is an ASCII graphic character:
+U+0021 '!' ..= U+007E '~'.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(uppercase_a.is_ascii_graphic());
+assert!(uppercase_g.is_ascii_graphic());
+assert!(a.is_ascii_graphic());
+assert!(g.is_ascii_graphic());
+assert!(zero.is_ascii_graphic());
+assert!(percent.is_ascii_graphic());
+assert!(!space.is_ascii_graphic());
+assert!(!lf.is_ascii_graphic());
+assert!(!esc.is_ascii_graphic());
+"""
+
+[is_ascii_whitespace]
+overview = """
+Checks if the value is an ASCII whitespace character:
+U+0020 SPACE, U+0009 HORIZONTAL TAB, U+000A LINE FEED,
+U+000C FORM FEED, or U+000D CARRIAGE RETURN.
+
+See [`u8::is_ascii_whitespace`] for more information.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(!uppercase_a.is_ascii_whitespace());
+assert!(!uppercase_g.is_ascii_whitespace());
+assert!(!a.is_ascii_whitespace());
+assert!(!g.is_ascii_whitespace());
+assert!(!zero.is_ascii_whitespace());
+assert!(!percent.is_ascii_whitespace());
+assert!(space.is_ascii_whitespace());
+assert!(lf.is_ascii_whitespace());
+assert!(!esc.is_ascii_whitespace());
+"""
+
+[is_ascii_control]
+overview = """
+Checks if the value is an ASCII control character:
+U+0000 NUL ..= U+001F UNIT SEPARATOR, or U+007F DELETE.
+Note that most ASCII whitespace characters are control characters,
+but SPACE is not.
+"""
+examples = """
+let uppercase_a = u8::from(b'A');
+let uppercase_g = u8::from(b'G');
+let a = u8::from(b'a');
+let g = u8::from(b'g');
+let zero = u8::from(b'0');
+let percent = u8::from(b'%');
+let space = u8::from(b' ');
+let lf = u8::from(b'\\n');
+let esc = u8::from(b'\\x1b');
+
+assert!(!uppercase_a.is_ascii_control());
+assert!(!uppercase_g.is_ascii_control());
+assert!(!a.is_ascii_control());
+assert!(!g.is_ascii_control());
+assert!(!zero.is_ascii_control());
+assert!(!percent.is_ascii_control());
+assert!(!space.is_ascii_control());
+assert!(lf.is_ascii_control());
+assert!(esc.is_ascii_control());
+"""
+
+[as_ascii]
+overview = """
+If the value of this byte is within the ASCII range, returns it as an
+[ASCII character](::core::ascii::Char). Otherwise, returns `None`.
+"""
+
+[as_ascii_unchecked]
+overview = """
+Converts this byte to an [ASCII character](::core::ascii::Char),
+without checking whether or not it's valid.
+
+# Safety
+
+This results in undefined behavior when the byte is not valid ASCII.
+"""
+
+[to_ascii_uppercase]
+overview = """
+Makes a copy of the value in its ASCII upper case equivalent.
+
+ASCII letters 'a' to 'z' are mapped to 'A' to 'Z', but non-ASCII letters are unchanged.
+
+To uppercase the value in-place, use [`make_ascii_uppercase`].
+
+[`make_ascii_uppercase`]: Self::make_ascii_uppercase
+"""
+examples = """
+let lowercase_a = 97_u8;
+let uppercase_a = 65_u8;
+
+assert_eq!(uppercase_a, lowercase_a.to_ascii_uppercase());
+"""
+
+[to_ascii_lowercase]
+overview = """
+Makes a copy of the value in its ASCII lower case equivalent.
+
+ASCII letters 'A' to 'Z' are mapped to 'a' to 'z', but non-ASCII letters are unchanged.
+
+To lowercase the value in-place, use [`make_ascii_lowercase`].
+
+[`make_ascii_lowercase`]: Self::make_ascii_lowercase
+"""
+examples = """
+let uppercase_a = 65_u8;
+let lowercase_a = 97_u8;
+
+assert_eq!(lowercase_a, uppercase_a.to_ascii_lowercase());
+"""
+
+[make_ascii_uppercase]
+overview = """
+Converts this value to its ASCII upper case equivalent in-place.
+
+ASCII letters 'a' to 'z' are mapped to 'A' to 'Z', but non-ASCII letters are unchanged.
+
+To return a new uppercased value without modifying the existing one,
+use [`to_ascii_uppercase`].
+
+[`to_ascii_uppercase`]: Self::to_ascii_uppercase
+"""
+examples = """
+let mut lowercase_a = u8::from(b'a');
+let uppercase_a = u8::from(b'A');
+
+lowercase_a.make_ascii_uppercase();
+
+assert_eq!(uppercase_a, lowercase_a);
+"""
+
+[make_ascii_lowercase]
+overview = """
+Converts this value to its ASCII lower case equivalent in-place.
+
+ASCII letters 'A' to 'Z' are mapped to 'a' to 'z', but non-ASCII letters are unchanged.
+
+To return a new lowercased value without modifying the existing one,
+use [`to_ascii_lowercase`].
+
+[`to_ascii_lowercase`]: Self::to_ascii_lowercase
+"""
+examples = """
+let mut uppercase_a = u8::from(b'A');
+let lowercase_a = u8::from(b'a');
+
+uppercase_a.make_ascii_lowercase();
+
+assert_eq!(lowercase_a, uppercase_a);
+"""
+
+[eq_ignore_ascii_case]
+overview = """
+Checks that two values are an ASCII case-insensitive match.
+
+This is equivalent to `to_ascii_lowercase(a) == to_ascii_lowercase(b)`.
+"""
+examples = """
+let lowercase_a = u8::from(b'a');
+let uppercase_a = u8::from(b'A');
+
+assert!(lowercase_a.eq_ignore_ascii_case(&uppercase_a));
+"""
+
+[escape_ascii]
+overview = """
+Returns an iterator that produces an escaped version of a `uint<1>`,
+treating it as an ASCII character.
+
+The behavior is identical to [`ascii::escape_default`].
+
+[`ascii::escape_default`]: ::core::ascii::escape_default
+"""
+examples = """
+assert_eq!("0", u8::from(b'0').escape_ascii().to_string());
+assert_eq!("\\\\t", u8::from(b'\\t').escape_ascii().to_string());
+assert_eq!("\\\\r", u8::from(b'\\r').escape_ascii().to_string());
+assert_eq!("\\\\n", u8::from(b'\\n').escape_ascii().to_string());
+assert_eq!("\\\\'", u8::from(b'\\'').escape_ascii().to_string());
+assert_eq!("\\\\\\"", u8::from(b'"').escape_ascii().to_string());
+assert_eq!("\\\\\\\\", u8::from(b'\\\\').escape_ascii().to_string());
+assert_eq!("\\\\x9d", u8::from(b'\\x9d').escape_ascii().to_string());
+"""
+
+[is_utf16_surrogate]
+overview = """
+Checks if the value is a Unicode surrogate code point,
+which are disallowed values for [`char`].
+"""
+examples = """
+let low_non_surrogate = 0xA000_u16;
+let low_surrogate = 0xD800_u16;
+let high_surrogate = 0xDC00_u16;
+let high_non_surrogate = 0xE000_u16;
+
+assert!(!low_non_surrogate.is_utf16_surrogate());
+assert!(low_surrogate.is_utf16_surrogate());
+assert!(high_surrogate.is_utf16_surrogate());
+assert!(!high_non_surrogate.is_utf16_surrogate());
+"""

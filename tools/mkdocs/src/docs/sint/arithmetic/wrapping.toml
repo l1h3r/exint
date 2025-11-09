@@ -1,0 +1,201 @@
+[wrapping_add]
+overview = """
+Wrapping (modular) addition. Computes `self + rhs`,
+wrapping around at the boundary of the type.
+"""
+examples = """
+assert_eq!(100_i24.wrapping_add(27_i24), 127_i24);
+assert_eq!(i24::MAX.wrapping_add(2_i24), i24::MIN + 1_i24);
+"""
+
+[wrapping_add_unsigned]
+overview = """
+Wrapping (modular) addition with an unsigned integer. Computes `self + rhs`,
+wrapping around at the boundary of the type.
+"""
+examples = """
+assert_eq!(100_i24.wrapping_add_unsigned(27_u24), 127_i24);
+assert_eq!(i24::MAX.wrapping_add_unsigned(2_u24), i24::MIN + 1_i24);
+"""
+
+[wrapping_sub]
+overview = """
+Wrapping (modular) subtraction. Computes `self - rhs`,
+wrapping around at the boundary of the type.
+"""
+examples = """
+assert_eq!(0_i24.wrapping_sub(127_i24), -127_i24);
+assert_eq!(-2_i24.wrapping_sub(i24::MAX), i24::MAX);
+"""
+
+[wrapping_sub_unsigned]
+overview = """
+Wrapping (modular) subtraction with an unsigned integer. Computes `self - rhs`,
+wrapping around at the boundary of the type.
+"""
+examples = """
+assert_eq!(0_i24.wrapping_sub_unsigned(127_u24), -127_i24);
+assert_eq!(-2_i24.wrapping_sub_unsigned(u24::MAX), -1_i24);
+"""
+
+[wrapping_mul]
+overview = """
+Wrapping (modular) multiplication. Computes `self * rhs`,
+wrapping around at the boundary of the type.
+"""
+examples = """
+assert_eq!(10_i24.wrapping_mul(12_i24), 120_i24);
+assert_eq!(11_i8.wrapping_mul(12_i8), -124_i8);
+"""
+
+[wrapping_div]
+overview = """
+Wrapping (modular) division. Computes `self / rhs`,
+wrapping around at the boundary of the type.
+
+The only case where such wrapping can occur is when one divides `MIN / -1` on a
+signed type (where `MIN` is the negative minimal value for the type); this is
+equivalent to `-MIN`, a positive value that is too large to represent in the
+type. In such a case, this function returns `MIN` itself.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(100_i24.wrapping_div(10_i24), 10_i24);
+assert_eq!((-128_i8).wrapping_div(-1_i8), -128_i8);
+"""
+
+[wrapping_div_euclid]
+overview = """
+Wrapping Euclidean division. Computes `self.div_euclid(rhs)`,
+wrapping around at the boundary of the type.
+
+Wrapping will only occur in `MIN / -1` on a signed type (where `MIN` is the
+negative minimal value for the type). This is equivalent to `-MIN`, a positive
+value that is too large to represent in the type. In this case, this method
+returns `MIN` itself.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(100_i24.wrapping_div_euclid(10_i24), 10_i24);
+assert_eq!((-128_i8).wrapping_div_euclid(-1_i8), -128_i8);
+"""
+
+[wrapping_rem]
+overview = """
+Wrapping (modular) remainder. Computes `self % rhs`,
+wrapping around at the boundary of the type.
+
+Such wrap-around never actually occurs mathematically; implementation artifacts
+make `x % y` invalid for `MIN / -1` on a signed type (where `MIN` is the
+negative minimal value). In such a case, this function returns `0`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(100_i24.wrapping_rem(10_i24), 0_i24);
+assert_eq!((-128_i8).wrapping_rem(-1_i8), 0_i8);
+"""
+
+[wrapping_rem_euclid]
+overview = """
+Wrapping Euclidean remainder. Computes `self.rem_euclid(rhs)`,
+wrapping around at the boundary of the type.
+
+Wrapping will only occur in `MIN % -1` on a signed type (where `MIN` is the
+negative minimal value for the type). In this case, this method returns 0.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(100_i24.wrapping_rem_euclid(10_i24), 0_i24);
+assert_eq!((-128_i8).wrapping_rem_euclid(-1_i8), 0_i8);
+"""
+
+[wrapping_shl]
+overview = """
+Panic-free bitwise shift-left; yields `self << mask(rhs)`, where `mask` removes
+any high-order bits of `rhs` that would cause the shift to exceed the bitwidth
+of the type.
+
+Note that this is *not* the same as a rotate-left; the RHS of a wrapping
+shift-left is restricted to the range of the type, rather than the bits shifted
+out of the LHS being returned to the other end. The primitive integer types all
+implement a [`rotate_left`] function, which may be what you want instead.
+
+[`rotate_left`]: Self::rotate_left
+"""
+examples = """
+assert_eq!((-1_i24).wrapping_shl(7), -128_i24);
+assert_eq!((-1_i24).wrapping_shl(96), -1_i24);
+"""
+
+[wrapping_shr]
+overview = """
+Panic-free bitwise shift-right; yields `self >> mask(rhs)`, where `mask` removes
+any high-order bits of `rhs` that would cause the shift to exceed the bitwidth
+of the type.
+
+Note that this is *not* the same as a rotate-right; the RHS of a wrapping
+shift-right is restricted to the range of the type, rather than the bits shifted
+out of the LHS being returned to the other end. The primitive integer types all
+implement a [`rotate_right`] function, which may be what you want instead.
+
+[`rotate_right`]: Self::rotate_right
+"""
+examples = """
+assert_eq!((-128_i24).wrapping_shr(7), -1_i24);
+assert_eq!((-128_i16).wrapping_shr(48), -128_i16);
+"""
+
+[wrapping_neg]
+overview = """
+Wrapping (modular) negation. Computes `-self`,
+wrapping around at the boundary of the type.
+
+The only case where such wrapping can occur is when one negates `MIN` on a
+signed type (where `MIN` is the negative minimal value for the type); this is a
+positive value that is too large to represent in the type. In such a case, this
+function returns `MIN` itself.
+"""
+examples = """
+assert_eq!(100_i24.wrapping_neg(), -100_i24);
+assert_eq!((-100_i24).wrapping_neg(), 100_i24);
+assert_eq!(i24::MIN.wrapping_neg(), i24::MIN);
+"""
+
+[wrapping_pow]
+overview = """
+Wrapping (modular) exponentiation. Computes `self.pow(exp)`,
+wrapping around at the boundary of the type.
+"""
+examples = """
+assert_eq!(3_i24.wrapping_pow(4), 81_i24);
+assert_eq!(3_i8.wrapping_pow(5), -13_i8);
+assert_eq!(3_i8.wrapping_pow(6), -39_i8);
+"""
+
+[wrapping_abs]
+overview = """
+Wrapping (modular) absolute value. Computes `self.abs()`,
+wrapping around at the boundary of the type.
+
+The only case where such wrapping can occur is when one takes the absolute value
+of the negative minimal value for the type; this is a positive value that is too
+large to represent in the type. In such a case, this function returns `MIN` itself.
+"""
+examples = """
+assert_eq!(100_i24.wrapping_abs(), 100_i24);
+assert_eq!((-100_i24).wrapping_abs(), 100_i24);
+assert_eq!(i24::MIN.wrapping_abs(), i24::MIN);
+assert_eq!((-128_i8).wrapping_abs().cast_unsigned(), 128_u8);
+"""

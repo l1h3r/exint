@@ -1,0 +1,194 @@
+[overflowing_add]
+overview = """
+Calculates `self` + `rhs`.
+
+Returns a tuple of the addition along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(5_u24.overflowing_add(2_u24), (7_u24, false));
+assert_eq!(u24::MAX.overflowing_add(1_u24), (0_u24, true));
+"""
+
+[overflowing_add_signed]
+overview = """
+Calculates `self` + `rhs` with a signed `rhs`.
+
+Returns a tuple of the addition along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(1_u24.overflowing_add_signed(2_i24), (3_u24, false));
+assert_eq!(1_u24.overflowing_add_signed(-2_i24), (u24::MAX, true));
+assert_eq!((u24::MAX - 2_u24).overflowing_add_signed(4_i24), (1_u24, true));
+"""
+
+[overflowing_sub]
+overview = """
+Calculates `self` - `rhs`.
+
+Returns a tuple of the subtraction along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(5_u24.overflowing_sub(2_u24), (3_u24, false));
+assert_eq!(0_u24.overflowing_sub(1_u24), (u24::MAX, true));
+"""
+
+[overflowing_sub_signed]
+overview = """
+Calculates `self` - `rhs` with a signed `rhs`.
+
+Returns a tuple of the subtraction along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(1_u24.overflowing_sub_signed(2_i24), (u24::MAX, true));
+assert_eq!(1_u24.overflowing_sub_signed(-2_i24), (3_u24, false));
+assert_eq!((u24::MAX - 2_u24).overflowing_sub_signed(-4_i24), (1_u24, true));
+"""
+
+[overflowing_mul]
+overview = """
+Calculates the multiplication of `self` and `rhs`.
+
+Returns a tuple of the multiplication along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+
+If you want the *value* of the overflow, rather than just *whether*
+an overflow occurred, see [`carrying_mul`].
+
+[`carrying_mul`]: Self::carrying_mul
+"""
+examples = """
+assert_eq!(5_u24.overflowing_mul(2_u24), (10_u24, false));
+assert_eq!(1000000000_u32.overflowing_mul(10_u32), (1410065408_u32, true));
+assert_eq!(u24::MAX.overflowing_mul(2_u24), (u24::MAX - 1_u24, true));
+"""
+
+[overflowing_div]
+overview = """
+Calculates the divisor when `self` is divided by `rhs`.
+
+Returns a tuple of the divisor along with a boolean indicating whether an
+arithmetic overflow would occur. Note that for unsigned integers overflow never
+occurs, so the second value is always `false`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(5_u24.overflowing_div(2_u24), (2_u24, false));
+"""
+
+[overflowing_div_euclid]
+overview = """
+Calculates the quotient of Euclidean division `self.div_euclid(rhs)`.
+
+Returns a tuple of the divisor along with a boolean indicating whether an
+arithmetic overflow would occur. Note that for unsigned integers overflow never
+occurs, so the second value is always `false`. Since, for the positive integers,
+all common definitions of division are equal, this is exactly equal to
+`self.overflowing_div(rhs)`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(5_u24.overflowing_div_euclid(2_u24), (2_u24, false));
+"""
+
+[overflowing_rem]
+overview = """
+Calculates the remainder when `self` is divided by `rhs`.
+
+Returns a tuple of the remainder after dividing along with a boolean indicating
+whether an arithmetic overflow would occur. Note that for unsigned integers
+overflow never occurs, so the second value is always `false`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(5_u24.overflowing_rem(2_u24), (1_u24, false));
+"""
+
+[overflowing_rem_euclid]
+overview = """
+Calculates the remainder `self.rem_euclid(rhs)` as if by Euclidean division.
+
+Returns a tuple of the modulo after dividing along with a boolean indicating
+whether an arithmetic overflow would occur. Note that for unsigned integers
+overflow never occurs, so the second value is always `false`. Since, for the
+positive integers, all common definitions of division are equal, this operation
+is exactly equal to `self.overflowing_rem(rhs)`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(5_u24.overflowing_rem_euclid(2_u24), (1_u24, false));
+"""
+
+[overflowing_shl]
+overview = """
+Shifts self left by `rhs` bits.
+
+Returns a tuple of the shifted version of self along with a boolean indicating
+whether the shift value was larger than or equal to the number of bits. If the
+shift value is too large, then value is masked (N-1) where N is the number of
+bits, and this value is then used to perform the shift.
+"""
+examples = """
+assert_eq!(0x1_u24.overflowing_shl(4), (0x10_u24, false));
+assert_eq!(0x1_u24.overflowing_shl(100), (0x10_u24, true));
+assert_eq!(0x10_u24.overflowing_shl(u24::BITS - 1), (0_u24, false));
+"""
+
+[overflowing_shr]
+overview = """
+Shifts self right by `rhs` bits.
+
+Returns a tuple of the shifted version of self along with a boolean indicating
+whether the shift value was larger than or equal to the number of bits. If the
+shift value is too large, then value is masked (N-1) where N is the number of
+bits, and this value is then used to perform the shift.
+"""
+examples = """
+assert_eq!(0x10_u24.overflowing_shr(4), (0x1_u24, false));
+assert_eq!(0x10_u24.overflowing_shr(100), (0x1_u24, true));
+"""
+
+[overflowing_neg]
+overview = """
+Negates self in an overflowing fashion.
+
+Returns `!self + 1` using wrapping operations to return the value that
+represents the negation of this unsigned value. Note that for positive unsigned
+values overflow always occurs, but negating 0 does not overflow.
+"""
+examples = """
+assert_eq!(0_u24.overflowing_neg(), (0_u24, false));
+assert_eq!(2_u24.overflowing_neg(), (u24::MAX - 1_u24, true));
+"""
+
+[overflowing_pow]
+overview = """
+Raises self to the power of `exp`, using exponentiation by squaring.
+
+Returns a tuple of the exponentiation along with a bool indicating whether an
+overflow happened.
+"""
+examples = """
+assert_eq!(3_u24.overflowing_pow(5), (243_u24, false));
+assert_eq!(3_u8.overflowing_pow(6), (217_u8, true));
+"""

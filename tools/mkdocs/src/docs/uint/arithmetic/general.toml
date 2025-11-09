@@ -1,0 +1,297 @@
+[max_value]
+overview = """
+New code should prefer to use [`uint::MAX`] instead.
+
+Returns the largest value that can be represented by this integer type.
+"""
+
+[min_value]
+overview = """
+New code should prefer to use [`uint::MIN`] instead.
+
+Returns the smallest value that can be represented by this integer type.
+"""
+
+[cast_signed]
+overview = """
+Returns the bit pattern of `self` reinterpreted as a signed integer of the same size.
+
+This produces the same result as an `as` cast, but ensures that the bit-width
+remains the same.
+"""
+examples = """
+assert_eq!(u24::MAX.cast_signed(), -1_i24);
+"""
+
+[midpoint]
+overview = """
+Calculates the midpoint (average) between `self` and `rhs`.
+
+`midpoint(a, b)` is `(a + b) >> 1` as if it were performed in a
+sufficiently-large signed integral type. This implies that the result is always
+rounded towards negative infinity and that no overflow will ever occur.
+"""
+examples = """
+assert_eq!(0_u24.midpoint(4_u24), 2_u24);
+assert_eq!(1_u24.midpoint(4_u24), 2_u24);
+"""
+
+[div_euclid]
+overview = """
+Performs Euclidean division.
+
+Since, for the positive integers, all common definitions of division are equal,
+this is exactly equal to `self / rhs`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(7_u24.div_euclid(4_u24), 1_u24);
+"""
+
+[rem_euclid]
+overview = """
+Calculates the least remainder of `self (mod rhs)`.
+
+Since, for the positive integers, all common definitions of division are equal,
+this is exactly equal to `self % rhs`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(7_u24.rem_euclid(4_u24), 3_u24);
+"""
+
+[div_ceil]
+overview = """
+Calculates the quotient of `self` and `rhs`, rounding the result towards positive infinity.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(7_u24.div_ceil(4_u24), 2_u24);
+"""
+
+[div_floor]
+overview = """
+Calculates the quotient of `self` and `rhs`, rounding the result towards negative infinity.
+
+This is the same as performing `self / rhs` for all unsigned integers.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(7_u24.div_floor(4_u24), 1_u24);
+"""
+
+[exact_div]
+overview = """
+Checked integer division without remainder. Computes `self / rhs`.
+
+# Panics
+
+This function will panic  if `rhs == 0` or `self % rhs != 0`.
+"""
+examples = """
+assert_eq!(64_u24.exact_div(2_u24), 32_u24);
+assert_eq!(64_u24.exact_div(32_u24), 2_u24);
+"""
+examples_panicking = """
+let _ = 65_u24.exact_div(2_u24);
+"""
+
+[exact_shl]
+overview = """
+Computes `self << rhs`, returning `None` if `rhs` >= `Self::BITS`
+or if any non-zero bits would be shifted out.
+"""
+examples = """
+assert_eq!(0x1_u24.exact_shl(4), Some(0x10_u24));
+assert_eq!(0x1_u24.exact_shl(129), None);
+"""
+
+[exact_shr]
+overview = """
+Computes `self >> rhs`, returning `None` if `rhs` >= `Self::BITS`
+or if any non-zero bits would be shifted out.
+"""
+examples = """
+assert_eq!(0x10_u24.exact_shr(4), Some(0x1_u24));
+assert_eq!(0x10_u24.exact_shr(5), None);
+"""
+
+[next_multiple_of]
+overview = """
+Calculates the smallest value greater than or equal to `self` that is a multiple of `rhs`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+
+## Overflow behavior
+
+On overflow, this function will panic if overflow checks are enabled (default in
+debug mode) and wrap if overflow checks are disabled (default in release mode).
+"""
+examples = """
+assert_eq!(16_u24.next_multiple_of(8_u24), 16_u24);
+assert_eq!(23_u24.next_multiple_of(8_u24), 24_u24);
+"""
+
+[pow]
+overview = """
+Raises self to the power of `exp`, using exponentiation by squaring.
+"""
+examples = """
+assert_eq!(2_u24.pow(5), 32_u24);
+"""
+
+[ilog]
+overview = """
+Returns the logarithm of the number with respect to an arbitrary base, rounded down.
+
+This method might not be optimized owing to implementation details; `ilog2` can
+produce results more efficiently for base 2, and `ilog10` can produce results
+more efficiently for base 10.
+
+# Panics
+
+This function will panic if `self` is zero, or if `base` is less than 2.
+"""
+examples = """
+assert_eq!(5_u24.ilog(5_u24), 1);
+"""
+
+[ilog2]
+overview = """
+Returns the base 2 logarithm of the number, rounded down.
+
+# Panics
+
+This function will panic if `self` is zero.
+"""
+examples = """
+assert_eq!(2_u24.ilog2(), 1);
+"""
+
+[ilog10]
+overview = """
+Returns the base 10 logarithm of the number, rounded down.
+
+# Panics
+
+This function will panic if `self` is zero.
+"""
+examples = """
+assert_eq!(10_u24.ilog10(), 1);
+"""
+
+[isqrt]
+overview = """
+Returns the square root of the number, rounded down.
+"""
+examples = """
+assert_eq!(10_u24.isqrt(), 3_u24);
+"""
+
+[abs_diff]
+overview = """
+Computes the absolute difference between `self` and `rhs`.
+"""
+examples = """
+assert_eq!(100_u24.abs_diff(80_u24), 20_u24);
+assert_eq!(100_u24.abs_diff(110_u24), 10_u24);
+"""
+
+[next_power_of_two]
+overview = """
+Returns the smallest power of two greater than or equal to `self`.
+
+When return value overflows (i.e., `self > (1 << (N-1))` for type `uN`), it
+panics in debug mode and the return value is wrapped to 0 in release mode (the
+only situation in which this method can return 0).
+"""
+examples = """
+assert_eq!(2_u24.next_power_of_two(), 2_u24);
+assert_eq!(3_u24.next_power_of_two(), 4_u24);
+assert_eq!(0_u24.next_power_of_two(), 1_u24);
+"""
+
+[is_power_of_two]
+overview = """
+Returns `true` if and only if `self == 2^k` for some unsigned integer `k`.
+"""
+examples = """
+assert!(16_u24.is_power_of_two());
+assert!(!10_u24.is_power_of_two());
+"""
+
+[is_multiple_of]
+overview = """
+Returns `true` if `self` is an integer multiple of `rhs`, and false otherwise.
+
+This function is equivalent to `self % rhs == 0`, except that it will not panic
+for `rhs == 0`. Instead, `0.is_multiple_of(0) == true`, and for any non-zero
+`n`, `n.is_multiple_of(0) == false`.
+"""
+examples = """
+assert!(6_u24.is_multiple_of(2_u24));
+assert!(!5_u24.is_multiple_of(2_u24));
+
+assert!(0_u24.is_multiple_of(0_u24));
+assert!(!6_u24.is_multiple_of(0_u24));
+"""
+
+[funnel_shl]
+overview = """
+Performs a left funnel shift (concatenates `self` and `rhs`, with `self`
+making up the most significant half, then shifts the combined value left
+by `bits`, and most significant half is extracted to produce the result).
+
+Please note this isn't the same operation as the `<<` shifting operator or
+[`rotate_left`], although `a.funnel_shl(a, n)` is *equivalent* to `a.rotate_left(n)`.
+
+# Panics
+
+This function will panic if `bits` is greater than or equal to the number of bits in `self`
+
+[`rotate_left`]: Self::rotate_left
+"""
+examples = """
+let a = $rotate_from_u24;
+let b = $fsh_from_u24;
+let m = $fshl_into_u24;
+
+assert_eq!(a.funnel_shl(b, $fsh_size), m);
+"""
+
+[funnel_shr]
+overview = """
+Performs a right funnel shift (concatenates `self` and `rhs`, with `self`
+making up the most significant half, then shifts the combined value right
+by `bits`, and least significant half is extracted to produce the result).
+
+Please note this isn't the same operation as the `>>` shifting operator or
+[`rotate_right`], although `a.funnel_shr(a, n)` is *equivalent* to `a.rotate_right(n)`.
+
+# Panics
+
+This function will panic if `bits` is greater than or equal to the number of bits in `self`
+
+[`rotate_right`]: Self::rotate_right
+"""
+examples = """
+let a = $rotate_from_u24;
+let b = $fsh_from_u24;
+let m = $fshr_into_u24;
+
+assert_eq!(a.funnel_shr(b, $fsh_size), m);
+"""

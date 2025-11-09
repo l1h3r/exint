@@ -1,0 +1,62 @@
+[from_str_radix]
+overview = """
+Parses an integer from a string slice with digits in a given base.
+
+The string is expected to be an optional `+` sign followed by only digits.
+Leading and trailing non-digit characters (including whitespace) represent an
+error. Underscores (which are accepted in Rust literals) also represent an error.
+
+Digits are a subset of these characters, depending on `radix`:
+* `0-9`
+* `a-z`
+* `A-Z`
+
+# Panics
+
+This function panics if `radix` is not in the range from 2 to 36.
+"""
+examples = """
+assert_eq!(u24::from_str_radix("A", 16), Ok(10_u24));
+"""
+examples_trailing = """
+assert!(u24::from_str_radix("1 ", 10).is_err());
+"""
+
+[from_ascii]
+overview = """
+Parses an integer from an ASCII-byte slice with decimal digits.
+
+The characters are expected to be an optional `+` sign followed by only digits.
+Leading and trailing non-digit characters (including whitespace) represent an
+error. Underscores (which are accepted in Rust literals) also represent an error.
+"""
+examples = """
+assert_eq!(u24::from_ascii(b"+10"), Ok(10_u24));
+"""
+examples_trailing = """
+assert!(u24::from_ascii(b"1 ").is_err());
+"""
+
+[int_from_ascii]
+overview = """
+Parses an integer from an ASCII-byte slice with digits in a given base.
+
+The characters are expected to be an optional `+` sign followed by only digits.
+Leading and trailing non-digit characters (including whitespace) represent an
+error. Underscores (which are accepted in Rust literals) also represent an error.
+
+Digits are a subset of these characters, depending on `radix`:
+* `0-9`
+* `a-z`
+* `A-Z`
+
+# Panics
+
+This function panics if `radix` is not in the range from 2 to 36.
+"""
+examples = """
+assert_eq!(u24::from_ascii_radix(b"A", 16), Ok(10_u24));
+"""
+examples_trailing = """
+assert!(u24::from_ascii_radix(b"1 ", 10).is_err());
+"""

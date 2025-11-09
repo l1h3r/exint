@@ -1,0 +1,131 @@
+[carrying_add]
+overview = """
+Calculates `self` + `rhs` + `carry` and returns a tuple
+containing the sum and the output carry (in that order).
+
+Performs "ternary addition" of two integer operands and a carry-in bit, and
+returns an output integer and a carry-out bit. This allows chaining together
+multiple additions to create a wider addition, and can be useful for bignum
+addition.
+
+This can be thought of as a `Self::BITS`-bit "full adder", in the electronics sense.
+
+If the input carry is false, this method is equivalent to [`overflowing_add`],
+and the output carry is equal to the overflow flag. Note that although carry and
+overflow flags are similar for unsigned integers, they are different for signed
+integers.
+
+[`overflowing_add`]: Self::overflowing_add
+"""
+examples = """
+//    3  MAX    (a = 3 × 2^$bits + 2^$bits - 1)
+// +  5    7    (b = 5 × 2^$bits + 7)
+// ---------
+//    9    6    (sum = 9 × 2^$bits + 6)
+
+let (a1, a0): (u32, u32) = (3_u32, u32::MAX);
+let (b1, b0): (u32, u32) = (5_u32, 7_u32);
+let carry0 = false;
+
+let (sum0, carry1) = a0.carrying_add(b0, carry0);
+assert_eq!(carry1, true);
+let (sum1, carry2) = a1.carrying_add(b1, carry1);
+assert_eq!(carry2, false);
+
+assert_eq!((sum1, sum0), (9_u32, 6_u32));
+"""
+
+[borrowing_sub]
+overview = """
+Calculates `self` &minus; `rhs` &minus; `borrow` and returns a tuple containing
+the difference and the output borrow.
+
+Performs "ternary subtraction" by subtracting both an integer operand and a
+borrow-in bit from `self`, and returns an output integer and a borrow-out bit.
+This allows chaining together multiple subtractions to create a wider
+subtraction, and can be useful for bignum subtraction.
+"""
+examples = """
+//    9    6    (a = 9 × 2^$bits + 6)
+// -  5    7    (b = 5 × 2^$bits + 7)
+// ---------
+//    3  MAX    (diff = 3 × 2^$bits + 2^$bits - 1)
+
+let (a1, a0): (u32, u32) = (9_u32, 6_u32);
+let (b1, b0): (u32, u32) = (5_u32, 7_u32);
+let borrow0 = false;
+
+let (diff0, borrow1) = a0.borrowing_sub(b0, borrow0);
+assert_eq!(borrow1, true);
+let (diff1, borrow2) = a1.borrowing_sub(b1, borrow1);
+assert_eq!(borrow2, false);
+
+assert_eq!((diff1, diff0), (3_u32, u32::MAX));
+"""
+
+[carrying_mul]
+overview = """
+Calculates the "full multiplication" `self * rhs + carry` without the possibility to overflow.
+
+This returns the low-order (wrapping) bits and the high-order (overflow) bits of
+the result as two separate values, in that order.
+
+Performs "long multiplication" which takes in an extra amount to add, and may
+return an additional amount of overflow. This allows for chaining together
+multiple multiplications to create "big integers" which represent larger values.
+
+If you also need to add a value, then use [`carrying_mul_add`].
+
+[`carrying_mul_add`]: Self::carrying_mul_add
+"""
+examples = """
+assert_eq!(5_u32.carrying_mul(2_u32, 0_u32), (10_u32, 0_u32));
+assert_eq!(5_u32.carrying_mul(2_u32, 10_u32), (20_u32, 0_u32));
+assert_eq!(1000000000_u32.carrying_mul(10_u32, 0_u32), (1410065408_u32, 2_u32));
+assert_eq!(1000000000_u32.carrying_mul(10_u32, 10_u32), (1410065418_u32, 2_u32));
+assert_eq!(u32::MAX.carrying_mul(u32::MAX, u32::MAX), (0_u32, u32::MAX));
+"""
+
+[carrying_mul_add]
+overview = """
+Calculates the "full multiplication" `self * rhs + carry + add`.
+
+This returns the low-order (wrapping) bits and the high-order (overflow) bits of
+the result as two separate values, in that order.
+
+This cannot overflow, as the double-width result has exactly enough space for
+the largest possible result. This is equivalent to how, in decimal,
+9 × 9 + 9 + 9 = 81 + 18 = 99 = 9×10⁰ + 9×10¹ = 10² - 1.
+
+Performs "long multiplication" which takes in an extra amount to add, and may
+return an additional amount of overflow. This allows for chaining together
+multiple multiplications to create "big integers" which represent larger values.
+
+If you don't need the `add` part, then you can use [`carrying_mul`] instead.
+
+[`carrying_mul`]: Self::carrying_mul
+"""
+examples = """
+assert_eq!(5_u32.carrying_mul_add(2_u32, 0_u32, 0_u32), (10_u32, 0_u32));
+assert_eq!(5_u32.carrying_mul_add(2_u32, 10_u32, 10_u32), (30_u32, 0_u32));
+assert_eq!(1000000000_u32.carrying_mul_add(10_u32, 0_u32, 0_u32), (1410065408_u32, 2_u32));
+assert_eq!(1000000000_u32.carrying_mul_add(10_u32, 10_u32, 10_u32), (1410065428_u32, 2_u32));
+assert_eq!(u32::MAX.carrying_mul_add(u32::MAX, u32::MAX, u32::MAX), (u32::MAX, u32::MAX));
+"""
+
+[widening_mul]
+overview = """
+Calculates the complete product `self * rhs` without the possibility to overflow.
+
+This returns the low-order (wrapping) bits and the high-order (overflow) bits of
+the result as two separate values, in that order.
+
+If you also need to add a carry to the wide result, then you want
+[`carrying_mul`] instead.
+
+[`carrying_mul`]: Self::carrying_mul
+"""
+examples = """
+assert_eq!(5_u32.widening_mul(2_u32), (10_u32, 0_u32));
+assert_eq!(1000000000_u32.widening_mul(10_u32), (1410065408_u32, 2_u32));
+"""

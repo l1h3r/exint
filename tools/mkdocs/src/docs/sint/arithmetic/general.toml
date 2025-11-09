@@ -1,0 +1,338 @@
+[max_value]
+overview = """
+New code should prefer to use [`int::MAX`] instead.
+
+Returns the largest value that can be represented by this integer type.
+"""
+
+[min_value]
+overview = """
+New code should prefer to use [`int::MIN`] instead.
+
+Returns the smallest value that can be represented by this integer type.
+"""
+
+[cast_unsigned]
+overview = """
+Returns the bit pattern of `self` reinterpreted as an unsigned integer of the same size.
+
+This produces the same result as an `as` cast, but ensures that the bit-width
+remains the same.
+"""
+examples = """
+assert_eq!(-1_i24.cast_unsigned(), u24::MAX);
+"""
+
+[midpoint]
+overview = """
+Calculates the midpoint (average) between `self` and `rhs`.
+
+`midpoint(a, b)` is `(a + b) >> 1` as if it were performed in a
+sufficiently-large signed integral type. This implies that the result is always
+rounded towards negative infinity and that no overflow will ever occur.
+"""
+examples = """
+assert_eq!(0_i24.midpoint(4_i24), 2_i24);
+assert_eq!(-1_i24.midpoint(2_i24), 0_i24);
+assert_eq!(-7_i24.midpoint(0_i24), -3_i24);
+assert_eq!(0_i24.midpoint(-7_i24), -3_i24);
+assert_eq!(0_i24.midpoint(7_i24), 3_i24);
+"""
+
+[div_euclid]
+overview = """
+Calculates the quotient of Euclidean division of `self` by `rhs`.
+
+This computes the integer `q` such that `self = q * rhs + r`, with
+`r = self.rem_euclid(rhs)` and `0 <= r < abs(rhs)`.
+
+In other words, the result is `self / rhs` rounded to the integer `q` such that
+`self >= q * rhs`.
+If `self > 0`, this is equal to rounding towards zero (the default in Rust);
+if `self < 0`, this is equal to rounding away from zero (towards +/- infinity).
+If `rhs > 0`, this is equal to rounding towards -infinity;
+if `rhs < 0`, this is equal to rounding towards +infinity.
+
+# Panics
+
+This function will panic if `rhs` is zero or if `self` is `Self::MIN` and `rhs`
+is -1. This behavior is not affected by the `overflow-checks` flag.
+"""
+examples = """
+let a = 7_i24;
+let b = 4_i24;
+
+assert_eq!(a.div_euclid(b), 1_i24); // 7 >= 4 * 1
+assert_eq!(a.div_euclid(-b), -1_i24); // 7 >= -4 * -1
+assert_eq!((-a).div_euclid(b), -2_i24); // -7 >= 4 * -2
+assert_eq!((-a).div_euclid(-b), 2_i24); // -7 >= -4 * 2
+"""
+
+[rem_euclid]
+overview = """
+Calculates the least nonnegative remainder of `self (mod rhs)`.
+
+This is done as if by the Euclidean division algorithm -- given
+`r = self.rem_euclid(rhs)`, the result satisfies
+`self = rhs * self.div_euclid(rhs) + r` and `0 <= r < abs(rhs)`.
+
+# Panics
+
+This function will panic if `rhs` is zero or if `self` is `Self::MIN` and `rhs`
+is -1. This behavior is not affected by the `overflow-checks` flag.
+"""
+examples = """
+let a = 7_i24;
+let b = 4_i24;
+
+assert_eq!(a.rem_euclid(b), 3_i24);
+assert_eq!((-a).rem_euclid(b), 1_i24);
+assert_eq!(a.rem_euclid(-b), 3_i24);
+assert_eq!((-a).rem_euclid(-b), 1_i24);
+"""
+examples_panicking = """
+let _ = i24::MIN.rem_euclid(-1_i24);
+"""
+
+[div_ceil]
+overview = """
+Calculates the quotient of `self` and `rhs`, rounding the result towards
+positive infinity.
+
+# Panics
+
+This function will panic if `rhs` is zero or if `self` is `Self::MIN` and
+`rhs` is -1. This behavior is not affected by the `overflow-checks` flag.
+"""
+examples = """
+let a = 8_i24;
+let b = 3_i24;
+
+assert_eq!(a.div_ceil(b), 3_i24);
+assert_eq!(a.div_ceil(-b), -2_i24);
+assert_eq!((-a).div_ceil(b), -2_i24);
+assert_eq!((-a).div_ceil(-b), 3_i24);
+"""
+
+[div_floor]
+overview = """
+Calculates the quotient of `self` and `rhs`, rounding the result towards negative infinity.
+
+# Panics
+
+This function will panic if `rhs` is zero or if `self` is `Self::MIN` and `rhs`
+is -1. This behavior is not affected by the `overflow-checks` flag.
+"""
+examples = """
+let a = 8_i24;
+let b = 3_i24;
+
+assert_eq!(a.div_floor(b), 2_i24);
+assert_eq!(a.div_floor(-b), -3_i24);
+assert_eq!((-a).div_floor(b), -3_i24);
+assert_eq!((-a).div_floor(-b), 2_i24);
+"""
+
+[exact_div]
+overview = """
+Checked integer division without remainder. Computes `self / rhs`.
+
+# Panics
+
+This function will panic  if `rhs == 0`, the division results in overflow,
+or `self % rhs != 0`.
+"""
+examples = """
+assert_eq!(64_i24.exact_div(2_i24), 32_i24);
+assert_eq!(64_i24.exact_div(32_i24), 2_i24);
+assert_eq!((i24::MIN + 1_i24).exact_div(-1_i24), i24::MAX);
+"""
+examples_panicking = """
+let _ = 65_i24.exact_div(2_i24);
+"""
+examples_overflow = """
+let _ = i24::MIN.exact_div(-1_i24);
+"""
+
+[exact_shl]
+overview = """
+Computes `self << rhs`, returning `None` if `rhs` >= `Self::BITS`
+or if any bits that would be shifted out differ from the resulting sign bit.
+"""
+examples = """
+assert_eq!(0x1_i24.exact_shl(4), Some(0x10_i24));
+assert_eq!(0x1_i24.exact_shl(i24::BITS - 2), Some(1_i24 << i24::BITS - 2));
+assert_eq!(0x1_i24.exact_shl(i24::BITS - 1), None);
+assert_eq!(-0x2_i24.exact_shl(i24::BITS - 2), Some(-0x2_i24 << i24::BITS - 2));
+assert_eq!(-0x2_i24.exact_shl(i24::BITS - 1), None);
+"""
+
+[exact_shr]
+overview = """
+Computes `self >> rhs`, returning `None` if `rhs` >= `Self::BITS`
+or if any non-zero bits would be shifted out.
+"""
+examples = """
+assert_eq!(0x10_i24.exact_shr(4), Some(0x1_i24));
+assert_eq!(0x10_i24.exact_shr(5), None);
+"""
+
+[next_multiple_of]
+overview = """
+If `rhs` is positive, calculates the smallest value greater than or equal to
+`self` that is a multiple of `rhs`. If `rhs` is negative, calculates the largest
+value less than or equal to `self` that is a multiple of `rhs`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+
+## Overflow behavior
+
+On overflow, this function will panic if overflow checks are enabled (default in
+debug mode) and wrap if overflow checks are disabled (default in release mode).
+"""
+examples = """
+assert_eq!(16_i24.next_multiple_of(8_i24), 16_i24);
+assert_eq!(23_i24.next_multiple_of(8_i24), 24_i24);
+assert_eq!(16_i24.next_multiple_of(-8_i24), 16_i24);
+assert_eq!(23_i24.next_multiple_of(-8_i24), 16_i24);
+assert_eq!(-16_i24.next_multiple_of(8_i24), -16_i24);
+assert_eq!(-23_i24.next_multiple_of(8_i24), -16_i24);
+assert_eq!(-16_i24.next_multiple_of(-8_i24), -16_i24);
+assert_eq!(-23_i24.next_multiple_of(-8_i24), -24_i24);
+"""
+
+[pow]
+overview = """
+Raises self to the power of `exp`, using exponentiation by squaring.
+"""
+examples = """
+assert_eq!(2_i24.pow(5), 32_i24);
+"""
+
+[ilog]
+overview = """
+Returns the logarithm of the number with respect to an arbitrary base, rounded down.
+
+This method might not be optimized owing to implementation details; `ilog2` can
+produce results more efficiently for base 2, and `ilog10` can produce results
+more efficiently for base 10.
+
+# Panics
+
+This function will panic if `self` is less than or equal to zero, or if `base`
+is less than 2.
+"""
+examples = """
+assert_eq!(5_i24.ilog(5_i24), 1);
+"""
+
+[ilog2]
+overview = """
+Returns the base 2 logarithm of the number, rounded down.
+
+# Panics
+
+This function will panic if `self` is less than or equal to zero.
+"""
+examples = """
+assert_eq!(2_i24.ilog2(), 1);
+"""
+
+[ilog10]
+overview = """
+Returns the base 10 logarithm of the number, rounded down.
+
+# Panics
+
+This function will panic if `self` is less than or equal to zero.
+"""
+examples = """
+assert_eq!(10_i24.ilog10(), 1);
+"""
+
+[isqrt]
+overview = """
+Returns the square root of the number, rounded down.
+
+# Panics
+
+This function will panic if `self` is negative.
+"""
+examples = """
+assert_eq!(10_i24.isqrt(), 3_i24);
+"""
+
+[abs_diff]
+overview = """
+Computes the absolute difference between `self` and `rhs`.
+
+This function always returns the correct answer without overflow or panics by
+returning an unsigned integer.
+"""
+examples = """
+assert_eq!(100_i24.abs_diff(80_i24), 20_u24);
+assert_eq!(100_i24.abs_diff(110_i24), 10_u24);
+assert_eq!((-100_i24).abs_diff(80_i24), 180_u24);
+assert_eq!((-100_i24).abs_diff(-120_i24), 20_u24);
+assert_eq!(i24::MIN.abs_diff(i24::MAX), u24::MAX);
+"""
+
+[abs]
+overview = """
+Computes the absolute value of `self`.
+
+## Overflow behavior
+
+The absolute value of `int::MIN` cannot be represented as an `int`, and attempting
+to calculate it will cause an overflow. This means that code in debug mode will
+trigger a panic on this case and optimized code will return `int::MIN` without a
+panic.
+"""
+examples = """
+assert_eq!(10_i24.abs(), 10_i24);
+assert_eq!((-10_i24).abs(), 10_i24);
+"""
+
+[unsigned_abs]
+overview = """
+Computes the absolute value of `self` without any wrapping or panicking.
+"""
+examples = """
+assert_eq!(100_i24.unsigned_abs(), 100_u24);
+assert_eq!((-100_i24).unsigned_abs(), 100_u24);
+assert_eq!((-128_i24).unsigned_abs(), 128_u24);
+"""
+
+[is_negative]
+overview = """
+Returns `true` if `self` is negative and `false` if the number is zero or positive.
+"""
+examples = """
+assert!((-10_i24).is_negative());
+assert!(!10_i24.is_negative());
+"""
+
+[is_positive]
+overview = """
+Returns `true` if `self` is positive and `false` if the number is zero or negative.
+"""
+examples = """
+assert!(10_i24.is_positive());
+assert!(!(-10_i24).is_positive());
+"""
+
+[signum]
+overview = """
+Returns a number representing sign of `self`.
+
+- `0` if the number is zero
+- `1` if the number is positive
+- `-1` if the number is negative
+"""
+examples = """
+assert_eq!(10_i24.signum(), 1_i24);
+assert_eq!(0_i24.signum(), 0_i24);
+assert_eq!((-10_i24).signum(), -1_i24);
+"""

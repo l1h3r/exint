@@ -1,0 +1,134 @@
+[from_be]
+overview = """
+Converts an integer from big endian to the target's endianness.
+
+On big endian this is a no-op. On little endian the bytes are swapped.
+"""
+examples = """
+let n = 0x1A_i24;
+
+if cfg!(target_endian = "big") {
+    assert_eq!(i24::from_be(n), n)
+} else {
+    assert_eq!(i24::from_be(n), n.swap_bytes())
+}
+"""
+
+[from_le]
+overview = """
+Converts an integer from little endian to the target's endianness.
+
+On little endian this is a no-op. On big endian the bytes are swapped.
+"""
+examples = """
+let n = 0x1A_i24;
+
+if cfg!(target_endian = "little") {
+    assert_eq!(i24::from_le(n), n)
+} else {
+    assert_eq!(i24::from_le(n), n.swap_bytes())
+}
+"""
+
+[to_be]
+overview = """
+Converts `self` to big endian from the target's endianness.
+
+On big endian this is a no-op. On little endian the bytes are swapped.
+"""
+examples = """
+let n = 0x1A_i24;
+
+if cfg!(target_endian = "big") {
+    assert_eq!(n.to_be(), n)
+} else {
+    assert_eq!(n.to_be(), n.swap_bytes())
+}
+"""
+
+[to_le]
+overview = """
+Converts `self` to little endian from the target's endianness.
+
+On little endian this is a no-op. On big endian the bytes are swapped.
+"""
+examples = """
+let n = 0x1A_i24;
+
+if cfg!(target_endian = "little") {
+    assert_eq!(n.to_le(), n)
+} else {
+    assert_eq!(n.to_le(), n.swap_bytes())
+}
+"""
+
+[from_be_bytes]
+overview = """
+Creates a native endian integer value from its representation as a byte array in big endian.
+"""
+examples = """
+assert_eq!(i24::from_be_bytes($swap_be), $to_swap_i24);
+"""
+
+[from_le_bytes]
+overview = """
+Creates a native endian integer value from its representation as a byte array in little endian.
+"""
+examples = """
+assert_eq!(i24::from_le_bytes($swap_le), $to_swap_i24);
+"""
+
+[from_ne_bytes]
+overview = """
+Creates a native endian integer value from its memory representation as a byte
+array in native endianness.
+
+As the target platform's native endianness is used, portable code likely wants
+to use [`from_be_bytes`] or [`from_le_bytes`], as appropriate instead.
+
+[`from_be_bytes`]: Self::from_be_bytes
+[`from_le_bytes`]: Self::from_le_bytes
+"""
+examples = """
+if cfg!(target_endian = "big") {
+    assert_eq!(i24::from_ne_bytes($swap_be), $to_swap_i24);
+} else {
+    assert_eq!(i24::from_ne_bytes($swap_le), $to_swap_i24);
+}
+"""
+
+[to_be_bytes]
+overview = """
+Returns the memory representation of this integer as a byte array in
+big-endian (network) byte order.
+"""
+examples = """
+assert_eq!($to_swap_i24.to_be_bytes(), $swap_be);
+"""
+
+[to_le_bytes]
+overview = """
+Returns the memory representation of this integer as a byte array in
+little-endian byte order.
+"""
+examples = """
+assert_eq!($to_swap_i24.to_le_bytes(), $swap_le);
+"""
+
+[to_ne_bytes]
+overview = """
+Returns the memory representation of this integer as a byte array in native byte order.
+
+As the target platform's native endianness is used, portable code should use
+[`to_be_bytes`] or [`to_le_bytes`], as appropriate, instead.
+
+[`to_be_bytes`]: Self::to_be_bytes
+[`to_le_bytes`]: Self::to_le_bytes
+"""
+examples = """
+if cfg!(target_endian = "big") {
+    assert_eq!($to_swap_i24.to_ne_bytes(), $swap_be);
+} else {
+    assert_eq!($to_swap_i24.to_ne_bytes(), $swap_le);
+}
+"""

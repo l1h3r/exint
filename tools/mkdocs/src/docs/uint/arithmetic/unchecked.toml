@@ -1,0 +1,149 @@
+[unchecked_add]
+overview = """
+Unchecked integer addition. Computes `self + rhs`,
+assuming overflow cannot occur.
+
+Calling `x.unchecked_add(y)` is semantically equivalent to calling
+`x.`[`checked_add`]`(y).`[`unwrap_unchecked`]`()`.
+
+If you're just trying to avoid the panic in debug mode, then **do not** use
+this. Instead, you're looking for [`wrapping_add`].
+
+# Safety
+
+This results in undefined behavior when `self + rhs > uint::MAX` or
+`self + rhs < uint::MIN`, i.e. when [`checked_add`] would return `None`.
+
+[`checked_add`]: Self::checked_add
+[`wrapping_add`]: Self::wrapping_add
+[`unwrap_unchecked`]: ::core::option::Option::unwrap_unchecked
+"""
+
+[unchecked_sub]
+overview = """
+Unchecked integer subtraction. Computes `self - rhs`,
+assuming overflow cannot occur.
+
+Calling `x.unchecked_sub(y)` is semantically equivalent to calling
+`x.`[`checked_sub`]`(y).`[`unwrap_unchecked`]`()`.
+
+If you're just trying to avoid the panic in debug mode, then **do not** use
+this. Instead, you're looking for [`wrapping_sub`].
+
+# Safety
+
+This results in undefined behavior when `self - rhs > uint::MAX` or
+`self - rhs < uint::MIN`, i.e. when [`checked_sub`] would return `None`.
+
+[`checked_sub`]: Self::checked_sub
+[`wrapping_sub`]: Self::wrapping_sub
+[`unwrap_unchecked`]: ::core::option::Option::unwrap_unchecked
+"""
+
+[unchecked_mul]
+overview = """
+Unchecked integer multiplication. Computes `self * rhs`,
+assuming overflow cannot occur.
+
+Calling `x.unchecked_mul(y)` is semantically equivalent to calling
+`x.`[`checked_mul`]`(y).`[`unwrap_unchecked`]`()`.
+
+If you're just trying to avoid the panic in debug mode, then **do not** use
+this. Instead, you're looking for [`wrapping_mul`].
+
+# Safety
+
+This results in undefined behavior when `self * rhs > uint::MAX` or
+`self * rhs < uint::MIN`, i.e. when [`checked_mul`] would return `None`.
+
+[`checked_mul`]: Self::checked_mul
+[`wrapping_mul`]: Self::wrapping_mul
+[`unwrap_unchecked`]: ::core::option::Option::unwrap_unchecked
+"""
+
+[unchecked_exact_div]
+overview = """
+Unchecked integer division without remainder. Computes `self / rhs`.
+
+# Safety
+
+This results in undefined behavior when `rhs == 0` or `self % rhs != 0`,
+i.e. when [`checked_exact_div`] would return `None`.
+
+[`checked_exact_div`]: Self::checked_exact_div
+"""
+
+[unchecked_shl]
+overview = """
+Unchecked shift left. Computes `self << rhs`,
+assuming that `rhs` is less than the number of bits in `self`.
+
+# Safety
+
+This results in undefined behavior when `rhs` is larger than or equal to the
+number of bits in `self`, i.e. when [`checked_shl`] would return `None`.
+
+[`checked_shl`]: Self::checked_shl
+"""
+
+[unchecked_shr]
+overview = """
+Unchecked shift right. Computes `self >> rhs`,
+assuming that `rhs` is less than the number of bits in `self`.
+
+# Safety
+
+This results in undefined behavior when `rhs` is larger than or equal to the
+number of bits in `self`, i.e. when [`checked_shr`] would return `None`.
+
+[`checked_shr`]: Self::checked_shr
+"""
+
+[unchecked_exact_shl]
+overview = """
+Unchecked exact shift left. Computes `self << rhs`, assuming the operation
+can be losslessly reversed and `rhs` cannot be larger than `Self::BITS`.
+
+# Safety
+
+This results in undefined behavior when `rhs > self.leading_zeros()` or
+`rhs >= Self::BITS`, i.e. when [`exact_shl`] would return `None`.
+
+[`exact_shl`]: Self::exact_shl
+"""
+
+[unchecked_exact_shr]
+overview = """
+Unchecked exact shift right. Computes `self >> rhs`, assuming the operation
+can be losslessly reversed and `rhs` cannot be larger than `Self::BITS`.
+
+# Safety
+
+This results in undefined behavior when `rhs > self.trailing_zeros()` or
+`rhs >= Self::BITS`, i.e. when [`exact_shr`] would return `None`.
+
+[`exact_shr`]: Self::exact_shr
+"""
+
+[unchecked_disjoint_bitor]
+overview = """
+Same value as `self | rhs`, but UB if any bit position is set in both inputs.
+
+This is a situational micro-optimization for places where you'd rather use
+addition on some platforms and bitwise or on other platforms, based on exactly
+which instructions combine better with whatever else you're doing. Note that
+there's no reason to bother using this for places where it's clear from the
+operations involved that they can't overlap. For example, if you're combining
+`u16`s into a `u32` with `((a as u32) << 16) | (b as u32)`, that's fine, as the
+backend will know those sides of the `|` are disjoint without needing help.
+
+# Safety
+
+This results in undefined behavior when `(self & rhs) != 0`.
+"""
+examples = """
+// SAFETY: `1` and `4` have no bits in common.
+unsafe {
+    assert_eq!(1_u24.unchecked_disjoint_bitor(4_u24), 5_u24);
+}
+"""

@@ -1,0 +1,28 @@
+[package]
+name = "exint-macro"
+version = "0.1.0"
+authors = ["l1h3r <5410284+l1h3r@users.noreply.github.com>"]
+categories = ["data-structures", "mathematics", "no-std", "no-std::no-alloc"]
+description = "A convenience macro for `exint`."
+documentation = "https://docs.rs/exint"
+edition = "2024"
+homepage = "https://github.com/l1h3r/exint"
+keywords = ["bignum", "mathematics", "int", "uint", "macro"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/l1h3r/exint"
+rust-version = "1.91"
+
+[lib]
+proc-macro = true
+
+[lints]
+workspace = true
+
+[features]
+default = []
+
+# Enable functionality that requires the `proc_macro_diagnostic` feature
+#
+# Tracking Issue: https://github.com/rust-lang/rust/issues/54140
+proc_macro_diagnostic = []

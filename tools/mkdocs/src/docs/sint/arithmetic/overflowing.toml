@@ -1,0 +1,204 @@
+[overflowing_add]
+overview = """
+Calculates `self` + `rhs`.
+
+Returns a tuple of the addition along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(5_i24.overflowing_add(2_i24), (7_i24, false));
+assert_eq!(i24::MAX.overflowing_add(1_i24), (i24::MIN, true));
+"""
+
+[overflowing_add_unsigned]
+overview = """
+Calculates `self` + `rhs` with an unsigned `rhs`.
+
+Returns a tuple of the addition along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(1_i24.overflowing_add_unsigned(2_u24), (3_i24, false));
+assert_eq!(i24::MIN.overflowing_add_unsigned(u24::MAX), (i24::MAX, false));
+assert_eq!((i24::MAX - 2_i24).overflowing_add_unsigned(3_u24), (i24::MIN, true));
+"""
+
+[overflowing_sub]
+overview = """
+Calculates `self` - `rhs`.
+
+Returns a tuple of the subtraction along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(5_i24.overflowing_sub(2_i24), (3_i24, false));
+assert_eq!(i24::MIN.overflowing_sub(1_i24), (i24::MAX, true));
+"""
+
+[overflowing_sub_unsigned]
+overview = """
+Calculates `self` - `rhs` with an unsigned `rhs`.
+
+Returns a tuple of the subtraction along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(1_i24.overflowing_sub_unsigned(2_u24), (-1_i24, false));
+assert_eq!(i24::MAX.overflowing_sub_unsigned(u24::MAX), (i24::MIN, false));
+assert_eq!((i24::MIN + 2_i24).overflowing_sub_unsigned(3_u24), (i24::MAX, true));
+"""
+
+[overflowing_mul]
+overview = """
+Calculates the multiplication of `self` and `rhs`.
+
+Returns a tuple of the multiplication along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would have occurred then the
+wrapped value is returned.
+"""
+examples = """
+assert_eq!(5_i24.overflowing_mul(2_i24), (10_i24, false));
+assert_eq!(1000000000_i32.overflowing_mul(10_i32), (1410065408_i32, true));
+"""
+
+[overflowing_div]
+overview = """
+Calculates the divisor when `self` is divided by `rhs`.
+
+Returns a tuple of the divisor along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would occur then self is
+returned.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(5_i24.overflowing_div(2_i24), (2_i24, false));
+assert_eq!(i24::MIN.overflowing_div(-1_i24), (i24::MIN, true));
+"""
+
+[overflowing_div_euclid]
+overview = """
+Calculates the quotient of Euclidean division `self.div_euclid(rhs)`.
+
+Returns a tuple of the divisor along with a boolean indicating whether an
+arithmetic overflow would occur. If an overflow would occur then `self` is
+returned.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(5_i24.overflowing_div_euclid(2_i24), (2_i24, false));
+assert_eq!(i24::MIN.overflowing_div_euclid(-1_i24), (i24::MIN, true));
+"""
+
+[overflowing_rem]
+overview = """
+Calculates the remainder when `self` is divided by `rhs`.
+
+Returns a tuple of the remainder after dividing along with a boolean indicating
+whether an arithmetic overflow would occur. If an overflow would occur then 0 is
+returned.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(5_i24.overflowing_rem(2_i24), (1_i24, false));
+assert_eq!(i24::MIN.overflowing_rem(-1_i24), (0_i24, true));
+"""
+
+[overflowing_rem_euclid]
+overview = """
+Overflowing Euclidean remainder. Calculates `self.rem_euclid(rhs)`.
+
+Returns a tuple of the remainder after dividing along with a boolean indicating
+whether an arithmetic overflow would occur. If an overflow would occur then 0 is
+returned.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+"""
+examples = """
+assert_eq!(5_i24.overflowing_rem_euclid(2_i24), (1_i24, false));
+assert_eq!(i24::MIN.overflowing_rem_euclid(-1_i24), (0_i24, true));
+"""
+
+[overflowing_shl]
+overview = """
+Shifts self left by `rhs` bits.
+
+Returns a tuple of the shifted version of self along with a boolean indicating
+whether the shift value was larger than or equal to the number of bits. If the
+shift value is too large, then value is masked (N-1) where N is the number of
+bits, and this value is then used to perform the shift.
+"""
+examples = """
+assert_eq!(0x1_i24.overflowing_shl(4), (0x10_i24, false));
+assert_eq!(0x1_i24.overflowing_shl(28), (0x10_i24, true));
+assert_eq!(0x10_i24.overflowing_shl(i24::BITS - 1), (0_i24, false));
+"""
+
+[overflowing_shr]
+overview = """
+Shifts self right by `rhs` bits.
+
+Returns a tuple of the shifted version of self along with a boolean indicating
+whether the shift value was larger than or equal to the number of bits. If the
+shift value is too large, then value is masked (N-1) where N is the number of
+bits, and this value is then used to perform the shift.
+"""
+examples = """
+assert_eq!(0x10_i24.overflowing_shr(4), (0x1_i24, false));
+assert_eq!(0x10_i24.overflowing_shr(28), (0x1_i24, true));
+"""
+
+[overflowing_neg]
+overview = """
+Negates self, overflowing if this is equal to the minimum value.
+
+Returns a tuple of the negated version of self along with a boolean indicating
+whether an overflow happened. If `self` is the minimum value (e.g., `i32::MIN`
+for values of type `i32`), then the minimum value will be returned again and
+`true` will be returned for an overflow happening.
+"""
+examples = """
+assert_eq!(2_i24.overflowing_neg(), (-2_i24, false));
+assert_eq!(i24::MIN.overflowing_neg(), (i24::MIN, true));
+"""
+
+[overflowing_pow]
+overview = """
+Raises self to the power of `exp`, using exponentiation by squaring.
+
+Returns a tuple of the exponentiation along with a bool indicating whether an
+overflow happened.
+"""
+examples = """
+assert_eq!(3_i24.overflowing_pow(4), (81_i24, false));
+assert_eq!(3_i8.overflowing_pow(5), (-13_i8, true));
+"""
+
+[overflowing_abs]
+overview = """
+Computes the absolute value of `self`.
+
+Returns a tuple of the absolute version of self along with a boolean indicating
+whether an overflow happened. If self is the minimum value (e.g., `int::MIN` for
+values of type int), then the minimum value will be returned again and true will
+be returned for an overflow happening.
+"""
+examples = """
+assert_eq!(10_i24.overflowing_abs(), (10_i24, false));
+assert_eq!((-10_i24).overflowing_abs(), (10_i24, false));
+assert_eq!(i24::MIN.overflowing_abs(), (i24::MIN, true));
+"""

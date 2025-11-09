@@ -1,0 +1,20 @@
+Calculates the remainder when `self` is divided by `rhs`.
+
+Returns a tuple of the remainder after dividing along with a boolean indicating
+whether an arithmetic overflow would occur. Note that for unsigned integers
+overflow never occurs, so the second value is always `false`.
+
+# Panics
+
+This function will panic if `rhs` is zero.
+
+# Examples
+
+Basic usage:
+
+```
+# use ::exint::primitive::*;
+# ::exint::uint! {
+assert_eq!(5_u24.overflowing_rem(2_u24), (1_u24, false));
+# }
+```

@@ -1,0 +1,8 @@
+# **NIGHTLY ONLY**
+skip_macro_invocations = [
+  "concat",
+  "define",
+  "implement",
+]
+
+tab_spaces = 2

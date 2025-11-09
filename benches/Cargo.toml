@@ -1,0 +1,21 @@
+[package]
+name = "exint-benchmarks"
+version = "0.0.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[lib]
+path = "lib.rs"
+
+[[bench]]
+name = "bench"
+path = "bench.rs"
+harness = false
+
+[dependencies]
+oorandom = { version = "11.1" }
+
+[dev-dependencies]
+criterion = { version = "0.7" }
+exint = { version = "=0.1.0", path = ".." }

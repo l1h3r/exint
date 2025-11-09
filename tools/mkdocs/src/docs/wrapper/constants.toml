@@ -1,0 +1,29 @@
+[BITS]
+overview = """
+The size of this integer type in bits.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer::<$inner>::BITS, $inner::BITS);
+"""
+
+[MAX]
+overview = """
+The largest value that can be represented by this integer type.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer::<$inner>::MAX, $outer($inner::MAX));
+"""
+
+[MIN]
+overview = """
+The smallest value that can be represented by this integer type.
+"""
+examples = """
+use exint::$outer;
+
+assert_eq!($outer::<$inner>::MIN, $outer($inner::MIN));
+"""
