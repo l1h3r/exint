@@ -1,5 +1,10 @@
 # Exint - Exotic Integer Types
 
+[![github][shield-img-github]][shield-url-github]
+[![crates.io][shield-img-crates]][shield-url-crates]
+[![docs.rs][shield-img-docs]][shield-url-docs]
+[![build status][shield-img-ci]][shield-url-ci]
+
 A pure Rust implementation of generic signed and unsigned integers.
 
 This crate provides the `no_std`-compatible types `int<N>` and `uint<N>`, which mimic the behavior and API of the core integer primitives while supporting fixed-width values of arbitrary precision.
@@ -133,3 +138,17 @@ This crate is **not** intended for cryptographic use. Consider using [`crypto-bi
 [//]: # (links)
 
 [`crypto-bigint`]: https://crates.io/crates/crypto-bigint
+
+[//]: # (badges)
+
+[shield-url-github]: https://github.com/l1h3r/exint
+[shield-img-github]: https://img.shields.io/badge/github-l1h3r/exint-main?style=flat-square&logo=github
+
+[shield-url-crates]: https://crates.io/crates/exint
+[shield-img-crates]: https://img.shields.io/crates/v/exint?style=flat-square&logo=rust
+
+[shield-url-docs]: https://docs.rs/exint
+[shield-img-docs]: https://img.shields.io/docsrs/exint?style=flat-square&logo=docs.rs
+
+[shield-url-ci]: https://github.com/l1h3r/exint/actions/workflows/ci.yml?query=branch:main
+[shield-img-ci]: https://img.shields.io/github/actions/workflow/status/l1h3r/exint/ci.yml?style=flat-square
