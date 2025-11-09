@@ -16,7 +16,6 @@ mod wrapping;
 ///
 /// Note that the examples here rely on the [`uint`] macro for constructing literals.
 ///
-/// [`int<4>`]: crate::primitive::i32
 /// [`uint`]: crate::uint!
 #[expect(non_camel_case_types, reason = "intentional naming")]
 #[repr(transparent)]
