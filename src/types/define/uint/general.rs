@@ -88,15 +88,15 @@ impl<const N: usize> uint<N> {
     self.const_div(rhs)
   }
 
-  #[doc = include_doc!(uint, "exact_div")]
+  #[doc = include_doc!(uint, "div_exact")]
   #[cfg(feature = "exact_div")]
   #[must_use = must_use_doc!()]
   #[inline]
-  pub const fn exact_div(self, rhs: Self) -> Self {
-    match self.checked_exact_div(rhs) {
-      Some(value) => value,
-      None if rhs.is_zero() => panic::div_zero(),
-      None => panic::exact_div(),
+  pub const fn div_exact(self, rhs: Self) -> Option<Self> {
+    if self.const_rem(rhs).is_zero() {
+      Some(self.const_div(rhs))
+    } else {
+      None
     }
   }
 
@@ -352,16 +352,16 @@ mod tests {
     // Forwards to Div::div
   });
 
-  test!(@uint, test_exact_div, () => {
-    assert_panic!(T::P_1.exact_div(T::P_2), message = EXACT_DIV);
-    assert_eq!(T::P_2.exact_div(T::P_2), T::P_1);
-    assert_eq!(T::MIN.exact_div(T::P_2), T::MIN);
-    assert_panic!(T::MAX.exact_div(T::P_2), message = EXACT_DIV);
+  test!(@uint, test_div_exact, () => {
+    assert_eq!(T::P_1.div_exact(T::P_2), None);
+    assert_eq!(T::P_2.div_exact(T::P_2), Some(T::P_1));
+    assert_eq!(T::MIN.div_exact(T::P_2), Some(T::MIN));
+    assert_eq!(T::MAX.div_exact(T::P_2), None);
 
-    assert_panic!(T::P_1.exact_div(T::MIN), message = DIV_ZERO);
-    assert_panic!(T::P_2.exact_div(T::MIN), message = DIV_ZERO);
-    assert_panic!(T::MIN.exact_div(T::MIN), message = DIV_ZERO);
-    assert_panic!(T::MAX.exact_div(T::MIN), message = DIV_ZERO);
+    assert_panic!(T::P_1.div_exact(T::MIN), message = REM_ZERO);
+    assert_panic!(T::P_2.div_exact(T::MIN), message = REM_ZERO);
+    assert_panic!(T::MIN.div_exact(T::MIN), message = REM_ZERO);
+    assert_panic!(T::MAX.div_exact(T::MIN), message = REM_ZERO);
   });
 
   test!(@uint, test_exact_shl, () => {

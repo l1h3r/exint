@@ -29,12 +29,12 @@ impl<const N: usize> uint<N> {
     unsafe { llapi::unchecked_umul::<Self, N>(self, rhs) }
   }
 
-  #[doc = include_doc!(uint, "unchecked_exact_div")]
+  #[doc = include_doc!(uint, "unchecked_div_exact")]
   #[cfg(feature = "exact_div")]
   #[must_use = must_use_doc!()]
   #[track_caller]
   #[inline]
-  pub const unsafe fn unchecked_exact_div(self, rhs: Self) -> Self {
+  pub const unsafe fn unchecked_div_exact(self, rhs: Self) -> Self {
     // SAFETY: This is guaranteed to be safe by the caller.
     unsafe { llapi::unchecked_udiv_exact::<Self, N>(self, rhs) }
   }

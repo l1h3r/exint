@@ -133,25 +133,31 @@ assert_eq!((-a).div_floor(b), -3_i24);
 assert_eq!((-a).div_floor(-b), 2_i24);
 """
 
-[exact_div]
+[div_exact]
 overview = """
-Checked integer division without remainder. Computes `self / rhs`.
+Integer division without remainder. Computes `self / rhs`,
+returning `None` if `self % rhs != 0`.
 
 # Panics
 
-This function will panic  if `rhs == 0`, the division results in overflow,
-or `self % rhs != 0`.
+This function will panic  if `rhs == 0`.
+
+## Overflow behavior
+
+On overflow, this function will panic if overflow checks are enabled (default in
+debug mode) and wrap if overflow checks are disabled (default in release mode).
 """
 examples = """
-assert_eq!(64_i24.exact_div(2_i24), 32_i24);
-assert_eq!(64_i24.exact_div(32_i24), 2_i24);
-assert_eq!((i24::MIN + 1_i24).exact_div(-1_i24), i24::MAX);
+assert_eq!(64_i24.div_exact(2_i24), Some(32_i24));
+assert_eq!(64_i24.div_exact(32_i24), Some(2_i24));
+assert_eq!((i24::MIN + 1_i24).div_exact(-1_i24), Some(i24::MAX));
+assert_eq!(65_i24.div_exact(2_i24), None);
 """
 examples_panicking = """
-let _ = 65_i24.exact_div(2_i24);
+let _ = 64_i24.div_exact(0_i24);
 """
 examples_overflow = """
-let _ = i24::MIN.exact_div(-1_i24);
+let _ = i24::MIN.div_exact(-1_i24);
 """
 
 [exact_shl]

@@ -97,11 +97,11 @@ impl<const N: usize> int<N> {
     }
   }
 
-  #[doc = include_doc!(int, "checked_exact_div")]
+  #[doc = include_doc!(int, "checked_div_exact")]
   #[cfg(feature = "exact_div")]
   #[must_use = must_use_doc!()]
   #[inline]
-  pub const fn checked_exact_div(self, rhs: Self) -> Option<Self> {
+  pub const fn checked_div_exact(self, rhs: Self) -> Option<Self> {
     if llapi::unlikely(rhs.is_zero() || (self.const_eq(&Self::MIN) && rhs.const_eq(&Self::NEG_ONE))) {
       None
     } else {
@@ -110,7 +110,7 @@ impl<const N: usize> int<N> {
         if llapi::unlikely(!llapi::unchecked_srem::<Self, N>(self, rhs).is_zero()) {
           None
         } else {
-          Some(self.unchecked_exact_div(rhs))
+          Some(self.unchecked_div_exact(rhs))
         }
       }
     }
@@ -389,18 +389,18 @@ mod tests {
     assert_eq!(T::MAX.checked_div_euclid(T::P_0), None);
   });
 
-  test!(@sint, test_checked_exact_div, () => {
-    assert_eq!(T::N_1.checked_exact_div(T::N_1), Some(T::P_1));
-    assert_eq!(T::P_1.checked_exact_div(T::N_1), Some(T::N_1));
-    assert_eq!(T::P_2.checked_exact_div(T::N_1), Some(T::N_2));
-    assert_eq!(T::MIN.checked_exact_div(T::N_1), None);
-    assert_eq!(T::MAX.checked_exact_div(T::N_1), Some(T::MIN + T::P_1));
+  test!(@sint, test_checked_div_exact, () => {
+    assert_eq!(T::N_1.checked_div_exact(T::N_1), Some(T::P_1));
+    assert_eq!(T::P_1.checked_div_exact(T::N_1), Some(T::N_1));
+    assert_eq!(T::P_2.checked_div_exact(T::N_1), Some(T::N_2));
+    assert_eq!(T::MIN.checked_div_exact(T::N_1), None);
+    assert_eq!(T::MAX.checked_div_exact(T::N_1), Some(T::MIN + T::P_1));
 
-    assert_eq!(T::N_1.checked_exact_div(T::P_0), None);
-    assert_eq!(T::P_1.checked_exact_div(T::P_0), None);
-    assert_eq!(T::P_2.checked_exact_div(T::P_0), None);
-    assert_eq!(T::MIN.checked_exact_div(T::P_0), None);
-    assert_eq!(T::MAX.checked_exact_div(T::P_0), None);
+    assert_eq!(T::N_1.checked_div_exact(T::P_0), None);
+    assert_eq!(T::P_1.checked_div_exact(T::P_0), None);
+    assert_eq!(T::P_2.checked_div_exact(T::P_0), None);
+    assert_eq!(T::MIN.checked_div_exact(T::P_0), None);
+    assert_eq!(T::MAX.checked_div_exact(T::P_0), None);
   });
 
   test!(@sint, test_checked_rem, () => {
