@@ -92,20 +92,19 @@ examples = """
 assert_eq!(7_u24.div_floor(4_u24), 1_u24);
 """
 
-[exact_div]
+[div_exact]
 overview = """
-Checked integer division without remainder. Computes `self / rhs`.
+Integer division without remainder. Computes `self / rhs`,
+returning `None` if `self % rhs != 0`.
 
 # Panics
 
-This function will panic  if `rhs == 0` or `self % rhs != 0`.
+This function will panic  if `rhs == 0`.
 """
 examples = """
-assert_eq!(64_u24.exact_div(2_u24), 32_u24);
-assert_eq!(64_u24.exact_div(32_u24), 2_u24);
-"""
-examples_panicking = """
-let _ = 65_u24.exact_div(2_u24);
+assert_eq!(64_u24.div_exact(2_u24), Some(32_u24));
+assert_eq!(64_u24.div_exact(32_u24), Some(2_u24));
+assert_eq!(65_u24.div_exact(2_u24), None);
 """
 
 [exact_shl]

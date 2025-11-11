@@ -33,7 +33,6 @@ define!(ILOG_BASE, ilog_base, "base of integer logarithm must be at least 2");
 define!(ISQRT, isqrt, "argument of integer square root cannot be negative");
 define!(DIV_ZERO, div_zero, "attempt to divide by zero");
 define!(REM_ZERO, rem_zero, "attempt to calculate the remainder with a divisor of zero");
-define!(EXACT_DIV, exact_div, "Failed to divide without remainder");
 
 #[cfg_attr(not(feature = "__internal_panic_immediate_abort"), inline(never))]
 #[cfg_attr(feature = "__internal_panic_immediate_abort", inline)]
