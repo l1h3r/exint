@@ -99,7 +99,7 @@ number of bits in `self`, i.e. when [`checked_shr`] would return `None`.
 [`checked_shr`]: Self::checked_shr
 """
 
-[unchecked_exact_shl]
+[unchecked_shl_exact]
 overview = """
 Unchecked exact shift left. Computes `self << rhs`, assuming the operation
 can be losslessly reversed and `rhs` cannot be larger than `Self::BITS`.
@@ -107,12 +107,12 @@ can be losslessly reversed and `rhs` cannot be larger than `Self::BITS`.
 # Safety
 
 This results in undefined behavior when `rhs > self.leading_zeros()` or
-`rhs >= Self::BITS`, i.e. when [`exact_shl`] would return `None`.
+`rhs >= Self::BITS`, i.e. when [`shl_exact`] would return `None`.
 
-[`exact_shl`]: Self::exact_shl
+[`shl_exact`]: Self::shl_exact
 """
 
-[unchecked_exact_shr]
+[unchecked_shr_exact]
 overview = """
 Unchecked exact shift right. Computes `self >> rhs`, assuming the operation
 can be losslessly reversed and `rhs` cannot be larger than `Self::BITS`.
@@ -120,9 +120,9 @@ can be losslessly reversed and `rhs` cannot be larger than `Self::BITS`.
 # Safety
 
 This results in undefined behavior when `rhs > self.trailing_zeros()` or
-`rhs >= Self::BITS`, i.e. when [`exact_shr`] would return `None`.
+`rhs >= Self::BITS`, i.e. when [`shr_exact`] would return `None`.
 
-[`exact_shr`]: Self::exact_shr
+[`shr_exact`]: Self::shr_exact
 """
 
 [unchecked_disjoint_bitor]

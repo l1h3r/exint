@@ -1,15 +1,15 @@
 macro_rules! assert_shift {
-  (exact_shl, $name:ident, $value:expr, $a:tt) => {
-    $crate::tests::assert_shift!(<<, exact_shl, $name, $value, $a, $a, $a, $a, $a, $a, $a);
+  (shl_exact, $name:ident, $value:expr, $a:tt) => {
+    $crate::tests::assert_shift!(<<, shl_exact, $name, $value, $a, $a, $a, $a, $a, $a, $a);
   };
-  (exact_shl, $name:ident, $value:expr, $a:tt, $b:tt, $c:tt, $d:tt, $e:tt, $f:tt, $g:tt) => {
-    $crate::tests::assert_shift!(<<, exact_shl, $name, $value, $a, $b, $c, $d, $e, $f, $g);
+  (shl_exact, $name:ident, $value:expr, $a:tt, $b:tt, $c:tt, $d:tt, $e:tt, $f:tt, $g:tt) => {
+    $crate::tests::assert_shift!(<<, shl_exact, $name, $value, $a, $b, $c, $d, $e, $f, $g);
   };
-  (exact_shr, $name:ident, $value:expr, $a:tt) => {
-    $crate::tests::assert_shift!(>>, exact_shr, $name, $value, $a, $a, $a, $a, $a, $a, $a);
+  (shr_exact, $name:ident, $value:expr, $a:tt) => {
+    $crate::tests::assert_shift!(>>, shr_exact, $name, $value, $a, $a, $a, $a, $a, $a, $a);
   };
-  (exact_shr, $name:ident, $value:expr, $a:tt, $b:tt, $c:tt, $d:tt, $e:tt, $f:tt, $g:tt) => {
-    $crate::tests::assert_shift!(>>, exact_shr, $name, $value, $a, $b, $c, $d, $e, $f, $g);
+  (shr_exact, $name:ident, $value:expr, $a:tt, $b:tt, $c:tt, $d:tt, $e:tt, $f:tt, $g:tt) => {
+    $crate::tests::assert_shift!(>>, shr_exact, $name, $value, $a, $b, $c, $d, $e, $f, $g);
   };
   ($operator:tt, $method:ident, $name:ident, $value:expr, $a:tt, $b:tt, $c:tt, $d:tt, $e:tt, $f:tt, $g:tt) => {{
     #[allow(unused_macro_rules, reason = "macro-generated")]
