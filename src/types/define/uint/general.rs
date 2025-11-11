@@ -100,11 +100,11 @@ impl<const N: usize> uint<N> {
     }
   }
 
-  #[doc = include_doc!(uint, "exact_shl")]
+  #[doc = include_doc!(uint, "shl_exact")]
   #[cfg(feature = "exact_bitshifts")]
   #[must_use = must_use_doc!()]
   #[inline]
-  pub const fn exact_shl(self, rhs: u32) -> Option<Self> {
+  pub const fn shl_exact(self, rhs: u32) -> Option<Self> {
     if rhs <= self.leading_zeros() && rhs < Self::BITS {
       // SAFETY: We just ensured that `rhs` is in-range.
       Some(unsafe { self.unchecked_shl(rhs) })
@@ -113,11 +113,11 @@ impl<const N: usize> uint<N> {
     }
   }
 
-  #[doc = include_doc!(uint, "exact_shr")]
+  #[doc = include_doc!(uint, "shr_exact")]
   #[cfg(feature = "exact_bitshifts")]
   #[must_use = must_use_doc!()]
   #[inline]
-  pub const fn exact_shr(self, rhs: u32) -> Option<Self> {
+  pub const fn shr_exact(self, rhs: u32) -> Option<Self> {
     if rhs <= self.trailing_zeros() && rhs < Self::BITS {
       // SAFETY: We just ensured that `rhs` is in-range.
       Some(unsafe { self.unchecked_shr(rhs) })
@@ -364,24 +364,24 @@ mod tests {
     assert_panic!(T::MAX.div_exact(T::MIN), message = REM_ZERO);
   });
 
-  test!(@uint, test_exact_shl, () => {
-    assert_shift!(exact_shl, T, T::P_1, 1, 3, 5, S_1, S_2, S_3, S_4);
-    assert_shift!(exact_shl, T, T::P_2, 1, 3, 5, None, S_2, S_3, S_4);
-    assert_shift!(exact_shl, T, T::MIN, 0);
-    assert_shift!(exact_shl, T, T::MAX, None);
+  test!(@uint, test_shl_exact, () => {
+    assert_shift!(shl_exact, T, T::P_1, 1, 3, 5, S_1, S_2, S_3, S_4);
+    assert_shift!(shl_exact, T, T::P_2, 1, 3, 5, None, S_2, S_3, S_4);
+    assert_shift!(shl_exact, T, T::MIN, 0);
+    assert_shift!(shl_exact, T, T::MAX, None);
   });
 
-  test!(@uint, test_exact_shr, () => {
-    assert_shift!(exact_shr, T, T::P_1, None);
+  test!(@uint, test_shr_exact, () => {
+    assert_shift!(shr_exact, T, T::P_1, None);
 
     if T::SIZE == 1 {
-      assert_shift!(exact_shr, T, T::P_2, 1, None, None, None, None, S_3, None);
+      assert_shift!(shr_exact, T, T::P_2, 1, None, None, None, None, S_3, None);
     } else {
-      assert_shift!(exact_shr, T, T::P_2, 1, None, None, None, None, None, None);
+      assert_shift!(shr_exact, T, T::P_2, 1, None, None, None, None, None, None);
     }
 
-    assert_shift!(exact_shr, T, T::MIN, 0);
-    assert_shift!(exact_shr, T, T::MAX, None);
+    assert_shift!(shr_exact, T, T::MIN, 0);
+    assert_shift!(shr_exact, T, T::MAX, None);
   });
 
   test!(@uint, test_next_multiple_of, () => {

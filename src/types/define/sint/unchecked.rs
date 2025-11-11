@@ -63,20 +63,20 @@ impl<const N: usize> int<N> {
     }
   }
 
-  #[doc = include_doc!(int, "unchecked_exact_shl")]
+  #[doc = include_doc!(int, "unchecked_shl_exact")]
   #[cfg(feature = "exact_bitshifts")]
   #[must_use = must_use_doc!()]
   #[inline]
-  pub const unsafe fn unchecked_exact_shl(self, rhs: u32) -> Self {
+  pub const unsafe fn unchecked_shl_exact(self, rhs: u32) -> Self {
     // SAFETY: This is guaranteed to be safe by the caller.
     unsafe { self.unchecked_shl(rhs) }
   }
 
-  #[doc = include_doc!(int, "unchecked_exact_shr")]
+  #[doc = include_doc!(int, "unchecked_shr_exact")]
   #[cfg(feature = "exact_bitshifts")]
   #[must_use = must_use_doc!()]
   #[inline]
-  pub const unsafe fn unchecked_exact_shr(self, rhs: u32) -> Self {
+  pub const unsafe fn unchecked_shr_exact(self, rhs: u32) -> Self {
     // SAFETY: This is guaranteed to be safe by the caller.
     unsafe { self.unchecked_shr(rhs) }
   }

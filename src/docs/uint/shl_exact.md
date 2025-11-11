@@ -8,7 +8,7 @@ Basic usage:
 ```
 # use ::exint::primitive::*;
 # ::exint::uint! {
-assert_eq!(0x1_u24.exact_shl(4), Some(0x10_u24));
-assert_eq!(0x1_u24.exact_shl(129), None);
+assert_eq!(0x1_u24.shl_exact(4), Some(0x10_u24));
+assert_eq!(0x1_u24.shl_exact(129), None);
 # }
 ```

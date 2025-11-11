@@ -160,27 +160,27 @@ examples_overflow = """
 let _ = i24::MIN.div_exact(-1_i24);
 """
 
-[exact_shl]
+[shl_exact]
 overview = """
 Computes `self << rhs`, returning `None` if `rhs` >= `Self::BITS`
 or if any bits that would be shifted out differ from the resulting sign bit.
 """
 examples = """
-assert_eq!(0x1_i24.exact_shl(4), Some(0x10_i24));
-assert_eq!(0x1_i24.exact_shl(i24::BITS - 2), Some(1_i24 << i24::BITS - 2));
-assert_eq!(0x1_i24.exact_shl(i24::BITS - 1), None);
-assert_eq!(-0x2_i24.exact_shl(i24::BITS - 2), Some(-0x2_i24 << i24::BITS - 2));
-assert_eq!(-0x2_i24.exact_shl(i24::BITS - 1), None);
+assert_eq!(0x1_i24.shl_exact(4), Some(0x10_i24));
+assert_eq!(0x1_i24.shl_exact(i24::BITS - 2), Some(1_i24 << i24::BITS - 2));
+assert_eq!(0x1_i24.shl_exact(i24::BITS - 1), None);
+assert_eq!(-0x2_i24.shl_exact(i24::BITS - 2), Some(-0x2_i24 << i24::BITS - 2));
+assert_eq!(-0x2_i24.shl_exact(i24::BITS - 1), None);
 """
 
-[exact_shr]
+[shr_exact]
 overview = """
 Computes `self >> rhs`, returning `None` if `rhs` >= `Self::BITS`
 or if any non-zero bits would be shifted out.
 """
 examples = """
-assert_eq!(0x10_i24.exact_shr(4), Some(0x1_i24));
-assert_eq!(0x10_i24.exact_shr(5), None);
+assert_eq!(0x10_i24.shr_exact(4), Some(0x1_i24));
+assert_eq!(0x10_i24.shr_exact(5), None);
 """
 
 [next_multiple_of]
