@@ -42,8 +42,6 @@ const FEATURES: &[&str] = &[
   "is_ascii_octdigit",
   "isolate_most_least_significant_one",
   "uint_bit_width",
-  "unchecked_neg",
-  "unchecked_shifts",
   "utf16_extra",
   "wrapping_next_power_of_two",
   // "all_nightly",
