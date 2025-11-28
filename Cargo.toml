@@ -73,8 +73,6 @@ all_unstable = [
   "is_ascii_octdigit",
   "isolate_most_least_significant_one",
   "uint_bit_width",
-  "unchecked_neg",
-  "unchecked_shifts",
   "utf16_extra",
   "wrapping_next_power_of_two",
 ]
@@ -215,16 +213,6 @@ isolate_most_least_significant_one = []
 #
 # Tracking Issue: https://github.com/rust-lang/rust/issues/142326
 uint_bit_width = []
-
-# Enable support for `unchecked_neg` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/85122
-unchecked_neg = []
-
-# Enable support for `unchecked_shifts` core functionality.
-#
-# Tracking Issue: https://github.com/rust-lang/rust/issues/85122
-unchecked_shifts = []
 
 # Enable support for `utf16_extra` core functionality.
 #

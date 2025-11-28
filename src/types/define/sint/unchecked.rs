@@ -39,28 +39,22 @@ impl<const N: usize> int<N> {
     unsafe { llapi::unchecked_sdiv_exact::<Self, N>(self, rhs) }
   }
 
-  stability! {
-    #[unstable(feature = "unchecked_shifts")]
-    #[doc = include_doc!(int, "unchecked_shl")]
-    #[must_use = must_use_doc!()]
-    #[track_caller]
-    #[inline]
-    pub const unsafe fn unchecked_shl(self, rhs: u32) -> Self {
-      // SAFETY: This is guaranteed to be safe by the caller.
-      unsafe { llapi::unchecked_shl::<Self, N>(self, rhs) }
-    }
+  #[doc = include_doc!(int, "unchecked_shl")]
+  #[must_use = must_use_doc!()]
+  #[track_caller]
+  #[inline]
+  pub const unsafe fn unchecked_shl(self, rhs: u32) -> Self {
+    // SAFETY: This is guaranteed to be safe by the caller.
+    unsafe { llapi::unchecked_shl::<Self, N>(self, rhs) }
   }
 
-  stability! {
-    #[unstable(feature = "unchecked_shifts")]
-    #[doc = include_doc!(int, "unchecked_shr")]
-    #[must_use = must_use_doc!()]
-    #[track_caller]
-    #[inline]
-    pub const unsafe fn unchecked_shr(self, rhs: u32) -> Self {
-      // SAFETY: This is guaranteed to be safe by the caller.
-      unsafe { llapi::unchecked_ashr::<Self, N>(self, rhs) }
-    }
+  #[doc = include_doc!(int, "unchecked_shr")]
+  #[must_use = must_use_doc!()]
+  #[track_caller]
+  #[inline]
+  pub const unsafe fn unchecked_shr(self, rhs: u32) -> Self {
+    // SAFETY: This is guaranteed to be safe by the caller.
+    unsafe { llapi::unchecked_ashr::<Self, N>(self, rhs) }
   }
 
   #[doc = include_doc!(int, "unchecked_shl_exact")]
@@ -82,7 +76,6 @@ impl<const N: usize> int<N> {
   }
 
   #[doc = include_doc!(int, "unchecked_neg")]
-  #[cfg(feature = "unchecked_neg")]
   #[must_use = must_use_doc!()]
   #[track_caller]
   #[inline]

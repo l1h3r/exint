@@ -87,8 +87,6 @@ This crate is **not** intended for cryptographic use. Consider using [`crypto-bi
 |                | `is_ascii_octdigit`                  | no             |
 |                | `isolate_most_least_significant_one` | no             |
 |                | `uint_bit_width`                     | no             |
-|                | `unchecked_neg`                      | no             |
-|                | `unchecked_shifts`                   | no             |
 |                | `utf16_extra`                        | no             |
 |                | `wrapping_next_power_of_two`         | no             |
 | `all_nightly`  |                                      |                |
