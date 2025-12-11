@@ -39,12 +39,12 @@ jobs:
       - run: cargo check --target thumbv6m-none-eabi --no-default-features
 
   msrv:
-    name: Rust 1.91.0
+    name: Rust 1.92.0
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
-      - uses: dtolnay/rust-toolchain@1.91.0
+      - uses: dtolnay/rust-toolchain@1.92.0
       - run: cargo check
 
   doc:

@@ -103,7 +103,7 @@ pub fn swap8(a: uint) -> uint {
 #[unsafe(no_mangle)]
 pub fn rotl(a: uint, b: u32) -> uint {
   // CHECK: %[[C:.+]] = zext i32 %[[B]] to i128
-  // CHECK: %[[D:.+]] = tail call i128 @llvm.fshl.i128(i128 %[[A]], i128 %[[A]], i128 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i128 @llvm.fshl.i128(i128 %[[A]], i128 %[[A]], i128 %[[C]])
   // CHECK: ret i128 %[[D]]
   ::core::intrinsics::rotate_left(a, b)
 }
@@ -113,7 +113,7 @@ pub fn rotl(a: uint, b: u32) -> uint {
 #[unsafe(no_mangle)]
 pub fn rotr(a: uint, b: u32) -> uint {
   // CHECK: %[[C:.+]] = zext i32 %[[B]] to i128
-  // CHECK: %[[D:.+]] = tail call i128 @llvm.fshr.i128(i128 %[[A]], i128 %[[A]], i128 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i128 @llvm.fshr.i128(i128 %[[A]], i128 %[[A]], i128 %[[C]])
   // CHECK: ret i128 %[[D]]
   ::core::intrinsics::rotate_right(a, b)
 }

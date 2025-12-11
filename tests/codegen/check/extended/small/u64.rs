@@ -98,22 +98,22 @@ pub fn swap8(a: uint) -> uint {
   exint::backend::swap8::<_, N>(a)
 }
 
-// CHECK-LABEL: define i64 @rotl
+// CHECK-LABEL: define noundef i64 @rotl
 // CHECK-SAME: (i64 %[[A:.+]], i32 noundef %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn rotl(a: uint, b: u32) -> uint {
   // CHECK: %[[C:.+]] = zext i32 %[[B]] to i64
-  // CHECK: %[[D:.+]] = tail call i64 @llvm.fshl.i64(i64 %[[A]], i64 %[[A]], i64 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i64 @llvm.fshl.i64(i64 %[[A]], i64 %[[A]], i64 %[[C]])
   // CHECK: ret i64 %[[D]]
   exint::backend::rotl::<_, N>(a, b)
 }
 
-// CHECK-LABEL: define i64 @rotr
+// CHECK-LABEL: define noundef i64 @rotr
 // CHECK-SAME: (i64 %[[A:.+]], i32 noundef %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn rotr(a: uint, b: u32) -> uint {
   // CHECK: %[[C:.+]] = zext i32 %[[B]] to i64
-  // CHECK: %[[D:.+]] = tail call i64 @llvm.fshr.i64(i64 %[[A]], i64 %[[A]], i64 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i64 @llvm.fshr.i64(i64 %[[A]], i64 %[[A]], i64 %[[C]])
   // CHECK: ret i64 %[[D]]
   exint::backend::rotr::<_, N>(a, b)
 }
