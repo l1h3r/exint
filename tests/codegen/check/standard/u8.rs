@@ -102,7 +102,7 @@ pub fn swap8(a: uint) -> uint {
 #[unsafe(no_mangle)]
 pub fn rotl(a: uint, b: u32) -> uint {
   // CHECK: %[[C:.+]] = trunc i32 %[[B]] to i8
-  // CHECK: %[[D:.+]] = tail call i8 @llvm.fshl.i8(i8 %[[A]], i8 %[[A]], i8 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i8 @llvm.fshl.i8(i8 %[[A]], i8 %[[A]], i8 %[[C]])
   // CHECK: ret i8 %[[D]]
   ::core::intrinsics::rotate_left(a, b)
 }
@@ -112,7 +112,7 @@ pub fn rotl(a: uint, b: u32) -> uint {
 #[unsafe(no_mangle)]
 pub fn rotr(a: uint, b: u32) -> uint {
   // CHECK: %[[C:.+]] = trunc i32 %[[B]] to i8
-  // CHECK: %[[D:.+]] = tail call i8 @llvm.fshr.i8(i8 %[[A]], i8 %[[A]], i8 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i8 @llvm.fshr.i8(i8 %[[A]], i8 %[[A]], i8 %[[C]])
   // CHECK: ret i8 %[[D]]
   ::core::intrinsics::rotate_right(a, b)
 }
