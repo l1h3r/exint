@@ -11,7 +11,7 @@ keywords = ["bignum", "mathematics", "int", "uint", "macro"]
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/l1h3r/exint"
-rust-version = "1.91"
+rust-version = "1.92"
 
 [lib]
 proc-macro = true
