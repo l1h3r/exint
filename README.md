@@ -5,14 +5,17 @@
 [![docs.rs][shield-img-docs]][shield-url-docs]
 [![build status][shield-img-ci]][shield-url-ci]
 
-A pure Rust implementation of generic signed and unsigned integers.
+A `no_std` Rust library providing stack-allocated generic integers.
 
-This crate provides the `no_std`-compatible types `int<N>` and `uint<N>`, which mimic the behavior and API of the core integer primitives while supporting fixed-width values of arbitrary precision.
+## Features
 
-```toml
-[dependencies]
-exint = "0.1.0"
-```
+- Generic integer types
+  - Signed integers via `int<N>`
+  - Unsigned integers via `uint<N>`
+  - Small type aliases (eg. `u24`, `u40`, `u80`)
+- Usable in `no-std` environments
+- Usable in `const` contexts
+- Zero dependencies
 
 ## Basic example
 
@@ -20,34 +23,29 @@ exint = "0.1.0"
 use exint::primitive::u24;
 
 fn main() {
-  let a: u24 = u24::from(123_u16);
-  let b: u24 = u24::from(456_u16);
-  let c: u24 = u24::from(10_u16);
+  let one: u24 = u24::from(1_u8);
+  let two: u24 = u24::from(2_u8);
 
-  println!("d = {}", a + b);
-  println!("e = {}", a.wrapping_sub(b));
-  println!("f = {}", u24::MAX - (c >> 1_u32));
+  assert_eq!(u24::MIN, u24::MAX.wrapping_add(one));
+  assert_eq!(u24::MAX, u24::try_from(16777215_u32).unwrap());
+  assert_eq!(u24::MAX / two, u24::MAX >> 1_u32);
 }
 ```
 
 ## Literals
 
-Since there is no way to define your own literal format in Rust, `exint` provides a simple procedural macro.
+`exint` provides a simple procedural macro to simplify working with literal values.
 
-The above example can be re-written as the following:
+The above example can be re-written as:
 
 ```rust
 use exint::primitive::u24;
 
 fn main() {
   exint::uint! {
-    let a: u24 = 123_u24;
-    let b: u24 = 456_u24;
-    let c: u24 = 10_u24;
-
-    println!("d = {}", a + b);
-    println!("e = {}", a.wrapping_sub(b));
-    println!("f = {}", u24::MAX - (c >> 1_u32));
+    assert_eq!(u24::MIN, u24::MAX.wrapping_add(1_u24));
+    assert_eq!(u24::MAX, 16777215_u24);
+    assert_eq!(u24::MAX / 2_u24, u24::MAX >> 1_u32);
   }
 }
 ```
@@ -73,53 +71,6 @@ fn main() {
 ## Security
 
 This crate is **not** intended for cryptographic use. Consider using [`crypto-bigint`] if you need an integer type suitable for cryptographic applications.
-
-## Features
-
-| Group          | Name                                 | Nightly        |
-| :------------- | :----------------------------------- | :------------: |
-|                | `std`                                | no             |
-| `all_unstable` |                                      |                |
-|                | `exact_bitshifts`                    | no             |
-|                | `int_from_ascii`                     | no             |
-|                | `int_lowest_highest_one`             | no             |
-|                | `int_roundings`                      | no             |
-|                | `is_ascii_octdigit`                  | no             |
-|                | `isolate_most_least_significant_one` | no             |
-|                | `uint_bit_width`                     | no             |
-|                | `utf16_extra`                        | no             |
-|                | `wrapping_next_power_of_two`         | no             |
-| `all_nightly`  |                                      |                |
-|                | `adt_const_params`                   | yes            |
-|                | `ascii_char`                         | yes            |
-|                | `bigint_helper_methods`              | yes            |
-|                | `disjoint_bitor`                     | yes            |
-|                | `exact_div`                          | yes            |
-|                | `f16`                                | yes            |
-|                | `f128`                               | yes            |
-|                | `funnel_shifts`                      | yes            |
-|                | `integer_atomics`                    | yes            |
-|                | `never_type`                         | yes            |
-|                | `random`                             | yes            |
-|                | `step_trait`                         | yes            |
-|                | `structural_match`                   | yes            |
-|                | `trusted_step`                       | yes            |
-|                | `unsized_const_params`               | yes            |
-| `all_const`    |                                      |                |
-|                | `const_traits`                       | yes            |
-|                | `const_clone`                        | yes            |
-|                | `const_cmp`                          | yes            |
-|                | `const_convert`                      | yes            |
-|                | `const_default`                      | yes            |
-|                | `const_ops`                          | yes            |
-|                | `const_option`                       | yes            |
-|                | `const_result`                       | yes            |
-| `all_backend`  |                                      |                |
-|                | `core_intrinsics`                    | yes            |
-|                | `const_eval_select`                  | yes            |
-|                | `min_specialization`                 | yes            |
-|                | `portable_simd`                      | yes            |
-|                | `proc_macro_diagnostic`              | yes            |
 
 #### License
 
