@@ -58,11 +58,13 @@ macro_rules! utils {
 
       #[inline]
       pub(crate) const fn carrying_shl(a: $uint, b: u32, d: $uint) -> ($uint, $uint) {
+        ::core::debug_assert!(b > 0 && b < $uint::BITS);
         ((a << b) | d, a >> ($uint::BITS - b))
       }
 
       #[inline]
       pub(crate) const fn carrying_shr(a: $uint, b: u32, d: $uint) -> ($uint, $uint) {
+        ::core::debug_assert!(b > 0 && b < $uint::BITS);
         ((a >> b) | d, a << ($uint::BITS - b))
       }
     }
