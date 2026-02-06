@@ -498,14 +498,17 @@ macro_rules! define_extended_integer {
       // Wrapping Operations
       // -----------------------------------------------------------------------
 
+      #[inline]
       pub(crate) const fn wrapping_add(lhs: Self, rhs: Self) -> Self {
         Self::read_uint($crate::llapi::intrinsics::wrapping_add!(lhs.zext(), rhs.zext()) & Self::UMAX)
       }
 
+      #[inline]
       pub(crate) const fn wrapping_sub(lhs: Self, rhs: Self) -> Self {
         Self::read_uint($crate::llapi::intrinsics::wrapping_sub!(lhs.zext(), rhs.zext()) & Self::UMAX)
       }
 
+      #[inline]
       pub(crate) const fn wrapping_mul(lhs: Self, rhs: Self) -> Self {
         Self::read_uint($crate::llapi::intrinsics::wrapping_mul!(lhs.zext(), rhs.zext()) & Self::UMAX)
       }
