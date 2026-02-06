@@ -16,12 +16,39 @@ pub(crate) const SIGN: u8 = 0b1000_0000;
 // Uint
 // -----------------------------------------------------------------------------
 
-/// A marker trait for integer types.
+/// A marker trait for types that can be reinterpreted as generic integers.
+///
+/// This trait enables the [`specialize!`] macro to transmute between the
+/// externally-provided generic type `T` and fixed-size byte arrays or
+/// built-in primitive integers.
 ///
 /// # Safety
 ///
-/// Types implementing this trait must ensure they are valid representations of
-/// integers with no padding or uninitialized bytes.
+/// Implementors must satisfy **all** of the following invariants:
+///
+/// 1. **No padding bytes.** The type's memory representation must be entirely
+///    composed of meaningful data - `size_of::<Self>()` bytes, all of which are
+///    initialized. This ensures transmutation to `[u8; N]` does not expose
+///    uninitialized memory.
+///
+/// 2. **Byte-equivalent to `[u8; N]`.** The type must have the same layout as a
+///    byte array of equal size: no alignment gaps, no internal padding.
+///    `#[repr(transparent)]` over `[u8; N]` or `#[repr(C)]` with all-byte
+///    fields satisfies this.
+///
+/// 3. **Bitwise `Copy`.** The type must implement [`Copy`] and its copy
+///    semantics must be a plain bitwise memcpy - no custom drop glue or move
+///    semantics.
+///
+/// 4. **All bit patterns valid.** Every possible byte sequence of length
+///    `size_of::<Self>()` must be a valid value of the type. This is required
+///    because arithmetic operations may produce any bit pattern.
+///
+/// # Correct Usage at the `llapi` Boundary
+///
+/// Every public `llapi` function takes a generic `T: Uint` paired with a const
+/// `N: usize`. Callers **must** ensure `size_of::<T>() == N`. Violating this
+/// causes immediate undefined behaviour via size-mismatched transmutation.
 pub unsafe trait Uint: Copy {}
 
 // SAFETY: byte arrays don't have padding or uninitialized bytes.

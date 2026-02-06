@@ -56,12 +56,30 @@ macro_rules! utils {
         (div, rem)
       }
 
+      /// Shifts `a` left by `b` bits, OR-ing in `d` as the low bits from a
+      /// previous limb's carry, and returns the carry-out (the `b` high bits
+      /// that were shifted off the top of `a`).
+      ///
+      /// # Safety
+      ///
+      /// `b` must satisfy `0 < b < $uint::BITS`. When `b == 0` the expression
+      /// `$uint::BITS - b` equals the full bit width, causing a
+      /// shift-by-bit-width which is immediate undefined behaviour.
       #[inline]
       pub(crate) const fn carrying_shl(a: $uint, b: u32, d: $uint) -> ($uint, $uint) {
         ::core::debug_assert!(b > 0 && b < $uint::BITS);
         ((a << b) | d, a >> ($uint::BITS - b))
       }
 
+      /// Shifts `a` right by `b` bits, OR-ing in `d` as the high bits from a
+      /// previous limb's carry, and returns the carry-out (the `b` low bits
+      /// that were shifted off the bottom of `a`).
+      ///
+      /// # Safety
+      ///
+      /// `b` must satisfy `0 < b < $uint::BITS`. When `b == 0` the expression
+      /// `$uint::BITS - b` equals the full bit width, causing a
+      /// shift-by-bit-width which is immediate undefined behaviour.
       #[inline]
       pub(crate) const fn carrying_shr(a: $uint, b: u32, d: $uint) -> ($uint, $uint) {
         ::core::debug_assert!(b > 0 && b < $uint::BITS);

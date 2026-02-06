@@ -1,23 +1,21 @@
-# Exint - Exotic Integer Types
+# exint - Fixed-Width Integer Types for Rust
 
 [![github][shield-img-github]][shield-url-github]
 [![crates.io][shield-img-crates]][shield-url-crates]
 [![docs.rs][shield-img-docs]][shield-url-docs]
 [![build status][shield-img-ci]][shield-url-ci]
 
-A `no_std` Rust library providing stack-allocated generic integers.
+A `no_std` Rust library providing stack-allocated integer types of **any** byte width (`uint<3>`, `int<5>`, `uint<10>`, and so on) alongside familiar aliases like `u24`, `i40`, and `u80`.
 
-## Features
+Standard Rust gives you `u8` through `u128`. exint fills every gap in between and beyond with types that behave like built-in integers: they implement the same traits, support the same operations, and work in `const` contexts.
 
-- Generic integer types
-  - Signed integers via `int<N>`
-  - Unsigned integers via `uint<N>`
-  - Small type aliases (eg. `u24`, `u40`, `u80`)
-- Usable in `no-std` environments
-- Usable in `const` contexts
-- Zero dependencies
+### Why exint?
 
-## Basic example
+Protocols, file formats, and hardware registers rarely align to powers of two. Rather than masking a `u32` and hoping every call site remembers, `uint<3>` makes the 24-bit width part of the type system.
+
+Under the hood, exint maps each width to an optimized code path: standard sizes (`1|2|4|8|16` bytes) use native primitives directly, non-standard sizes (`3|5|6|7|9..15` bytes) widen to the next primitive with LLVM-recognized narrowing patterns, and arbitrary sizes fall back to portable limb-based algorithms. The result is that `u24::wrapping_add` compiles to an `add i24` in LLVM IR, not a `u32` add with a manual mask.
+
+## Quick Start
 
 ```rust
 use exint::primitive::u24;
@@ -31,6 +29,15 @@ fn main() {
   assert_eq!(u24::MAX / two, u24::MAX >> 1_u32);
 }
 ```
+
+## Features
+
+- Signed (`int<N>`) and unsigned (`uint<N>`) types for any byte width
+- Convenient aliases: `u24`, `u40`, `i48`, `u80`, ...
+- `no_std` compatible, zero dependencies
+- Fully `const`-evaluable
+- Compile-time specialization targeting ideal LLVM IR per width
+- Literal macro support (`exint::uint!`, `exint::uint_strict!`)
 
 ## Literals
 
