@@ -380,7 +380,7 @@ mod default {
 
   macro_rules! unchecked_rem {
     ($lhs:expr, $rhs:expr) => {
-      $lhs.checked_div($rhs).unwrap_unchecked()
+      $lhs.checked_rem($rhs).unwrap_unchecked()
     };
   }
 
