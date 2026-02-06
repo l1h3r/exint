@@ -18,7 +18,7 @@ pub(crate) const SIGN: u8 = 0b1000_0000;
 
 /// A marker trait for types that can be reinterpreted as generic integers.
 ///
-/// This trait enables the [`specialize!`] macro to transmute between the
+/// This trait enables the `specialize!` macro to transmute between the
 /// externally-provided generic type `T` and fixed-size byte arrays or
 /// built-in primitive integers.
 ///
