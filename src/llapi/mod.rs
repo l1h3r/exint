@@ -18,6 +18,7 @@
 #![expect(unused_unsafe, reason = "macro-generated code")]
 
 use ::core::cmp::Ordering;
+use ::core::mem::size_of;
 
 mod intrinsics;
 mod specialize;
@@ -215,6 +216,10 @@ pub const fn cast_bytes<const UINT: bool, const N: usize, const M: usize>(
 #[inline]
 #[track_caller]
 pub const fn band<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::band(lhs, rhs))
 }
 
@@ -222,6 +227,10 @@ pub const fn band<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn bor<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::bor(lhs, rhs))
 }
 
@@ -229,6 +238,10 @@ pub const fn bor<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn bxor<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::bxor(lhs, rhs))
 }
 
@@ -236,6 +249,10 @@ pub const fn bxor<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn bnot<T: Uint, const N: usize>(int: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::bnot(int))
 }
 
@@ -247,6 +264,10 @@ pub const fn bnot<T: Uint, const N: usize>(int: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn eq<T: Uint, const N: usize>(lhs: T, rhs: T) -> bool {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::eq(lhs, rhs) -> @pure)
 }
 
@@ -254,6 +275,10 @@ pub const fn eq<T: Uint, const N: usize>(lhs: T, rhs: T) -> bool {
 #[inline]
 #[track_caller]
 pub const fn ucmp<T: Uint, const N: usize>(lhs: T, rhs: T) -> Ordering {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::ucmp(lhs, rhs) -> @pure)
 }
 
@@ -261,6 +286,10 @@ pub const fn ucmp<T: Uint, const N: usize>(lhs: T, rhs: T) -> Ordering {
 #[inline]
 #[track_caller]
 pub const fn scmp<T: Uint, const N: usize>(lhs: T, rhs: T) -> Ordering {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::scmp(lhs, rhs) -> @pure)
 }
 
@@ -272,6 +301,10 @@ pub const fn scmp<T: Uint, const N: usize>(lhs: T, rhs: T) -> Ordering {
 #[inline]
 #[track_caller]
 pub const fn swap1<T: Uint, const N: usize>(int: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::swap1(int))
 }
 
@@ -279,6 +312,10 @@ pub const fn swap1<T: Uint, const N: usize>(int: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn swap8<T: Uint, const N: usize>(int: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::swap8(int))
 }
 
@@ -286,6 +323,10 @@ pub const fn swap8<T: Uint, const N: usize>(int: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn rotl<T: Uint, const N: usize>(int: T, bits: u32) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::rotl(int, @pure bits))
 }
 
@@ -293,6 +334,10 @@ pub const fn rotl<T: Uint, const N: usize>(int: T, bits: u32) -> T {
 #[inline]
 #[track_caller]
 pub const fn rotr<T: Uint, const N: usize>(int: T, bits: u32) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::rotr(int, @pure bits))
 }
 
@@ -304,6 +349,10 @@ pub const fn rotr<T: Uint, const N: usize>(int: T, bits: u32) -> T {
 #[inline]
 #[track_caller]
 pub const fn ctpop<T: Uint, const N: usize>(int: T) -> u32 {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::ctpop(int) -> @pure)
 }
 
@@ -311,6 +360,10 @@ pub const fn ctpop<T: Uint, const N: usize>(int: T) -> u32 {
 #[inline]
 #[track_caller]
 pub const fn ctlz<T: Uint, const N: usize>(int: T) -> u32 {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::ctlz(int) -> @pure)
 }
 
@@ -318,6 +371,10 @@ pub const fn ctlz<T: Uint, const N: usize>(int: T) -> u32 {
 #[inline]
 #[track_caller]
 pub const fn cttz<T: Uint, const N: usize>(int: T) -> u32 {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::cttz(int) -> @pure)
 }
 
@@ -329,6 +386,10 @@ pub const fn cttz<T: Uint, const N: usize>(int: T) -> u32 {
 #[inline]
 #[track_caller]
 pub const unsafe fn ctlz_nonzero<T: Uint, const N: usize>(int: T) -> u32 {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::ctlz_nonzero(int) -> @pure) }
 }
@@ -341,6 +402,10 @@ pub const unsafe fn ctlz_nonzero<T: Uint, const N: usize>(int: T) -> u32 {
 #[inline]
 #[track_caller]
 pub const unsafe fn cttz_nonzero<T: Uint, const N: usize>(int: T) -> u32 {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::cttz_nonzero(int) -> @pure) }
 }
@@ -353,6 +418,10 @@ pub const unsafe fn cttz_nonzero<T: Uint, const N: usize>(int: T) -> u32 {
 #[inline]
 #[track_caller]
 pub const fn overflowing_uadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bool) {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::overflowing_uadd(lhs, rhs) -> @cast(T, bool))
 }
 
@@ -360,6 +429,10 @@ pub const fn overflowing_uadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bo
 #[inline]
 #[track_caller]
 pub const fn overflowing_usub<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bool) {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::overflowing_usub(lhs, rhs) -> @cast(T, bool))
 }
 
@@ -367,6 +440,10 @@ pub const fn overflowing_usub<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bo
 #[inline]
 #[track_caller]
 pub const fn overflowing_umul<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bool) {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::overflowing_umul(lhs, rhs) -> @cast(T, bool))
 }
 
@@ -374,6 +451,10 @@ pub const fn overflowing_umul<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bo
 #[inline]
 #[track_caller]
 pub const fn overflowing_sadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bool) {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::overflowing_sadd(lhs, rhs) -> @cast(T, bool))
 }
 
@@ -381,6 +462,10 @@ pub const fn overflowing_sadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bo
 #[inline]
 #[track_caller]
 pub const fn overflowing_ssub<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bool) {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::overflowing_ssub(lhs, rhs) -> @cast(T, bool))
 }
 
@@ -388,6 +473,10 @@ pub const fn overflowing_ssub<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bo
 #[inline]
 #[track_caller]
 pub const fn overflowing_smul<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bool) {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::overflowing_smul(lhs, rhs) -> @cast(T, bool))
 }
 
@@ -399,6 +488,10 @@ pub const fn overflowing_smul<T: Uint, const N: usize>(lhs: T, rhs: T) -> (T, bo
 #[inline]
 #[track_caller]
 pub const fn saturating_uadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::saturating_uadd(lhs, rhs))
 }
 
@@ -406,6 +499,10 @@ pub const fn saturating_uadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn saturating_usub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::saturating_usub(lhs, rhs))
 }
 
@@ -413,6 +510,10 @@ pub const fn saturating_usub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn saturating_sadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::saturating_sadd(lhs, rhs))
 }
 
@@ -420,6 +521,10 @@ pub const fn saturating_sadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn saturating_ssub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::saturating_ssub(lhs, rhs))
 }
 
@@ -435,6 +540,10 @@ pub const fn saturating_ssub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_uadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_uadd(lhs, rhs)) }
 }
@@ -447,6 +556,10 @@ pub const unsafe fn unchecked_uadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_usub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_usub(lhs, rhs)) }
 }
@@ -459,6 +572,10 @@ pub const unsafe fn unchecked_usub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_umul<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_umul(lhs, rhs)) }
 }
@@ -471,6 +588,10 @@ pub const unsafe fn unchecked_umul<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_udiv<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_udiv(lhs, rhs)) }
 }
@@ -484,6 +605,10 @@ pub const unsafe fn unchecked_udiv<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_udiv_exact<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_udiv_exact(lhs, rhs)) }
 }
@@ -496,6 +621,10 @@ pub const unsafe fn unchecked_udiv_exact<T: Uint, const N: usize>(lhs: T, rhs: T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_urem<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_urem(lhs, rhs)) }
 }
@@ -508,6 +637,10 @@ pub const unsafe fn unchecked_urem<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_sadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_sadd(lhs, rhs)) }
 }
@@ -520,6 +653,10 @@ pub const unsafe fn unchecked_sadd<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_ssub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_ssub(lhs, rhs)) }
 }
@@ -532,6 +669,10 @@ pub const unsafe fn unchecked_ssub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_smul<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_smul(lhs, rhs)) }
 }
@@ -544,6 +685,10 @@ pub const unsafe fn unchecked_smul<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_sdiv<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_sdiv(lhs, rhs)) }
 }
@@ -557,6 +702,10 @@ pub const unsafe fn unchecked_sdiv<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_sdiv_exact<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_sdiv_exact(lhs, rhs)) }
 }
@@ -569,6 +718,10 @@ pub const unsafe fn unchecked_sdiv_exact<T: Uint, const N: usize>(lhs: T, rhs: T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_srem<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_srem(lhs, rhs)) }
 }
@@ -581,6 +734,10 @@ pub const unsafe fn unchecked_srem<T: Uint, const N: usize>(lhs: T, rhs: T) -> T
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_shl<T: Uint, const N: usize>(int: T, bits: u32) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_shl(int, @pure bits)) }
 }
@@ -593,6 +750,10 @@ pub const unsafe fn unchecked_shl<T: Uint, const N: usize>(int: T, bits: u32) ->
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_lshr<T: Uint, const N: usize>(int: T, bits: u32) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_lshr(int, @pure bits)) }
 }
@@ -605,6 +766,10 @@ pub const unsafe fn unchecked_lshr<T: Uint, const N: usize>(int: T, bits: u32) -
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_ashr<T: Uint, const N: usize>(int: T, bits: u32) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_ashr(int, @pure bits)) }
 }
@@ -618,6 +783,10 @@ pub const unsafe fn unchecked_ashr<T: Uint, const N: usize>(int: T, bits: u32) -
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_fshl<T: Uint, const N: usize>(lhs: T, rhs: T, bits: u32) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_fshl(lhs, rhs, @pure bits)) }
 }
@@ -631,6 +800,10 @@ pub const unsafe fn unchecked_fshl<T: Uint, const N: usize>(lhs: T, rhs: T, bits
 #[inline]
 #[track_caller]
 pub const unsafe fn unchecked_fshr<T: Uint, const N: usize>(lhs: T, rhs: T, bits: u32) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::unchecked_fshr(lhs, rhs, @pure bits)) }
 }
@@ -644,6 +817,10 @@ pub const unsafe fn unchecked_fshr<T: Uint, const N: usize>(lhs: T, rhs: T, bits
 #[inline]
 #[track_caller]
 pub const fn wrapping_add<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::wrapping_add(lhs, rhs))
 }
 
@@ -652,6 +829,10 @@ pub const fn wrapping_add<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn wrapping_sub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::wrapping_sub(lhs, rhs))
 }
 
@@ -660,6 +841,10 @@ pub const fn wrapping_sub<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const fn wrapping_mul<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::wrapping_mul(lhs, rhs))
 }
 
@@ -676,6 +861,10 @@ pub const fn wrapping_mul<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
 #[inline]
 #[track_caller]
 pub const unsafe fn disjoint_bor<T: Uint, const N: usize>(lhs: T, rhs: T) -> T {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   // SAFETY: This is guaranteed to be safe by the caller.
   unsafe { specialize!(Int::disjoint_bor(lhs, rhs)) }
 }
@@ -690,6 +879,10 @@ pub const fn carrying_umul_uadd<T: Uint, const N: usize>(
   add: T,
   carry: T,
 ) -> (T, T) {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::carrying_umul_uadd(lhs, rhs, add, carry) -> @cast(T, T))
 }
 
@@ -703,5 +896,9 @@ pub const fn carrying_smul_sadd<T: Uint, U: Uint, const N: usize>(
   add: T,
   carry: T,
 ) -> (U, T) {
+  const {
+    assert!(size_of::<T>() == N);
+  }
+
   specialize!(Int::carrying_smul_sadd(lhs, rhs, add, carry) -> @cast(U, T))
 }
