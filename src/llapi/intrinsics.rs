@@ -393,13 +393,13 @@ mod default {
 
   macro_rules! unchecked_shl {
     ($lhs:expr, $rhs:expr) => {
-      $lhs.checked_shl($rhs).unwrap_unchecked()
+      $lhs.unchecked_shl($rhs)
     };
   }
 
   macro_rules! unchecked_shr {
     ($lhs:expr, $rhs:expr) => {
-      $lhs.checked_shr($rhs).unwrap_unchecked()
+      $lhs.unchecked_shr($rhs)
     };
   }
 
