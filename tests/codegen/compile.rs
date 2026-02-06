@@ -6,7 +6,6 @@
 use rustc_driver::Callbacks;
 use rustc_driver::catch_with_exit_code;
 use rustc_driver::run_compiler;
-use rustc_driver::EXIT_FAILURE;
 use rustc_interface::Config;
 use rustc_lint_defs::Level;
 use rustc_session::config::CrateType;
@@ -31,6 +30,7 @@ use std::io::Error;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
+use std::process::ExitCode;
 use std::process::Output;
 use std::process::Stdio;
 use std::sync::LazyLock;
@@ -130,11 +130,11 @@ impl Capture {
   }
 
   pub(crate) fn rustc(callbacks: &mut (dyn Callbacks + Send)) -> Result<(), Error> {
-    let code: i32 = catch_with_exit_code(|| {
+    let code: ExitCode = catch_with_exit_code(|| {
       run_compiler(&[const { String::new() }; 2], callbacks)
     });
 
-    if code == EXIT_FAILURE {
+    if code == ExitCode::FAILURE {
       Err(Error::other("RUSTC"))
     } else {
       Ok(())
