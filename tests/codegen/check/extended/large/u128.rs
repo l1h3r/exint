@@ -119,15 +119,27 @@ pub fn swap8(a: uint) -> uint {
   exint::backend::swap8::<_, N>(a)
 }
 
-// TODO
+// CHECK-LABEL: define void @rotl
+// CHECK-SAME: (ptr {{.*}} %[[C:.+]], ptr {{.*}} %[[A:.+]], i32 noundef %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn rotl(a: uint, b: u32) -> uint {
+  // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
+  // CHECK: %[[E:.+]] = zext i32 %[[B]] to i128
+  // CHECK: %[[F:.+]] = tail call noundef i128 @llvm.fshl.i128(i128 %[[D]], i128 %[[D]], i128 %[[E]])
+  // CHECK: store i128 %[[F]], ptr %[[C]], align 1
+  // CHECK: ret void
   exint::backend::rotl::<_, N>(a, b)
 }
 
-// TODO
+// CHECK-LABEL: define void @rotr
+// CHECK-SAME: (ptr {{.*}} %[[C:.+]], ptr {{.*}} %[[A:.+]], i32 noundef %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn rotr(a: uint, b: u32) -> uint {
+  // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
+  // CHECK: %[[E:.+]] = zext i32 %[[B]] to i128
+  // CHECK: %[[F:.+]] = tail call noundef i128 @llvm.fshr.i128(i128 %[[D]], i128 %[[D]], i128 %[[E]])
+  // CHECK: store i128 %[[F]], ptr %[[C]], align 1
+  // CHECK: ret void
   exint::backend::rotr::<_, N>(a, b)
 }
 
@@ -494,33 +506,65 @@ pub fn unchecked_srem(a: int, b: int) -> int {
   unsafe { exint::backend::unchecked_srem::<_, N>(a, b) }
 }
 
-// TODO
+// CHECK-LABEL: define void @unchecked_shl
+// CHECK-SAME: (ptr {{.*}} %[[C:.+]], ptr {{.*}} %[[A:.+]], i32 noundef %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_shl(a: uint, b: u32) -> uint {
+  // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
+  // CHECK: %[[E:.+]] = zext nneg i32 %[[B]] to i128
+  // CHECK: %[[F:.+]] = shl i128 %[[D]], %[[E]]
+  // CHECK: store i128 %[[F]], ptr %[[C]], align 1
+  // CHECK: ret void
   unsafe { exint::backend::unchecked_shl::<_, N>(a, b) }
 }
 
-// TODO
+// CHECK-LABEL: define void @unchecked_lshr
+// CHECK-SAME: (ptr {{.*}} %[[C:.+]], ptr {{.*}} %[[A:.+]], i32 noundef %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_lshr(a: uint, b: u32) -> uint {
+  // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
+  // CHECK: %[[E:.+]] = zext nneg i32 %[[B]] to i128
+  // CHECK: %[[F:.+]] = lshr i128 %[[D]], %[[E]]
+  // CHECK: store i128 %[[F]], ptr %[[C]], align 1
+  // CHECK: ret void
   unsafe { exint::backend::unchecked_lshr::<_, N>(a, b) }
 }
 
-// TODO
+// CHECK-LABEL: define void @unchecked_ashr
+// CHECK-SAME: (ptr {{.*}} %[[C:.+]], ptr {{.*}} %[[A:.+]], i32 noundef %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_ashr(a: int, b: u32) -> int {
+  // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
+  // CHECK: %[[E:.+]] = zext nneg i32 %[[B]] to i128
+  // CHECK: %[[F:.+]] = ashr i128 %[[D]], %[[E]]
+  // CHECK: store i128 %[[F]], ptr %[[C]], align 1
+  // CHECK: ret void
   unsafe { exint::backend::unchecked_ashr::<_, N>(a, b) }
 }
 
-// TODO
+// CHECK-LABEL: define void @unchecked_fshl
+// CHECK-SAME: (ptr {{.*}} %[[D:.+]], ptr {{.*}} %[[A:.+]], ptr {{.*}} %[[B:.+]], i32 noundef %[[C:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_fshl(a: uint, b: uint, c: u32) -> uint {
+  // CHECK: %[[E:.+]] = load i128, ptr %[[A]], align 1
+  // CHECK: %[[F:.+]] = load i128, ptr %[[B]], align 1
+  // CHECK: %[[G:.+]] = zext i32 %[[C]] to i128
+  // CHECK: %[[H:.+]] = tail call noundef i128 @llvm.fshl.i128(i128 %[[E]], i128 %[[F]], i128 %[[G]])
+  // CHECK: store i128 %[[H]], ptr %[[D]], align 1
+  // CHECK: ret void
   unsafe { exint::backend::unchecked_fshl::<_, N>(a, b, c) }
 }
 
-// TODO
+// CHECK-LABEL: define void @unchecked_fshr
+// CHECK-SAME: (ptr {{.*}} %[[D:.+]], ptr {{.*}} %[[A:.+]], ptr {{.*}} %[[B:.+]], i32 noundef %[[C:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_fshr(a: uint, b: uint, c: u32) -> uint {
+  // CHECK: %[[E:.+]] = load i128, ptr %[[A]], align 1
+  // CHECK: %[[F:.+]] = load i128, ptr %[[B]], align 1
+  // CHECK: %[[G:.+]] = zext i32 %[[C]] to i128
+  // CHECK: %[[H:.+]] = tail call noundef i128 @llvm.fshr.i128(i128 %[[E]], i128 %[[F]], i128 %[[G]])
+  // CHECK: store i128 %[[H]], ptr %[[D]], align 1
+  // CHECK: ret void
   unsafe { exint::backend::unchecked_fshr::<_, N>(a, b, c) }
 }
 
