@@ -80,20 +80,20 @@ pub fn scmp(a: int, b: int) -> ::core::cmp::Ordering {
 // Bit Conversion Operations
 // -----------------------------------------------------------------------------
 
-// CHECK-LABEL: define i32 @swap1
+// CHECK-LABEL: define noundef i32 @swap1
 // CHECK-SAME: (i32 %[[A:.+]])
 #[unsafe(no_mangle)]
 pub fn swap1(a: uint) -> uint {
-  // CHECK: %[[B:.+]] = tail call i32 @llvm.bitreverse.i32(i32 %[[A]])
+  // CHECK: %[[B:.+]] = tail call noundef i32 @llvm.bitreverse.i32(i32 %[[A]])
   // CHECK: ret i32 %[[B]]
   exint::backend::swap1::<_, N>(a)
 }
 
-// CHECK-LABEL: define i32 @swap8
+// CHECK-LABEL: define noundef i32 @swap8
 // CHECK-SAME: (i32 %[[A:.+]])
 #[unsafe(no_mangle)]
 pub fn swap8(a: uint) -> uint {
-  // CHECK: %[[B:.+]] = tail call i32 @llvm.bswap.i32(i32 %[[A]])
+  // CHECK: %[[B:.+]] = tail call noundef i32 @llvm.bswap.i32(i32 %[[A]])
   // CHECK: ret i32 %[[B]]
   exint::backend::swap8::<_, N>(a)
 }
@@ -199,7 +199,7 @@ pub fn overflowing_usub(a: uint, b: uint) -> (uint, bool) {
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn overflowing_umul(a: uint, b: uint) -> (uint, bool) {
-  // CHECK: %[[C:.+]] = tail call { i32, i1 } @llvm.umul.with.overflow.i32(i32 %[[A]], i32 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef { i32, i1 } @llvm.umul.with.overflow.i32(i32 %[[A]], i32 %[[B]])
   // CHECK: %[[D:.+]] = extractvalue { i32, i1 } %[[C]], 0
   // CHECK: %[[E:.+]] = extractvalue { i32, i1 } %[[C]], 1
   // CHECK: %[[F:.+]] = select i1 %[[E]], i40 4294967296, i40 0
@@ -213,7 +213,7 @@ pub fn overflowing_umul(a: uint, b: uint) -> (uint, bool) {
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn overflowing_sadd(a: int, b: int) -> (int, bool) {
-  // CHECK: %[[C:.+]] = tail call { i32, i1 } @llvm.sadd.with.overflow.i32(i32 %[[A]], i32 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef { i32, i1 } @llvm.sadd.with.overflow.i32(i32 %[[A]], i32 %[[B]])
   // CHECK: %[[D:.+]] = extractvalue { i32, i1 } %[[C]], 0
   // CHECK: %[[E:.+]] = extractvalue { i32, i1 } %[[C]], 1
   // CHECK: %[[F:.+]] = select i1 %[[E]], i40 4294967296, i40 0
@@ -227,7 +227,7 @@ pub fn overflowing_sadd(a: int, b: int) -> (int, bool) {
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn overflowing_ssub(a: int, b: int) -> (int, bool) {
-  // CHECK: %[[C:.+]] = tail call { i32, i1 } @llvm.ssub.with.overflow.i32(i32 %[[A]], i32 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef { i32, i1 } @llvm.ssub.with.overflow.i32(i32 %[[A]], i32 %[[B]])
   // CHECK: %[[D:.+]] = extractvalue { i32, i1 } %[[C]], 0
   // CHECK: %[[E:.+]] = extractvalue { i32, i1 } %[[C]], 1
   // CHECK: %[[F:.+]] = select i1 %[[E]], i40 4294967296, i40 0
@@ -241,7 +241,7 @@ pub fn overflowing_ssub(a: int, b: int) -> (int, bool) {
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn overflowing_smul(a: int, b: int) -> (int, bool) {
-  // CHECK: %[[C:.+]] = tail call { i32, i1 } @llvm.smul.with.overflow.i32(i32 %[[A]], i32 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef { i32, i1 } @llvm.smul.with.overflow.i32(i32 %[[A]], i32 %[[B]])
   // CHECK: %[[D:.+]] = extractvalue { i32, i1 } %[[C]], 0
   // CHECK: %[[E:.+]] = extractvalue { i32, i1 } %[[C]], 1
   // CHECK: %[[F:.+]] = select i1 %[[E]], i40 4294967296, i40 0
@@ -255,38 +255,38 @@ pub fn overflowing_smul(a: int, b: int) -> (int, bool) {
 // Saturating Operations
 // -----------------------------------------------------------------------------
 
-// CHECK-LABEL: define i32 @saturating_uadd
+// CHECK-LABEL: define noundef i32 @saturating_uadd
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn saturating_uadd(a: uint, b: uint) -> uint {
-  // CHECK: %[[C:.+]] = tail call i32 @llvm.uadd.sat.i32(i32 %[[A]], i32 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef i32 @llvm.uadd.sat.i32(i32 %[[A]], i32 %[[B]])
   // CHECK: ret i32 %[[C]]
   exint::backend::saturating_uadd::<_, N>(a, b)
 }
 
-// CHECK-LABEL: define i32 @saturating_usub
+// CHECK-LABEL: define noundef i32 @saturating_usub
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn saturating_usub(a: uint, b: uint) -> uint {
-  // CHECK: %[[C:.+]] = tail call i32 @llvm.usub.sat.i32(i32 %[[A]], i32 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef i32 @llvm.usub.sat.i32(i32 %[[A]], i32 %[[B]])
   // CHECK: ret i32 %[[C]]
   exint::backend::saturating_usub::<_, N>(a, b)
 }
 
-// CHECK-LABEL: define i32 @saturating_sadd
+// CHECK-LABEL: define noundef i32 @saturating_sadd
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn saturating_sadd(a: int, b: int) -> int {
-  // CHECK: %[[C:.+]] = tail call i32 @llvm.sadd.sat.i32(i32 %[[A]], i32 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef i32 @llvm.sadd.sat.i32(i32 %[[A]], i32 %[[B]])
   // CHECK: ret i32 %[[C]]
   exint::backend::saturating_sadd::<_, N>(a, b)
 }
 
-// CHECK-LABEL: define i32 @saturating_ssub
+// CHECK-LABEL: define noundef i32 @saturating_ssub
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn saturating_ssub(a: int, b: int) -> int {
-  // CHECK: %[[C:.+]] = tail call i32 @llvm.ssub.sat.i32(i32 %[[A]], i32 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef i32 @llvm.ssub.sat.i32(i32 %[[A]], i32 %[[B]])
   // CHECK: ret i32 %[[C]]
   exint::backend::saturating_ssub::<_, N>(a, b)
 }
@@ -430,20 +430,20 @@ pub fn unchecked_ashr(a: int, b: u32) -> int {
   unsafe { exint::backend::unchecked_ashr::<_, N>(a, b) }
 }
 
-// CHECK-LABEL: define i32 @unchecked_fshl
+// CHECK-LABEL: define noundef i32 @unchecked_fshl
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]], i32 noundef %[[C:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_fshl(a: uint, b: uint, c: u32) -> uint {
-  // CHECK: %[[D:.+]] = tail call i32 @llvm.fshl.i32(i32 %[[A]], i32 %[[B]], i32 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i32 @llvm.fshl.i32(i32 %[[A]], i32 %[[B]], i32 %[[C]])
   // CHECK: ret i32 %[[D]]
   unsafe { exint::backend::unchecked_fshl::<_, N>(a, b, c) }
 }
 
-// CHECK-LABEL: define i32 @unchecked_fshr
+// CHECK-LABEL: define noundef i32 @unchecked_fshr
 // CHECK-SAME: (i32 %[[A:.+]], i32 %[[B:.+]], i32 noundef %[[C:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_fshr(a: uint, b: uint, c: u32) -> uint {
-  // CHECK: %[[D:.+]] = tail call i32 @llvm.fshr.i32(i32 %[[A]], i32 %[[B]], i32 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i32 @llvm.fshr.i32(i32 %[[A]], i32 %[[B]], i32 %[[C]])
   // CHECK: ret i32 %[[D]]
   unsafe { exint::backend::unchecked_fshr::<_, N>(a, b, c) }
 }

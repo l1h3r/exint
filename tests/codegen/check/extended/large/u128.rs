@@ -102,7 +102,7 @@ pub fn scmp(a: int, b: int) -> ::core::cmp::Ordering {
 #[unsafe(no_mangle)]
 pub fn swap1(a: uint) -> uint {
   // CHECK: %[[C:.+]] = load i128, ptr %[[A]], align 1
-  // CHECK: %[[D:.+]] = tail call i128 @llvm.bitreverse.i128(i128 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i128 @llvm.bitreverse.i128(i128 %[[C]])
   // CHECK: store i128 %[[D]], ptr %[[B]], align 1
   // CHECK: ret void
   exint::backend::swap1::<_, N>(a)
@@ -113,7 +113,7 @@ pub fn swap1(a: uint) -> uint {
 #[unsafe(no_mangle)]
 pub fn swap8(a: uint) -> uint {
   // CHECK: %[[C:.+]] = load i128, ptr %[[A]], align 1
-  // CHECK: %[[D:.+]] = tail call i128 @llvm.bswap.i128(i128 %[[C]])
+  // CHECK: %[[D:.+]] = tail call noundef i128 @llvm.bswap.i128(i128 %[[C]])
   // CHECK: store i128 %[[D]], ptr %[[B]], align 1
   // CHECK: ret void
   exint::backend::swap8::<_, N>(a)
@@ -202,10 +202,10 @@ pub fn overflowing_uadd(a: uint, b: uint) -> (uint, bool) {
   // CHECK: %[[E:.+]] = load i128, ptr %[[B]], align 1
   // CHECK: %[[F:.+]] = add i128 %[[E]], %[[D]]
   // CHECK: %[[G:.+]] = icmp ult i128 %[[F]], %[[D]]
+  // CHECK: %[[H:.+]] = zext i1 %[[G]] to i8
   // CHECK: store i128 %[[F]], ptr %[[C]], align 1
-  // CHECK: %[[H:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
-  // CHECK: %[[I:.+]] = zext i1 %[[G]] to i8
-  // CHECK: store i8 %[[I]], ptr %[[H]], align 1
+  // CHECK: %[[I:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
+  // CHECK: store i8 %[[H]], ptr %[[I]], align 1
   // CHECK: ret void
   exint::backend::overflowing_uadd::<_, N>(a, b)
 }
@@ -218,10 +218,10 @@ pub fn overflowing_usub(a: uint, b: uint) -> (uint, bool) {
   // CHECK: %[[E:.+]] = load i128, ptr %[[B]], align 1
   // CHECK: %[[F:.+]] = sub i128 %[[D]], %[[E]]
   // CHECK: %[[G:.+]] = icmp ult i128 %[[D]], %[[E]]
+  // CHECK: %[[H:.+]] = zext i1 %[[G]] to i8
   // CHECK: store i128 %[[F]], ptr %[[C]], align 1
-  // CHECK: %[[H:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
-  // CHECK: %[[I:.+]] = zext i1 %[[G]] to i8
-  // CHECK: store i8 %[[I]], ptr %[[H]], align 1
+  // CHECK: %[[I:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
+  // CHECK: store i8 %[[H]], ptr %[[I]], align 1
   // CHECK: ret void
   exint::backend::overflowing_usub::<_, N>(a, b)
 }
@@ -235,10 +235,10 @@ pub fn overflowing_umul(a: uint, b: uint) -> (uint, bool) {
   // CHECK: %[[F:.+]] = tail call { i128, i1 } @llvm.umul.with.overflow.i128(i128 %[[D]], i128 %[[E]])
   // CHECK: %[[G:.+]] = extractvalue { i128, i1 } %[[F]], 0
   // CHECK: %[[H:.+]] = extractvalue { i128, i1 } %[[F]], 1
+  // CHECK: %[[I:.+]] = zext i1 %[[H]] to i8
   // CHECK: store i128 %[[G]], ptr %[[C]], align 1
-  // CHECK: %[[I:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
-  // CHECK: %[[J:.+]] = zext i1 %[[H]] to i8
-  // CHECK: store i8 %[[J]], ptr %[[I]], align 1
+  // CHECK: %[[J:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
+  // CHECK: store i8 %[[I]], ptr %[[J]], align 1
   // CHECK: ret void
   exint::backend::overflowing_umul::<_, N>(a, b)
 }
@@ -252,14 +252,13 @@ pub fn overflowing_sadd(a: int, b: int) -> (int, bool) {
   // CHECK: %[[F:.+]] = tail call { i128, i1 } @llvm.sadd.with.overflow.i128(i128 %[[D]], i128 %[[E]])
   // CHECK: %[[G:.+]] = extractvalue { i128, i1 } %[[F]], 0
   // CHECK: %[[H:.+]] = extractvalue { i128, i1 } %[[F]], 1
+  // CHECK: %[[I:.+]] = zext i1 %[[H]] to i8
   // CHECK: store i128 %[[G]], ptr %[[C]], align 1
-  // CHECK: %[[I:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
-  // CHECK: %[[J:.+]] = zext i1 %[[H]] to i8
-  // CHECK: store i8 %[[J]], ptr %[[I]], align 1
+  // CHECK: %[[J:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
+  // CHECK: store i8 %[[I]], ptr %[[J]], align 1
   // CHECK: ret void
   exint::backend::overflowing_sadd::<_, N>(a, b)
 }
-
 
 // CHECK-LABEL: define void @overflowing_ssub
 // CHECK-SAME: (ptr {{.*}} %[[C:.+]], ptr {{.*}} %[[A:.+]], ptr {{.*}} %[[B:.+]])
@@ -270,10 +269,10 @@ pub fn overflowing_ssub(a: int, b: int) -> (int, bool) {
   // CHECK: %[[F:.+]] = tail call { i128, i1 } @llvm.ssub.with.overflow.i128(i128 %[[D]], i128 %[[E]])
   // CHECK: %[[G:.+]] = extractvalue { i128, i1 } %[[F]], 0
   // CHECK: %[[H:.+]] = extractvalue { i128, i1 } %[[F]], 1
+  // CHECK: %[[I:.+]] = zext i1 %[[H]] to i8
   // CHECK: store i128 %[[G]], ptr %[[C]], align 1
-  // CHECK: %[[I:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
-  // CHECK: %[[J:.+]] = zext i1 %[[H]] to i8
-  // CHECK: store i8 %[[J]], ptr %[[I]], align 1
+  // CHECK: %[[J:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
+  // CHECK: store i8 %[[I]], ptr %[[J]], align 1
   // CHECK: ret void
   exint::backend::overflowing_ssub::<_, N>(a, b)
 }
@@ -287,10 +286,10 @@ pub fn overflowing_smul(a: int, b: int) -> (int, bool) {
   // CHECK: %[[F:.+]] = tail call { i128, i1 } @llvm.smul.with.overflow.i128(i128 %[[D]], i128 %[[E]])
   // CHECK: %[[G:.+]] = extractvalue { i128, i1 } %[[F]], 0
   // CHECK: %[[H:.+]] = extractvalue { i128, i1 } %[[F]], 1
+  // CHECK: %[[I:.+]] = zext i1 %[[H]] to i8
   // CHECK: store i128 %[[G]], ptr %[[C]], align 1
-  // CHECK: %[[I:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
-  // CHECK: %[[J:.+]] = zext i1 %[[H]] to i8
-  // CHECK: store i8 %[[J]], ptr %[[I]], align 1
+  // CHECK: %[[J:.+]] = getelementptr inbounds nuw i8, ptr %[[C]], i64 16
+  // CHECK: store i8 %[[I]], ptr %[[J]], align 1
   // CHECK: ret void
   exint::backend::overflowing_smul::<_, N>(a, b)
 }
@@ -305,7 +304,7 @@ pub fn overflowing_smul(a: int, b: int) -> (int, bool) {
 pub fn saturating_uadd(a: uint, b: uint) -> uint {
   // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i128, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i128 @llvm.uadd.sat.i128(i128 %[[D]], i128 %[[E]])
+  // CHECK: %[[F:.+]] = tail call noundef i128 @llvm.uadd.sat.i128(i128 %[[D]], i128 %[[E]])
   // CHECK: store i128 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   exint::backend::saturating_uadd::<_, N>(a, b)
@@ -317,7 +316,7 @@ pub fn saturating_uadd(a: uint, b: uint) -> uint {
 pub fn saturating_usub(a: uint, b: uint) -> uint {
   // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i128, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i128 @llvm.usub.sat.i128(i128 %[[D]], i128 %[[E]])
+  // CHECK: %[[F:.+]] = tail call noundef i128 @llvm.usub.sat.i128(i128 %[[D]], i128 %[[E]])
   // CHECK: store i128 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   exint::backend::saturating_usub::<_, N>(a, b)
@@ -329,7 +328,7 @@ pub fn saturating_usub(a: uint, b: uint) -> uint {
 pub fn saturating_sadd(a: int, b: int) -> int {
   // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i128, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i128 @llvm.sadd.sat.i128(i128 %[[D]], i128 %[[E]])
+  // CHECK: %[[F:.+]] = tail call noundef i128 @llvm.sadd.sat.i128(i128 %[[D]], i128 %[[E]])
   // CHECK: store i128 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   exint::backend::saturating_sadd::<_, N>(a, b)
@@ -341,7 +340,7 @@ pub fn saturating_sadd(a: int, b: int) -> int {
 pub fn saturating_ssub(a: int, b: int) -> int {
   // CHECK: %[[D:.+]] = load i128, ptr %[[A]], align 1
   // CHECK: %[[E:.+]] = load i128, ptr %[[B]], align 1
-  // CHECK: %[[F:.+]] = tail call i128 @llvm.ssub.sat.i128(i128 %[[D]], i128 %[[E]])
+  // CHECK: %[[F:.+]] = tail call noundef i128 @llvm.ssub.sat.i128(i128 %[[D]], i128 %[[E]])
   // CHECK: store i128 %[[F]], ptr %[[C]], align 1
   // CHECK: ret void
   exint::backend::saturating_ssub::<_, N>(a, b)

@@ -80,11 +80,11 @@ pub fn scmp(a: int, b: int) -> ::core::cmp::Ordering {
 // Bit Conversion Operations
 // -----------------------------------------------------------------------------
 
-// CHECK-LABEL: define i8 @swap1
+// CHECK-LABEL: define noundef i8 @swap1
 // CHECK-SAME: (i8 %[[A:.+]])
 #[unsafe(no_mangle)]
 pub fn swap1(a: uint) -> uint {
-  // CHECK: %[[B:.+]] = tail call i8 @llvm.bitreverse.i8(i8 %[[A]])
+  // CHECK: %[[B:.+]] = tail call noundef i8 @llvm.bitreverse.i8(i8 %[[A]])
   // CHECK: ret i8 %[[B]]
   exint::backend::swap1::<_, N>(a)
 }
@@ -205,7 +205,7 @@ pub fn overflowing_usub(a: uint, b: uint) -> (uint, bool) {
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn overflowing_umul(a: uint, b: uint) -> (uint, bool) {
-  // CHECK: %[[C:.+]] = tail call { i8, i1 } @llvm.umul.with.overflow.i8(i8 %[[A]], i8 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef { i8, i1 } @llvm.umul.with.overflow.i8(i8 %[[A]], i8 %[[B]])
   // CHECK: %[[D:.+]] = extractvalue { i8, i1 } %[[C]], 0
   // CHECK: %[[E:.+]] = extractvalue { i8, i1 } %[[C]], 1
   // CHECK: %[[F:.+]] = select i1 %[[E]], i16 256, i16 0
@@ -219,7 +219,7 @@ pub fn overflowing_umul(a: uint, b: uint) -> (uint, bool) {
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn overflowing_sadd(a: int, b: int) -> (int, bool) {
-  // CHECK: %[[C:.+]] = tail call { i8, i1 } @llvm.sadd.with.overflow.i8(i8 %[[A]], i8 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef { i8, i1 } @llvm.sadd.with.overflow.i8(i8 %[[A]], i8 %[[B]])
   // CHECK: %[[D:.+]] = extractvalue { i8, i1 } %[[C]], 0
   // CHECK: %[[E:.+]] = extractvalue { i8, i1 } %[[C]], 1
   // CHECK: %[[F:.+]] = select i1 %[[E]], i16 256, i16 0
@@ -233,7 +233,7 @@ pub fn overflowing_sadd(a: int, b: int) -> (int, bool) {
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn overflowing_ssub(a: int, b: int) -> (int, bool) {
-  // CHECK: %[[C:.+]] = tail call { i8, i1 } @llvm.ssub.with.overflow.i8(i8 %[[A]], i8 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef { i8, i1 } @llvm.ssub.with.overflow.i8(i8 %[[A]], i8 %[[B]])
   // CHECK: %[[D:.+]] = extractvalue { i8, i1 } %[[C]], 0
   // CHECK: %[[E:.+]] = extractvalue { i8, i1 } %[[C]], 1
   // CHECK: %[[F:.+]] = select i1 %[[E]], i16 256, i16 0
@@ -247,7 +247,7 @@ pub fn overflowing_ssub(a: int, b: int) -> (int, bool) {
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn overflowing_smul(a: int, b: int) -> (int, bool) {
-  // CHECK: %[[C:.+]] = tail call { i8, i1 } @llvm.smul.with.overflow.i8(i8 %[[A]], i8 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef { i8, i1 } @llvm.smul.with.overflow.i8(i8 %[[A]], i8 %[[B]])
   // CHECK: %[[D:.+]] = extractvalue { i8, i1 } %[[C]], 0
   // CHECK: %[[E:.+]] = extractvalue { i8, i1 } %[[C]], 1
   // CHECK: %[[F:.+]] = select i1 %[[E]], i16 256, i16 0
@@ -261,38 +261,38 @@ pub fn overflowing_smul(a: int, b: int) -> (int, bool) {
 // Saturating Operations
 // -----------------------------------------------------------------------------
 
-// CHECK-LABEL: define i8 @saturating_uadd
+// CHECK-LABEL: define noundef i8 @saturating_uadd
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn saturating_uadd(a: uint, b: uint) -> uint {
-  // CHECK: %[[C:.+]] = tail call i8 @llvm.uadd.sat.i8(i8 %[[A]], i8 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef i8 @llvm.uadd.sat.i8(i8 %[[A]], i8 %[[B]])
   // CHECK: ret i8 %[[C]]
   exint::backend::saturating_uadd::<_, N>(a, b)
 }
 
-// CHECK-LABEL: define i8 @saturating_usub
+// CHECK-LABEL: define noundef i8 @saturating_usub
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn saturating_usub(a: uint, b: uint) -> uint {
-  // CHECK: %[[C:.+]] = tail call i8 @llvm.usub.sat.i8(i8 %[[A]], i8 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef i8 @llvm.usub.sat.i8(i8 %[[A]], i8 %[[B]])
   // CHECK: ret i8 %[[C]]
   exint::backend::saturating_usub::<_, N>(a, b)
 }
 
-// CHECK-LABEL: define i8 @saturating_sadd
+// CHECK-LABEL: define noundef i8 @saturating_sadd
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn saturating_sadd(a: int, b: int) -> int {
-  // CHECK: %[[C:.+]] = tail call i8 @llvm.sadd.sat.i8(i8 %[[A]], i8 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef i8 @llvm.sadd.sat.i8(i8 %[[A]], i8 %[[B]])
   // CHECK: ret i8 %[[C]]
   exint::backend::saturating_sadd::<_, N>(a, b)
 }
 
-// CHECK-LABEL: define i8 @saturating_ssub
+// CHECK-LABEL: define noundef i8 @saturating_ssub
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]])
 #[unsafe(no_mangle)]
 pub fn saturating_ssub(a: int, b: int) -> int {
-  // CHECK: %[[C:.+]] = tail call i8 @llvm.ssub.sat.i8(i8 %[[A]], i8 %[[B]])
+  // CHECK: %[[C:.+]] = tail call noundef i8 @llvm.ssub.sat.i8(i8 %[[A]], i8 %[[B]])
   // CHECK: ret i8 %[[C]]
   exint::backend::saturating_ssub::<_, N>(a, b)
 }
@@ -439,22 +439,22 @@ pub fn unchecked_ashr(a: int, b: u32) -> int {
   unsafe { exint::backend::unchecked_ashr::<_, N>(a, b) }
 }
 
-// CHECK-LABEL: define i8 @unchecked_fshl
+// CHECK-LABEL: define noundef i8 @unchecked_fshl
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]], i32 noundef %[[C:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_fshl(a: uint, b: uint, c: u32) -> uint {
   // CHECK: %[[D:.+]] = trunc i32 %[[C]] to i8
-  // CHECK: %[[E:.+]] = tail call i8 @llvm.fshl.i8(i8 %[[A]], i8 %[[B]], i8 %[[D]])
+  // CHECK: %[[E:.+]] = tail call noundef i8 @llvm.fshl.i8(i8 %[[A]], i8 %[[B]], i8 %[[D]])
   // CHECK: ret i8 %[[E]]
   unsafe { exint::backend::unchecked_fshl::<_, N>(a, b, c) }
 }
 
-// CHECK-LABEL: define i8 @unchecked_fshr
+// CHECK-LABEL: define noundef i8 @unchecked_fshr
 // CHECK-SAME: (i8 %[[A:.+]], i8 %[[B:.+]], i32 noundef %[[C:.+]])
 #[unsafe(no_mangle)]
 pub fn unchecked_fshr(a: uint, b: uint, c: u32) -> uint {
   // CHECK: %[[D:.+]] = trunc i32 %[[C]] to i8
-  // CHECK: %[[E:.+]] = tail call i8 @llvm.fshr.i8(i8 %[[A]], i8 %[[B]], i8 %[[D]])
+  // CHECK: %[[E:.+]] = tail call noundef i8 @llvm.fshr.i8(i8 %[[A]], i8 %[[B]], i8 %[[D]])
   // CHECK: ret i8 %[[E]]
   unsafe { exint::backend::unchecked_fshr::<_, N>(a, b, c) }
 }
