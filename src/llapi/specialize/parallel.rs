@@ -3,7 +3,7 @@
 //! This experimental implementation is feature-gated by the `portable_simd`
 //! feature.
 //!
-//! Currently only supports integers that can be expressed as 64-bit [SIMD lanes].
+//! Currently only supports integers that can be expressed as 64-bit SIMD lanes.
 //!
 //! # Safety
 //!
@@ -14,16 +14,13 @@
 //!
 //! All invariants of [`Uint`] are required.
 //!
-//! [SIMD lanes]: ::core::simd::SupportedLaneCount
 //! [`Int`]: crate::llapi::specialize::Int
 //! [`Uint`]: crate::llapi::Uint
 
 use ::core::cmp::Ordering;
 use ::core::intrinsics;
 use ::core::mem;
-use ::core::simd::LaneCount;
 use ::core::simd::Simd;
-use ::core::simd::SupportedLaneCount;
 use ::core::simd::num::SimdUint as _;
 
 use crate::llapi::specialize::Int;
@@ -31,14 +28,9 @@ use crate::llapi::utils;
 
 #[derive(Clone, Copy)]
 #[repr(transparent)]
-pub(crate) struct I64xN<const BYTES: usize, const LANES: usize>([u64; LANES])
-where
-  LaneCount<LANES>: SupportedLaneCount;
+pub(crate) struct I64xN<const BYTES: usize, const LANES: usize>([u64; LANES]);
 
-impl<const B: usize, const L: usize> I64xN<B, L>
-where
-  LaneCount<L>: SupportedLaneCount,
-{
+impl<const B: usize, const L: usize> I64xN<B, L> {
   const ASSERT: () = {
     assert!(B.is_multiple_of(mem::size_of::<u64>()));
     assert!(B / mem::size_of::<u64>() == L);

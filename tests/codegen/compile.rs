@@ -164,8 +164,8 @@ impl Capture {
       CrateType::Executable => {
         panic!("not supported: Executable")
       }
-      CrateType::Staticlib => {
-        panic!("not supported: Staticlib")
+      CrateType::StaticLib => {
+        panic!("not supported: StaticLib")
       }
     }
   }
